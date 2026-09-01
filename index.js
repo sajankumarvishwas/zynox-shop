@@ -4,7 +4,7 @@ const fs = require("fs");
 const app = express();
 const PORT = 3001;
 
-const CONFIG_PATH = "/data/data/com.termux/files/home/zynox-ranks/config.json";
+const CONFIG_PATH = "./config.json";
 
 app.use(express.json());
 app.use(express.static("public"));

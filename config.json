@@ -1,0 +1,29 @@
+{
+  "ranks": {
+    "vip": {
+      "name": "VIP",
+      "price": 49,
+      "homes": 3,
+      "title": "VIP",
+      "particles": 1,
+      "join_effect": true
+    },
+    "mvp": {
+      "name": "MVP",
+      "price": 99,
+      "homes": 5,
+      "title": "MVP",
+      "particles": 2,
+      "join_effect": true
+    },
+    "elite": {
+      "name": "ELITE",
+      "price": 199,
+      "homes": 8,
+      "title": "ELITE",
+      "particles": 4,
+      "join_effect": true,
+      "kill_effect": true
+    }
+  }
+}
