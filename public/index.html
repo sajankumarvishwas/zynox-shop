@@ -3,203 +3,386 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#080810">
+  <meta name="theme-color" content="#10100d">
   <title>ZynoxSMP • Official Store</title>
   <link rel="stylesheet" href="/style.css">
 </head>
 
 <body>
 
-<div class="bg-grid"></div>
-<div class="glow glow-one"></div>
-<div class="glow glow-two"></div>
+<div class="pixel-sky"></div>
+<div class="pixel-stars"></div>
 
-<header class="navbar">
-  <a class="brand" href="/">
-    <span class="brand-icon">⚡</span>
-    <span>Zynox<span class="accent">SMP</span></span>
+<header class="mc-navbar">
+
+  <a href="/" class="mc-brand">
+    <span class="mc-brand-block">⚡</span>
+    <span class="mc-brand-text">
+      Zynox<span>SMP</span>
+    </span>
   </a>
 
-  <nav>
+  <nav class="mc-nav">
     <a class="active" href="#ranks">Ranks</a>
     <a href="#cosmetics">Cosmetics</a>
     <a href="#bundles">Bundles</a>
   </nav>
 
-  <button class="cart-button" onclick="scrollToRanks()">
-    <span>🛒</span>
-    <span>Shop</span>
-  </button>
+  <a href="#ranks" class="mc-inventory-btn">
+    <span>▣</span>
+    STORE
+  </a>
+
 </header>
 
 <main>
 
-  <section class="hero">
-    <div class="hero-badge">
-      <span class="live-dot"></span>
-      ZYNOXSMP OFFICIAL STORE
+<section class="mc-hero">
+
+  <div class="hero-content">
+
+    <div class="mc-achievement">
+      <span class="achievement-icon">★</span>
+      <span>ZYNOXSMP OFFICIAL STORE</span>
     </div>
 
     <h1>
-      Support the server.<br>
-      <span>Upgrade your adventure.</span>
+      ENTER THE
+      <span>ZYNOX WORLD</span>
     </h1>
 
-    <p>
-      Unlock exclusive cosmetics, ranks and quality-of-life perks
-      while helping ZynoxSMP grow.
+    <p class="hero-description">
+      Upgrade your adventure with exclusive ranks,
+      cosmetics and special server perks.
     </p>
 
-    <div class="hero-actions">
-      <button class="primary-button" onclick="scrollToRanks()">
-        Explore Ranks <span>→</span>
+    <div class="hero-buttons">
+
+      <button class="mc-button mc-button-primary" onclick="scrollToRanks()">
+        <span class="button-icon">⛏</span>
+        VIEW RANKS
       </button>
-      <div class="secure-note">
-        <span>✓</span> Secure checkout
-      </div>
+
+      <a href="#cosmetics" class="mc-button mc-button-secondary">
+        <span class="button-icon">✦</span>
+        EXPLORE
+      </a>
+
     </div>
 
-    <div class="hero-stats">
-      <div>
-        <strong>10</strong>
-        <span>Player Slots</span>
+    <div class="minecraft-stats">
+
+      <div class="stat-item">
+        <span class="stat-icon">👥</span>
+        <div>
+          <strong>10</strong>
+          <small>PLAYER SLOTS</small>
+        </div>
       </div>
-      <div>
-        <strong>24/7</strong>
-        <span>SMP Adventure</span>
+
+      <div class="stat-divider"></div>
+
+      <div class="stat-item">
+        <span class="stat-icon">⚔</span>
+        <div>
+          <strong>SMP</strong>
+          <small>SURVIVAL</small>
+        </div>
       </div>
-      <div>
-        <strong>3</strong>
-        <span>Supporter Ranks</span>
+
+      <div class="stat-divider"></div>
+
+      <div class="stat-item">
+        <span class="stat-icon">★</span>
+        <div>
+          <strong>3</strong>
+          <small>RANK TIERS</small>
+        </div>
       </div>
+
     </div>
-  </section>
 
-  <section class="section" id="ranks">
+  </div>
 
-    <div class="section-heading">
-      <div>
-        <span class="eyebrow">CHOOSE YOUR STATUS</span>
-        <h2>Supporter Ranks</h2>
+  <div class="hero-floating-item item-diamond">◆</div>
+  <div class="hero-floating-item item-emerald">♦</div>
+  <div class="hero-floating-item item-gold">✦</div>
+
+</section>
+
+<section class="minecraft-announcement">
+
+  <div class="announcement-icon">!</div>
+
+  <div>
+    <strong>SUPPORT THE SERVER</strong>
+    <span>
+      Every purchase helps fund new features,
+      maintenance and future adventures.
+    </span>
+  </div>
+
+  <div class="announcement-xp">
+    <div class="xp-label">XP</div>
+    <div class="xp-bar">
+      <div class="xp-fill"></div>
+    </div>
+  </div>
+
+</section>
+
+<section class="mc-section" id="ranks">
+
+  <div class="minecraft-section-title">
+
+    <div class="title-line"></div>
+
+    <div>
+      <span class="section-kicker">CHOOSE YOUR UPGRADE</span>
+      <h2>SUPPORTER RANKS</h2>
+    </div>
+
+    <div class="title-line"></div>
+
+  </div>
+
+  <p class="section-description">
+    Pick your tier and unlock more ways to stand out on ZynoxSMP.
+  </p>
+
+  <div id="products" class="minecraft-rank-grid">
+
+    <div class="minecraft-loading">
+      <div class="loading-pixel"></div>
+      <span>LOADING INVENTORY...</span>
+    </div>
+
+  </div>
+
+</section>
+
+<section class="minecraft-divider">
+  <span>◆</span>
+</section>
+
+<section class="mc-section" id="cosmetics">
+
+  <div class="minecraft-section-title">
+
+    <div class="title-line"></div>
+
+    <div>
+      <span class="section-kicker">CUSTOMIZE YOUR PLAYER</span>
+      <h2>COSMETICS</h2>
+    </div>
+
+    <div class="title-line"></div>
+
+  </div>
+
+  <p class="section-description">
+    Stand apart from the crowd with cosmetic upgrades made for ZynoxSMP.
+  </p>
+
+  <div class="minecraft-category-grid">
+
+    <article class="minecraft-category-card">
+
+      <div class="item-frame">
+        <div class="item-frame-inner">✦</div>
       </div>
+
+      <div class="category-info">
+        <span class="category-tag">COSMETIC</span>
+        <h3>PARTICLE AURAS</h3>
+        <p>
+          Surround your player with custom visual effects.
+        </p>
+        <span class="coming-soon">COMING SOON</span>
+      </div>
+
+    </article>
+
+    <article class="minecraft-category-card">
+
+      <div class="item-frame">
+        <div class="item-frame-inner">★</div>
+      </div>
+
+      <div class="category-info">
+        <span class="category-tag">COSMETIC</span>
+        <h3>CUSTOM TITLES</h3>
+        <p>
+          Show your status with exclusive player titles.
+        </p>
+        <span class="coming-soon">COMING SOON</span>
+      </div>
+
+    </article>
+
+    <article class="minecraft-category-card">
+
+      <div class="item-frame">
+        <div class="item-frame-inner">♦</div>
+      </div>
+
+      <div class="category-info">
+        <span class="category-tag">COSMETIC</span>
+        <h3>PLAYER EFFECTS</h3>
+        <p>
+          Make your arrivals and moments unforgettable.
+        </p>
+        <span class="coming-soon">COMING SOON</span>
+      </div>
+
+    </article>
+
+  </div>
+
+</section>
+
+<section class="minecraft-divider">
+  <span>◆</span>
+</section>
+
+<section class="mc-section" id="bundles">
+
+  <div class="minecraft-section-title">
+
+    <div class="title-line"></div>
+
+    <div>
+      <span class="section-kicker">MORE VALUE</span>
+      <h2>ZYNOX BUNDLES</h2>
+    </div>
+
+    <div class="title-line"></div>
+
+  </div>
+
+  <p class="section-description">
+    Bigger collections. Better value. More Zynox.
+  </p>
+
+  <div class="minecraft-bundle">
+
+    <div class="bundle-art">
+
+      <div class="pixel-chest">
+        <div class="chest-lid"></div>
+        <div class="chest-body"></div>
+        <div class="chest-lock">■</div>
+      </div>
+
+    </div>
+
+    <div class="bundle-content">
+
+      <span class="category-tag">UPCOMING</span>
+
+      <h3>ZYNOX ADVENTURER PACK</h3>
 
       <p>
-        Every purchase supports the development and maintenance
-        of ZynoxSMP.
+        A future collection combining cosmetics,
+        titles and supporter perks into one special package.
       </p>
-    </div>
 
-    <div id="products" class="rank-grid">
-      <div class="loading-card">
-        <div class="loader"></div>
-        <span>Loading Zynox ranks...</span>
-      </div>
-    </div>
-
-  </section>
-
-  <section class="feature-strip">
-
-    <div class="feature">
-      <div class="feature-icon">⚡</div>
-      <div>
-        <strong>Instant Delivery</strong>
-        <span>Automatic reward delivery</span>
-      </div>
-    </div>
-
-    <div class="feature">
-      <div class="feature-icon">🛡️</div>
-      <div>
-        <strong>Fair Play</strong>
-        <span>Designed around cosmetics & QoL</span>
-      </div>
-    </div>
-
-    <div class="feature">
-      <div class="feature-icon">💜</div>
-      <div>
-        <strong>Support Zynox</strong>
-        <span>Help us build something bigger</span>
-      </div>
-    </div>
-
-  </section>
-
-  <section class="section comparison" id="cosmetics">
-
-    <div class="section-heading centered">
-      <span class="eyebrow">WHAT'S INSIDE</span>
-      <h2>Built for every kind of player</h2>
-      <p>
-        Start small with cosmetics or go all-in with a supporter rank.
-      </p>
-    </div>
-
-    <div class="category-grid">
-
-      <div class="category-card">
-        <div class="category-icon">✨</div>
-        <h3>Cosmetics</h3>
-        <p>
-          Particles, titles, effects and other ways to stand out.
-        </p>
-        <span>Coming to the store →</span>
+      <div class="bundle-items">
+        <span>✦ Cosmetic Aura</span>
+        <span>★ Custom Title</span>
+        <span>♦ Exclusive Effect</span>
       </div>
 
-      <div class="category-card">
-        <div class="category-icon">📦</div>
-        <h3>Bundles</h3>
-        <p>
-          Carefully packed collections with more value in one purchase.
-        </p>
-        <span>Coming to the store →</span>
-      </div>
-
-      <div class="category-card">
-        <div class="category-icon">🎃</div>
-        <h3>Seasonal</h3>
-        <p>
-          Limited-time ZynoxSMP cosmetics for special events.
-        </p>
-        <span>Coming to the store →</span>
-      </div>
-
-    </div>
-
-  </section>
-
-  <section class="cta">
-    <div class="cta-content">
-      <span class="eyebrow">THE ZYNOX JOURNEY</span>
-      <h2>More players. More worlds.<br><span>More Zynox.</span></h2>
-      <p>
-        Your support helps us keep improving the server,
-        adding features and creating new experiences.
-      </p>
-      <button class="primary-button" onclick="scrollToRanks()">
-        View Supporter Ranks <span>→</span>
+      <button class="mc-button mc-button-disabled">
+        COMING SOON
       </button>
+
     </div>
-  </section>
+
+  </div>
+
+</section>
+
+<section class="minecraft-feature-strip">
+
+  <div class="mc-feature">
+    <div class="feature-slot">⚡</div>
+    <div>
+      <strong>FAST DELIVERY</strong>
+      <span>Automatic reward system</span>
+    </div>
+  </div>
+
+  <div class="mc-feature">
+    <div class="feature-slot">🛡</div>
+    <div>
+      <strong>FAIR PLAY</strong>
+      <span>Cosmetic & QoL focused</span>
+    </div>
+  </div>
+
+  <div class="mc-feature">
+    <div class="feature-slot">💜</div>
+    <div>
+      <strong>SUPPORT ZYNOX</strong>
+      <span>Help grow the server</span>
+    </div>
+  </div>
+
+</section>
+
+<section class="minecraft-footer-cta">
+
+  <div class="footer-cta-inner">
+
+    <span class="section-kicker">YOUR ADVENTURE AWAITS</span>
+
+    <h2>
+      BUILD.
+      <span>EXPLORE.</span>
+      CONQUER.
+    </h2>
+
+    <p>
+      ZynoxSMP is built by players, for players.
+      Your support helps us keep creating.
+    </p>
+
+    <button
+      class="mc-button mc-button-primary"
+      onclick="scrollToRanks()">
+      OPEN STORE
+    </button>
+
+  </div>
+
+</section>
 
 </main>
 
-<footer>
-  <div class="footer-brand">
-    ⚡ <strong>ZynoxSMP</strong>
-    <span>Official Server Store</span>
+<footer class="mc-footer">
+
+  <div class="footer-logo">
+
+    <span class="mc-brand-block">⚡</span>
+
+    <div>
+      <strong>ZYNOX<span>SMP</span></strong>
+      <small>OFFICIAL SERVER STORE</small>
+    </div>
+
   </div>
 
   <div class="footer-links">
-    <a href="#">Terms</a>
-    <a href="#">Privacy</a>
-    <a href="#">Support</a>
+    <a href="#">TERMS</a>
+    <a href="#">PRIVACY</a>
+    <a href="#">SUPPORT</a>
   </div>
 
-  <div class="copyright">
-    © 2026 ZynoxSMP
+  <div class="footer-copy">
+    © 2026 ZYNOXSMP
   </div>
+
 </footer>
 
 <script src="/app.js"></script>
