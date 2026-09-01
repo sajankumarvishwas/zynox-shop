@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#07070d">
+  <title>ZynoxSMP • Checkout</title>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+    :root {
+      --bg: #07070d;
+      --panel: #11111b;
+      --panel-2: #151522;
+      --border: rgba(255,255,255,.08);
+      --text: #f7f7fb;
+      --muted: #9191a5;
+      --purple: #8b5cf6;
+      --purple-light: #b48cff;
+      --green: #7fe0aa;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      color: var(--text);
+      font-family: Inter, Arial, sans-serif;
+      background:
+        radial-gradient(circle at 50% -5%, rgba(139,92,246,.20), transparent 35%),
+        radial-gradient(circle at 100% 60%, rgba(91,33,182,.10), transparent 30%),
+        var(--bg);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: .20;
+      background-image:
+        linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+      background-size: 42px 42px;
+      mask-image: linear-gradient(to bottom, black, transparent 85%);
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      height: 74px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      background: rgba(7,7,13,.82);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: white;
+      text-decoration: none;
+      font-size: 20px;
+      font-weight: 900;
+    }
+
+    .brand-icon {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #a77aff, #6d35df);
+      box-shadow: 0 0 28px rgba(139,92,246,.28);
+    }
+
+    .brand .accent {
+      color: var(--purple-light);
+    }
+
+    .back {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .back:hover {
+      color: white;
+    }
+
+    .page {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 52px 0 70px;
+    }
+
+    .page-head {
+      text-align: center;
+      max-width: 620px;
+      margin: 0 auto 40px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #b894ff;
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 1.8px;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #9b6cff;
+      box-shadow: 0 0 12px #9b6cff;
+    }
+
+    .page-head h1 {
+      margin-top: 12px;
+      font-size: clamp(34px, 7vw, 58px);
+      line-height: 1;
+      letter-spacing: -2px;
+      font-weight: 900;
+    }
+
+    .page-head p {
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .checkout-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.35fr;
+      gap: 20px;
+      align-items: start;
+    }
+
+    .panel {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,.012)),
+        var(--panel);
+      box-shadow: 0 25px 70px rgba(0,0,0,.22);
+    }
+
+    .summary {
+      padding: 28px;
+    }
+
+    .summary::before {
+      content: "";
+      position: absolute;
+      width: 190px;
+      height: 190px;
+      right: -75px;
+      top: -80px;
+      border-radius: 50%;
+      background: var(--purple);
+      filter: blur(85px);
+      opacity: .15;
+    }
+
+    .summary-label {
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 1.5px;
+    }
+
+    .rank-icon {
+      width: 55px;
+      height: 55px;
+      margin-top: 20px;
+      display: grid;
+      place-items: center;
+      border-radius: 16px;
+      background: rgba(139,92,246,.10);
+      border: 1px solid rgba(139,92,246,.18);
+      font-size: 27px;
+    }
+
+    .summary h2 {
+      margin-top: 18px;
+      font-size: 31px;
+      letter-spacing: -.8px;
+    }
+
+    .price {
+      display: flex;
+      align-items: baseline;
+      gap: 7px;
+      margin-top: 8px;
+    }
+
+    .price strong {
+      font-size: 38px;
+      letter-spacing: -1px;
+    }
+
+    .price span {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .summary-text {
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.65;
+    }
+
+    .divider {
+      height: 1px;
+      margin: 24px 0;
+      background: var(--border);
+    }
+
+    .mini-feature {
+      display: flex;
+      gap: 11px;
+      align-items: flex-start;
+      margin-top: 14px;
+    }
+
+    .mini-icon {
+      flex: 0 0 auto;
+      width: 28px;
+      height: 28px;
+      display: grid;
+      place-items: center;
+      border-radius: 9px;
+      background: rgba(139,92,246,.10);
+      color: #bb9dff;
+      font-size: 12px;
+    }
+
+    .mini-feature strong,
+    .mini-feature span {
+      display: block;
+    }
+
+    .mini-feature strong {
+      font-size: 12px;
+    }
+
+    .mini-feature span {
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.45;
+    }
+
+    .form-panel {
+      padding: 30px;
+    }
+
+    .step {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+
+    .step-number {
+      width: 31px;
+      height: 31px;
+      display: grid;
+      place-items: center;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #9b6cff, #6d35df);
+      color: white;
+      font-size: 12px;
+      font-weight: 900;
+      box-shadow: 0 7px 24px rgba(109,53,223,.25);
+    }
+
+    .step-text strong,
+    .step-text span {
+      display: block;
+    }
+
+    .step-text strong {
+      font-size: 14px;
+    }
+
+    .step-text span {
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .field-label {
+      display: block;
+      margin-bottom: 8px;
+      color: #dad9e3;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .input-wrap {
+      position: relative;
+    }
+
+    input {
+      width: 100%;
+      height: 56px;
+      padding: 0 16px;
+      border: 1px solid rgba(255,255,255,.09);
+      border-radius: 13px;
+      outline: none;
+      background: #090911;
+      color: white;
+      font: inherit;
+      font-size: 15px;
+      transition: .2s ease;
+    }
+
+    input::placeholder {
+      color: #626274;
+    }
+
+    input:focus {
+      border-color: rgba(139,92,246,.65);
+      box-shadow: 0 0 0 4px rgba(139,92,246,.10);
+    }
+
+    .hint {
+      margin-top: 9px;
+      color: #66667a;
+      font-size: 10px;
+      line-height: 1.5;
+    }
+
+    .continue {
+      width: 100%;
+      margin-top: 22px;
+      height: 55px;
+      border: 0;
+      border-radius: 13px;
+      background: linear-gradient(135deg, #9b6cff, #6d35df);
+      color: white;
+      font-size: 14px;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 14px 32px rgba(109,53,223,.24);
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    .continue:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 18px 38px rgba(109,53,223,.36);
+    }
+
+    .message {
+      min-height: 22px;
+      margin-top: 14px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .trust-row {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-top: 20px;
+      padding-top: 19px;
+      border-top: 1px solid var(--border);
+      color: #6f6f82;
+      font-size: 10px;
+    }
+
+    .trust-row span {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .trust-row b {
+      color: var(--green);
+    }
+
+    .bottom-note {
+      max-width: 650px;
+      margin: 28px auto 0;
+      color: #656577;
+      text-align: center;
+      font-size: 10px;
+      line-height: 1.7;
+    }
+
+    @media (max-width: 780px) {
+      .checkout-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .summary {
+        order: 1;
+      }
+
+      .form-panel {
+        order: 2;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .topbar {
+        padding: 0 15px;
+      }
+
+      .brand {
+        font-size: 17px;
+      }
+
+      .page {
+        width: min(100% - 20px, 1080px);
+        padding-top: 35px;
+      }
+
+      .summary,
+      .form-panel {
+        padding: 22px;
+      }
+
+      .page-head {
+        margin-bottom: 28px;
+      }
+
+      .page-head h1 {
+        letter-spacing: -1.2px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header class="topbar">
+  <a class="brand" href="/">
+    <span class="brand-icon">⚡</span>
+    <span>Zynox<span class="accent">SMP</span></span>
+  </a>
+
+  <a class="back" href="/">← Back to Shop</a>
+</header>
+
+<main class="page">
+
+  <section class="page-head">
+    <span class="eyebrow">ORDER CHECKOUT</span>
+    <h1>Complete your order.</h1>
+    <p>
+      Enter your Minecraft username so your purchase can be delivered
+      to the correct ZynoxSMP account.
+    </p>
+  </section>
+
+  <section class="checkout-grid">
+
+    <div class="panel summary">
+      <div class="summary-label">YOUR SELECTION</div>
+
+      <div class="rank-icon" id="rankIcon">✦</div>
+
+      <h2 id="product">Selected Rank</h2>
+
+      <div class="price">
+        <strong id="price">₹0</strong>
+        <span>one-time</span>
+      </div>
+
+      <p class="summary-text">
+        Your selected ZynoxSMP rank will be connected to the
+        Minecraft username entered on this page.
+      </p>
+
+      <div class="divider"></div>
+
+      <div class="mini-feature">
+        <div class="mini-icon">✓</div>
+        <div>
+          <strong>Correct account delivery</strong>
+          <span>Your Minecraft username is used to identify the destination account.</span>
+        </div>
+      </div>
+
+      <div class="mini-feature">
+        <div class="mini-icon">⚡</div>
+        <div>
+          <strong>Automatic delivery</strong>
+          <span>Automatic reward delivery will be connected after payment integration.</span>
+        </div>
+      </div>
+
+      <div class="mini-feature">
+        <div class="mini-icon">🛡</div>
+        <div>
+          <strong>Fair-play focused</strong>
+          <span>ZynoxSMP rewards are designed around cosmetics and quality-of-life features.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel form-panel">
+
+      <div class="step">
+        <div class="step-number">1</div>
+        <div class="step-text">
+          <strong>Minecraft Account</strong>
+          <span>Tell us where to deliver your rank.</span>
+        </div>
+      </div>
+
+      <label class="field-label" for="username">
+        Minecraft Username
+      </label>
+
+      <div class="input-wrap">
+        <input
+          id="username"
+          type="text"
+          maxlength="16"
+          autocomplete="off"
+          spellcheck="false"
+          placeholder="Enter your Minecraft username"
+        >
+      </div>
+
+      <div class="hint">
+        Enter your Minecraft username exactly as it appears in-game.
+      </div>
+
+      <button class="continue" id="continueBtn">
+        Continue to Payment →
+      </button>
+
+      <div class="message" id="message"></div>
+
+      <div class="trust-row">
+        <span><b>✓</b> Username verification</span>
+        <span><b>✓</b> Protected checkout flow</span>
+        <span>⚡ ZynoxSMP</span>
+      </div>
+
+    </div>
+
+  </section>
+
+  <p class="bottom-note">
+    By continuing, you confirm that the Minecraft username entered above
+    belongs to the account you want to receive the selected product.
+  </p>
+
+</main>
+
+<script>
+  const params = new URLSearchParams(window.location.search);
+
+  const product = params.get("product") || "Unknown Product";
+  const price = params.get("price") || "0";
+
+  const productElement = document.getElementById("product");
+  const priceElement = document.getElementById("price");
+  const usernameElement = document.getElementById("username");
+  const messageElement = document.getElementById("message");
+  const continueButton = document.getElementById("continueBtn");
+  const rankIcon = document.getElementById("rankIcon");
+
+  productElement.textContent = product;
+  priceElement.textContent = "₹" + price;
+
+  const productLower = product.toLowerCase();
+
+  if (productLower.includes("mvp")) {
+    rankIcon.textContent = "◆";
+  } else if (productLower.includes("elite")) {
+    rankIcon.textContent = "♛";
+  } else {
+    rankIcon.textContent = "✦";
+  }
+
+  continueButton.addEventListener("click", () => {
+    const username = usernameElement.value.trim();
+
+    if (!username) {
+      messageElement.textContent =
+        "Please enter your Minecraft username.";
+      usernameElement.focus();
+      return;
+    }
+
+    if (
+      username.length < 3 ||
+      username.length > 32 ||
+      !/^[A-Za-z0-9_ .-]+$/.test(username)
+    ) {
+      messageElement.textContent =
+        "Please enter a valid Minecraft username.";
+      usernameElement.focus();
+      return;
+    }
+
+    messageElement.textContent =
+      "✓ " + username +
+      " verified locally. Payment integration is the next step.";
+  });
+</script>
+
+</body>
+</html>
