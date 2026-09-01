@@ -580,6 +580,7 @@
 
 </main>
 
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
   const params = new URLSearchParams(window.location.search);
 
@@ -606,7 +607,7 @@
     rankIcon.textContent = "✦";
   }
 
-  continueButton.addEventListener("click", () => {
+  continueButton.addEventListener("click", async () => {
     const username = usernameElement.value.trim();
 
     if (!username) {
@@ -627,9 +628,59 @@
       return;
     }
 
-    messageElement.textContent =
-      "✓ " + username +
-      " verified locally. Payment integration is the next step.";
+    messageElement.textContent = "Creating secure payment order...";
+
+    try {
+      const response = await fetch("/api/create-order", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          product,
+          username
+        })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        throw new Error(data.message || "Unable to create payment order");
+      }
+
+      const options = {
+        key: data.key_id,
+        amount: data.amount,
+        currency: data.currency,
+        name: "ZynoxSMP",
+        description: data.product,
+        order_id: data.order_id,
+        prefill: {
+          name: data.username
+        },
+        theme: {
+          color: "#8b5cf6"
+        },
+        handler: function (payment) {
+          messageElement.textContent =
+            "Payment received. Verifying payment...";
+          console.log("Razorpay payment:", payment);
+        },
+        modal: {
+          ondismiss: function () {
+            messageElement.textContent = "Payment window closed.";
+          }
+        }
+      };
+
+      const razorpayCheckout = new Razorpay(options);
+      razorpayCheckout.open();
+
+    } catch (error) {
+      console.error("[Zynox Shop] Payment error:", error);
+      messageElement.textContent =
+        error.message || "Unable to start payment.";
+    }
   });
 </script>
 
