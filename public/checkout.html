@@ -468,62 +468,61 @@
     <span>Zynox<span class="accent">SMP</span></span>
   </a>
 
-  <a class="back" href="/">← Back to Shop</a>
+  <a class="back" href="/">← Back to Home</a>
 </header>
 
 <main class="page">
 
   <section class="page-head">
-    <span class="eyebrow">ORDER CHECKOUT</span>
-    <h1>Complete your order.</h1>
+    <span class="eyebrow">ZYNOX SUPPORT</span>
+    <h1>Treat the Admin. 💚</h1>
     <p>
-      Enter your Minecraft username so your purchase can be delivered
-      to the correct ZynoxSMP account.
+      No ranks. No pressure. Just a simple way to support Zynox
+      and send a little love to the person keeping the world running.
     </p>
   </section>
 
   <section class="checkout-grid">
 
     <div class="panel summary">
-      <div class="summary-label">YOUR SELECTION</div>
+      <div class="summary-label">YOUR SUPPORT</div>
 
-      <div class="rank-icon" id="rankIcon">✦</div>
+      <div class="rank-icon" id="rankIcon">❤</div>
 
-      <h2 id="product">Selected Rank</h2>
+      <h2 id="product">Zynox Support</h2>
 
       <div class="price">
         <strong id="price">₹0</strong>
-        <span>one-time</span>
+        <span id="priceLabel">donation</span>
       </div>
 
-      <p class="summary-text">
-        Your selected ZynoxSMP rank will be connected to the
-        Minecraft username entered on this page.
+      <p class="summary-text" id="summaryText">
+        Your support goes directly toward the Zynox server and its future adventures.
       </p>
 
       <div class="divider"></div>
 
       <div class="mini-feature">
-        <div class="mini-icon">✓</div>
+        <div class="mini-icon">❤</div>
         <div>
-          <strong>Correct account delivery</strong>
-          <span>Your Minecraft username is used to identify the destination account.</span>
+          <strong>Direct UPI Payment</strong>
+          <span>Payment goes directly to the Zynox UPI account.</span>
         </div>
       </div>
 
       <div class="mini-feature">
         <div class="mini-icon">⚡</div>
         <div>
-          <strong>Automatic delivery</strong>
-          <span>Automatic reward delivery will be connected after payment integration.</span>
+          <strong>Quick & Simple</strong>
+          <span>Tap donate and your phone can open an available UPI app.</span>
         </div>
       </div>
 
       <div class="mini-feature">
-        <div class="mini-icon">🛡</div>
+        <div class="mini-icon">✉</div>
         <div>
-          <strong>Fair-play focused</strong>
-          <span>ZynoxSMP rewards are designed around cosmetics and quality-of-life features.</span>
+          <strong>Leave a Message</strong>
+          <span>Add a short message for the Admin with your donation.</span>
         </div>
       </div>
     </div>
@@ -533,40 +532,63 @@
       <div class="step">
         <div class="step-number">1</div>
         <div class="step-text">
-          <strong>Minecraft Account</strong>
-          <span>Tell us where to deliver your rank.</span>
+          <strong>Your Donation</strong>
+          <span>Choose an amount and optionally leave a message.</span>
         </div>
       </div>
 
-      <label class="field-label" for="username">
-        Minecraft Username
+      <div id="fixedAmountWrap">
+        <label class="field-label" for="amount">
+          Donation Amount
+        </label>
+
+        <div class="input-wrap">
+          <input
+            id="amount"
+            type="number"
+            min="1"
+            max="100"
+            step="1"
+            inputmode="numeric"
+            autocomplete="off"
+            placeholder="Enter amount"
+          >
+        </div>
+
+        <div class="hint">
+          Fixed support options are between ₹1 and ₹100.
+        </div>
+      </div>
+
+      <label class="field-label" for="message" style="margin-top:18px;">
+        Message to Admin <span style="color:#66667a;">(optional)</span>
       </label>
 
       <div class="input-wrap">
         <input
-          id="username"
+          id="messageInput"
           type="text"
-          maxlength="16"
+          maxlength="120"
           autocomplete="off"
           spellcheck="false"
-          placeholder="Enter your Minecraft username"
+          placeholder="Thanks for keeping Zynox alive! 💚"
         >
       </div>
 
       <div class="hint">
-        Enter your Minecraft username exactly as it appears in-game.
+        Your message can be included with the UPI payment.
       </div>
 
       <button class="continue" id="continueBtn">
-        Continue to Payment →
+        DONATE NOW →
       </button>
 
       <div class="message" id="message"></div>
 
       <div class="trust-row">
-        <span><b>✓</b> Username verification</span>
-        <span><b>✓</b> Protected checkout flow</span>
-        <span>⚡ ZynoxSMP</span>
+        <span><b>✓</b> Direct UPI</span>
+        <span><b>✓</b> No Razorpay</span>
+        <span><b>❤</b> Zynox Support</span>
       </div>
 
     </div>
@@ -574,113 +596,99 @@
   </section>
 
   <p class="bottom-note">
-    By continuing, you confirm that the Minecraft username entered above
-    belongs to the account you want to receive the selected product.
+    By continuing, your phone may open an available UPI payment app.
+    The payment is made directly to the Zynox UPI account.
   </p>
 
 </main>
 
-  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
-  const params = new URLSearchParams(window.location.search);
+  const UPI_ID = "spidermankumar@fam";
 
-  const product = params.get("product") || "Unknown Product";
-  const price = params.get("price") || "0";
+  const params = new URLSearchParams(window.location.search);
+  const product = params.get("product") || "Zynox Support";
+  const priceParam = params.get("price") || "";
 
   const productElement = document.getElementById("product");
   const priceElement = document.getElementById("price");
-  const usernameElement = document.getElementById("username");
+  const amountElement = document.getElementById("amount");
   const messageElement = document.getElementById("message");
+  const messageInput = document.getElementById("messageInput");
   const continueButton = document.getElementById("continueBtn");
   const rankIcon = document.getElementById("rankIcon");
+  const summaryText = document.getElementById("summaryText");
 
   productElement.textContent = product;
-  priceElement.textContent = "₹" + price;
 
-  const productLower = product.toLowerCase();
+  const icons = {
+    "Treat Admin a Pizza": "🍕",
+    "Treat Admin a Fanta": "🥤",
+    "Admin ka Ration": "🍱",
+    "Support the Server": "⛏",
+    "Custom Donation": "💚"
+  };
 
-  if (productLower.includes("mvp")) {
-    rankIcon.textContent = "◆";
-  } else if (productLower.includes("elite")) {
-    rankIcon.textContent = "♛";
+  rankIcon.textContent = icons[product] || "❤";
+
+  const isCustom = priceParam.toLowerCase() === "custom";
+
+  if (isCustom) {
+    priceElement.textContent = "₹?";
+    amountElement.value = "";
+    amountElement.placeholder = "Enter your amount";
+    amountElement.removeAttribute("max");
+    summaryText.textContent =
+      "Choose your own donation amount and send a personal message to the Admin.";
   } else {
-    rankIcon.textContent = "✦";
+    const fixedPrice = Number(priceParam);
+
+    if (Number.isFinite(fixedPrice) && fixedPrice > 0) {
+      priceElement.textContent = "₹" + fixedPrice;
+      amountElement.value = fixedPrice;
+      amountElement.readOnly = true;
+      summaryText.textContent =
+        "Thank you for supporting Zynox. Every contribution helps keep the server running.";
+    }
   }
 
-  continueButton.addEventListener("click", async () => {
-    const username = usernameElement.value.trim();
+  continueButton.addEventListener("click", () => {
+    const amount = Number(amountElement.value);
+    const note = messageInput.value.trim();
 
-    if (!username) {
-      messageElement.textContent =
-        "Please enter your Minecraft username.";
-      usernameElement.focus();
+    if (!Number.isFinite(amount) || amount <= 0) {
+      messageElement.textContent = "Please enter a valid donation amount.";
+      amountElement.focus();
       return;
     }
 
-    if (
-      username.length < 3 ||
-      username.length > 32 ||
-      !/^[A-Za-z0-9_ .-]+$/.test(username)
-    ) {
-      messageElement.textContent =
-        "Please enter a valid Minecraft username.";
-      usernameElement.focus();
+    if (!isCustom && (amount < 1 || amount > 100)) {
+      messageElement.textContent = "Donation amount must be between ₹1 and ₹100.";
+      amountElement.focus();
       return;
     }
 
-    messageElement.textContent = "Creating secure payment order...";
-
-    try {
-      const response = await fetch("/api/create-order", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          product,
-          username
-        })
-      });
-
-      const data = await response.json();
-
-      if (!response.ok || !data.success) {
-        throw new Error(data.message || "Unable to create payment order");
-      }
-
-      const options = {
-        key: data.key_id,
-        amount: data.amount,
-        currency: data.currency,
-        name: "ZynoxSMP",
-        description: data.product,
-        order_id: data.order_id,
-        prefill: {
-          name: data.username
-        },
-        theme: {
-          color: "#8b5cf6"
-        },
-        handler: function (payment) {
-          messageElement.textContent =
-            "Payment received. Verifying payment...";
-          console.log("Razorpay payment:", payment);
-        },
-        modal: {
-          ondismiss: function () {
-            messageElement.textContent = "Payment window closed.";
-          }
-        }
-      };
-
-      const razorpayCheckout = new Razorpay(options);
-      razorpayCheckout.open();
-
-    } catch (error) {
-      console.error("[Zynox Shop] Payment error:", error);
-      messageElement.textContent =
-        error.message || "Unable to start payment.";
+    if (isCustom && amount < 1) {
+      messageElement.textContent = "Custom donation must be at least ₹1.";
+      amountElement.focus();
+      return;
     }
+
+    const params = new URLSearchParams({
+      pa: UPI_ID,
+      pn: "Zynox World",
+      am: amount.toFixed(2),
+      cu: "INR"
+    });
+
+    if (note) {
+      params.set("tn", note.slice(0, 120));
+    }
+
+    const upiUrl = "upi://pay?" + params.toString();
+
+    messageElement.textContent = "Opening your UPI app…";
+
+    window.location.href = upiUrl;
   });
 </script>
 

@@ -1,29 +1,24 @@
 {
-  "ranks": {
-    "vip": {
-      "name": "VIP",
+  "donations": {
+    "pizza": {
+      "name": "Fanta Ki Chhoti Bottle",
+      "price": 29,
+      "icon": "🥤"
+    },
+    "fanta": {
+      "name": "Fanta Ki Badi Bottle",
       "price": 49,
-      "homes": 3,
-      "title": "VIP",
-      "particles": 1,
-      "join_effect": true
+      "icon": "🧃"
     },
-    "mvp": {
-      "name": "MVP",
-      "price": 99,
-      "homes": 5,
-      "title": "MVP",
-      "particles": 2,
-      "join_effect": true
+    "ration": {
+      "name": "Chai-Nashta",
+      "price": 79,
+      "icon": "☕"
     },
-    "elite": {
-      "name": "ELITE",
-      "price": 199,
-      "homes": 8,
-      "title": "ELITE",
-      "particles": 4,
-      "join_effect": true,
-      "kill_effect": true
+    "server": {
+      "name": "Zynox Recharge Fund",
+      "price": 349,
+      "icon": "📱"
     }
   }
 }

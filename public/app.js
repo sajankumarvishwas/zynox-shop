@@ -2,40 +2,28 @@ const productContainer = document.getElementById("products");
 
 const fallbackProducts = [
   {
-    id: "vip",
-    name: "VIP",
+    id: "pizza",
+    name: "Treat Admin a Pizza",
     price: 49,
-    perks: {
-      homes: 3,
-      title: "VIP",
-      particles: 1,
-      join_effect: true,
-      kill_effect: false
-    }
+    icon: "🍕"
   },
   {
-    id: "mvp",
-    name: "MVP",
+    id: "fanta",
+    name: "Treat Admin a Fanta",
+    price: 29,
+    icon: "🥤"
+  },
+  {
+    id: "ration",
+    name: "Admin ka Ration",
+    price: 79,
+    icon: "🍱"
+  },
+  {
+    id: "server",
+    name: "Support the Server",
     price: 99,
-    perks: {
-      homes: 5,
-      title: "MVP",
-      particles: 2,
-      join_effect: true,
-      kill_effect: false
-    }
-  },
-  {
-    id: "elite",
-    name: "ELITE",
-    price: 199,
-    perks: {
-      homes: 8,
-      title: "ELITE",
-      particles: 4,
-      join_effect: true,
-      kill_effect: true
-    }
+    icon: "⛏"
   }
 ];
 
@@ -48,105 +36,120 @@ function escapeHtml(value) {
     .replaceAll("'", "&#039;");
 }
 
-function getRankIcon(id) {
-  if (id === "vip") return "✦";
-  if (id === "mvp") return "◆";
-  if (id === "elite") return "♛";
-  return "✦";
+function getDonationIcon(product) {
+  if (product.id === "pizza") {
+    return '<img src="/assets/minecraft/items/fanta-small.png" alt="Fanta Ki Bottle">';
+  }
+
+  if (product.id === "fanta") {
+    return '<img src="/assets/minecraft/items/fanta-big.png" alt="Fanta Ki Badi Bottle">';
+  }
+
+  return product.icon || "❤";
 }
 
-function getRankDescription(id) {
-  if (id === "vip") {
-    return "Your first step into the ZynoxSMP supporter club.";
+function getDonationDescription(id) {
+  if (id === "pizza") {
+    return "Help keep the admin fed while Zynox keeps moving.";
   }
 
-  if (id === "mvp") {
-    return "More convenience, more style and more ways to stand out.";
+  if (id === "fanta") {
+    return "A tiny refreshment for the person keeping the server alive.";
   }
 
-  if (id === "elite") {
-    return "The ultimate ZynoxSMP supporter experience.";
+  if (id === "ration") {
+    return "Help stock up the admin's virtual-world survival supplies.";
   }
 
-  return "A ZynoxSMP supporter package.";
-}
-
-function makePerks(product) {
-  const perks = [];
-  const data = product.perks || {};
-
-  if (data.homes) {
-    perks.push(`${data.homes} extra homes`);
+  if (id === "server") {
+    return "Put your support directly toward the Zynox server.";
   }
 
-  if (data.title) {
-    perks.push(`${data.title} exclusive title`);
-  }
-
-  if (data.particles) {
-    perks.push(`${data.particles} cosmetic particle option${data.particles > 1 ? "s" : ""}`);
-  }
-
-  if (data.join_effect) {
-    perks.push("Join effect");
-  }
-
-  if (data.kill_effect) {
-    perks.push("Exclusive kill effect");
-  }
-
-  return perks;
+  return "Every little bit helps keep Zynox running.";
 }
 
 function renderProducts(products) {
   productContainer.innerHTML = "";
 
-  products.forEach((product, index) => {
+  products.forEach(product => {
     const id = String(product.id).toLowerCase();
     const name = escapeHtml(product.name);
     const price = Number(product.price) || 0;
-    const perks = makePerks(product);
 
     const card = document.createElement("article");
-    card.className = `rank-card ${id === "mvp" ? "featured" : ""}`;
+    card.className = "rank-card donation-card";
 
     card.innerHTML = `
       <div class="rank-glow"></div>
 
       <div class="rank-top">
-        <div class="rank-icon">${getRankIcon(id)}</div>
-        ${id === "mvp" ? '<span class="rank-label">MOST POPULAR</span>' : ""}
+        <div class="rank-icon">${getDonationIcon(product)}</div>
+        <span class="rank-label">SUPPORT</span>
       </div>
 
       <h3>${name}</h3>
 
       <div class="rank-price">
         <strong>₹${price}</strong>
-        <span>one-time</span>
+        <span>donation</span>
       </div>
 
       <p class="rank-description">
-        ${escapeHtml(getRankDescription(id))}
+        ${escapeHtml(getDonationDescription(id))}
       </p>
 
       <div class="perks">
-        ${
-          perks.length
-            ? perks.map(perk => `<div class="perk">${escapeHtml(perk)}</div>`).join("")
-            : `<div class="perk">ZynoxSMP supporter rank</div>`
-        }
+        <div class="perk">❤ No rank required</div>
+        <div class="perk">◆ Pure server support</div>
       </div>
 
       <button
-        class="buy-button"
-        data-product="${escapeHtml(product.name)}"
+        class="buy-button donation-button"
+        data-product="${name}"
         data-price="${price}">
-        Get ${name} →
+        DONATE ₹${price} →
       </button>
     `;
 
     productContainer.appendChild(card);
   });
+
+  const customCard = document.createElement("article");
+  customCard.className = "rank-card donation-card custom-donation-card";
+
+  customCard.innerHTML = `
+    <div class="rank-glow"></div>
+
+    <div class="rank-top">
+      <div class="rank-icon">💚</div>
+      <span class="rank-label">YOUR CHOICE</span>
+    </div>
+
+    <h3>Custom Donation</h3>
+
+    <div class="rank-price">
+      <strong>₹?</strong>
+      <span>any amount</span>
+    </div>
+
+    <p class="rank-description">
+      Choose exactly how much you want to contribute to Zynox.
+    </p>
+
+    <div class="perks">
+      <div class="perk">❤ You choose the amount</div>
+      <div class="perk">◆ Optional message to Admin</div>
+    </div>
+
+    <button
+      class="buy-button donation-button custom-donation-button"
+      data-product="Custom Donation"
+      data-price="custom">
+      CHOOSE AMOUNT →
+    </button>
+  `;
+
+  productContainer.appendChild(customCard);
 
   document.querySelectorAll(".buy-button").forEach(button => {
     button.addEventListener("click", () => {
@@ -232,3 +235,78 @@ document.querySelectorAll(".mc-server-card[data-server]").forEach(card => {
     }
   });
 });
+
+const zynoxRevealItems = document.querySelectorAll(
+  ".mc-section, .minecraft-announcement, .minecraft-feature-strip, .minecraft-footer-cta"
+);
+
+const zynoxRevealObserver = new IntersectionObserver(
+  entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("zynox-revealed");
+        zynoxRevealObserver.unobserve(entry.target);
+      }
+    });
+  },
+  {
+    threshold: 0.12,
+    rootMargin: "0px 0px -40px 0px"
+  }
+);
+
+zynoxRevealItems.forEach(item => {
+  zynoxRevealObserver.observe(item);
+});
+
+
+/* =========================================================
+   RANDOM MINECRAFT DECORATIONS
+   Changes decorative card assets on every page load.
+========================================================= */
+
+(() => {
+  const randomDecorations = [
+    "/assets/decor/flower-poppy.svg",
+    "/assets/decor/flower-dandelion.svg",
+    "/assets/decor/flower-blue.svg",
+    "/assets/minecraft/items/wheat.png",
+    "/assets/minecraft/items/apple.png",
+    "/assets/minecraft/items/ore_emerald.png",
+    "/assets/minecraft/items/ore_diamond.png",
+    "/assets/minecraft/items/ore_gold.png"
+  ];
+
+  const shuffle = items => {
+    const copy = [...items];
+
+    for (let i = copy.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+
+    return copy;
+  };
+
+  const decorativeTargets = document.querySelectorAll(
+    ".minecraft-category-card::after"
+  );
+
+  const cards = [
+    ...document.querySelectorAll(".minecraft-category-card"),
+    ...document.querySelectorAll(".rank-card"),
+    ...document.querySelectorAll(".creation-vault")
+  ];
+
+  if (!cards.length) return;
+
+  const pool = shuffle(randomDecorations);
+
+  cards.forEach((card, index) => {
+    const asset = pool[index % pool.length];
+    card.style.setProperty(
+      "--zynox-random-decor",
+      `url("${asset}")`
+    );
+  });
+})();

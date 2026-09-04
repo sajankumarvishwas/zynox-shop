@@ -5878,3 +5878,700 @@ body.zynox-page-leaving {
     right: 8px;
   }
 }
+
+.world-mini-art-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  box-sizing: border-box;
+}
+
+.world-mini-art-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+}
+
+
+.world-mini-card {
+  will-change: transform, filter, border-color;
+}
+
+.world-mini-card:hover {
+  transform: translateY(-6px) scale(1.015);
+  filter: brightness(1.1);
+}
+
+.world-mini-art-image img {
+  transition: transform .35s cubic-bezier(.2,.8,.2,1), filter .35s ease;
+}
+
+.world-mini-card:hover .world-mini-art-image img {
+  transform: scale(1.08);
+  filter: brightness(1.12) saturate(1.08);
+}
+
+
+.world-mini-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 55%;
+  height: 100%;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255,255,255,.10),
+    transparent
+  );
+  transform: skewX(-18deg);
+}
+
+.world-mini-card:hover::after {
+  animation: worldCardShine .7s ease forwards;
+}
+
+@keyframes worldCardShine {
+  from {
+    left: -120%;
+  }
+  to {
+    left: 150%;
+  }
+}
+
+
+.world-mini-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 55%;
+  height: 100%;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255,255,255,.10),
+    transparent
+  );
+  transform: skewX(-18deg);
+}
+
+.world-mini-card:hover::after {
+  animation: worldCardShine .7s ease forwards;
+}
+
+@keyframes worldCardShine {
+  from {
+    left: -120%;
+  }
+  to {
+    left: 150%;
+  }
+}
+
+
+.world-mini-card {
+  animation: worldCardEnter .55s cubic-bezier(.2,.8,.2,1) both;
+}
+
+.world-mini-card:nth-child(2) {
+  animation-delay: .12s;
+}
+
+@keyframes worldCardEnter {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(.97);
+    filter: brightness(.75);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: brightness(1);
+  }
+}
+
+
+.hero-floating-item {
+  will-change: transform;
+}
+
+.item-diamond {
+  animation:
+    floatItem 4s ease-in-out infinite,
+    heroSpin 7s linear infinite;
+}
+
+.item-emerald {
+  animation:
+    floatItem 4.8s ease-in-out infinite reverse,
+    heroSpin 9s linear infinite reverse;
+}
+
+.item-gold {
+  animation:
+    floatItem 3.6s ease-in-out infinite,
+    heroSpin 6s linear infinite;
+}
+
+@keyframes heroSpin {
+  from {
+    rotate: -8deg;
+  }
+  to {
+    rotate: 8deg;
+  }
+}
+
+
+.mc-inventory-btn {
+  will-change: transform, filter;
+}
+
+.mc-inventory-btn:active {
+  transform: translateY(2px) scale(.97);
+  filter: brightness(.95);
+  box-shadow:
+    inset 0 3px 0 rgba(0,0,0,.18),
+    inset 0 -1px 0 rgba(255,255,255,.15),
+    0 2px 0 rgba(0,0,0,.45);
+}
+
+
+.world-mini-card > b {
+  display: inline-block;
+  transition:
+    transform .25s cubic-bezier(.2,.8,.2,1),
+    filter .25s ease;
+}
+
+.world-mini-card:hover > b {
+  transform: translateX(7px) scale(1.15);
+  filter: brightness(1.35);
+}
+
+.world-mini-card:active > b {
+  transform: translateX(3px) scale(.95);
+}
+
+
+.world-showcase-grid {
+  position: relative;
+  overflow: hidden;
+}
+
+.world-showcase-grid::before,
+.world-showcase-grid::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  filter: blur(55px);
+  opacity: .12;
+  animation: worldGlowMove 8s ease-in-out infinite alternate;
+}
+
+.world-showcase-grid::before {
+  top: -90px;
+  left: -60px;
+  background: #70e958;
+}
+
+.world-showcase-grid::after {
+  right: -60px;
+  bottom: -90px;
+  background: #a66bff;
+  animation-delay: -4s;
+}
+
+@keyframes worldGlowMove {
+  from {
+    transform: translate(0, 0) scale(.9);
+  }
+  to {
+    transform: translate(55px, 25px) scale(1.15);
+  }
+}
+
+
+.mc-section,
+.minecraft-announcement,
+.minecraft-feature-strip,
+.minecraft-footer-cta {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity .7s ease,
+    transform .7s cubic-bezier(.2,.8,.2,1);
+}
+
+.mc-section.zynox-revealed,
+.minecraft-announcement.zynox-revealed,
+.minecraft-feature-strip.zynox-revealed,
+.minecraft-footer-cta.zynox-revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+.mc-server-card .server-art-character,
+.mc-server-card .server-art-item,
+.mc-server-card .server-art-particle {
+  transition:
+    transform .45s cubic-bezier(.2,.8,.2,1),
+    filter .45s ease;
+  will-change: transform, filter;
+}
+
+.mc-server-card:hover .server-art-character {
+  transform: translateY(-5px) scale(1.025);
+  filter: brightness(1.08) saturate(1.08);
+}
+
+.mc-server-card:hover .server-art-item {
+  filter: brightness(1.15) drop-shadow(0 0 6px rgba(255,255,255,.16));
+}
+
+.mc-server-card:hover .server-art-particle {
+  transform: translateY(-4px) scale(1.08);
+  filter: brightness(1.2);
+}
+
+
+.mc-server-card .server-art {
+  overflow: hidden;
+}
+
+.mc-server-card .server-art::after {
+  content: "";
+  position: absolute;
+  inset: -40%;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      120deg,
+      transparent 42%,
+      rgba(255,255,255,.045) 50%,
+      transparent 58%
+    );
+  transform: translateX(-35%) rotate(8deg);
+  opacity: 0;
+}
+
+.mc-server-card:hover .server-art::after {
+  opacity: 1;
+  animation: serverArtSweep 1.2s ease forwards;
+}
+
+@keyframes serverArtSweep {
+  from {
+    transform: translateX(-35%) rotate(8deg);
+  }
+  to {
+    transform: translateX(35%) rotate(8deg);
+  }
+}
+
+
+@media (min-width: 901px) {
+  .world-mini-card {
+    transform-style: preserve-3d;
+    perspective: 900px;
+  }
+
+  .world-mini-card:hover {
+    transform: translateY(-6px) scale(1.015) rotateX(1.2deg) rotateY(-1.2deg);
+  }
+}
+
+
+.world-mini-card:active {
+  transform: translateY(-2px) scale(.985);
+  filter: brightness(.96);
+}
+
+
+.world-mini-art-image img {
+  animation: worldThumbIdle 4s ease-in-out infinite;
+  transform-origin: center;
+}
+
+.world-mini-card:hover .world-mini-art-image img {
+  animation-play-state: paused;
+}
+
+@keyframes worldThumbIdle {
+  0%, 100% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  50% {
+    transform: scale(1.025);
+    filter: brightness(1.06);
+  }
+}
+
+
+.mc-brand-block {
+  animation: zynoxLogoPulse 3s ease-in-out infinite;
+  will-change: transform, filter;
+}
+
+.mc-brand:hover .mc-brand-block {
+  animation-play-state: paused;
+  transform: translateY(-2px) rotate(-2deg) scale(1.05);
+  filter: brightness(1.15);
+}
+
+.mc-brand-text {
+  transition: text-shadow .25s ease, transform .25s ease;
+}
+
+.mc-brand:hover .mc-brand-text {
+  transform: translateX(2px);
+  text-shadow:
+    3px 3px 0 #000,
+    0 0 12px rgba(166,107,255,.35);
+}
+
+@keyframes zynoxLogoPulse {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+    filter: brightness(1);
+  }
+  50% {
+    transform: translateY(-1px) scale(1.025);
+    filter: brightness(1.08);
+  }
+}
+
+
+.mc-inventory-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.mc-inventory-btn::after {
+  content: "";
+  position: absolute;
+  top: -20%;
+  left: -130%;
+  width: 45%;
+  height: 140%;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255,255,255,.28),
+    transparent
+  );
+  transform: skewX(-18deg);
+}
+
+.mc-inventory-btn:hover::after {
+  animation: buttonShine .65s ease forwards;
+}
+
+@keyframes buttonShine {
+  from {
+    left: -130%;
+  }
+  to {
+    left: 150%;
+  }
+}
+
+
+.pixel-stars {
+  animation: pixelStarsDrift 18s linear infinite;
+  will-change: background-position;
+}
+
+@keyframes pixelStarsDrift {
+  from {
+    background-position:
+      10px 20px,
+      55px 70px;
+  }
+  to {
+    background-position:
+      50px 60px,
+      5px 25px;
+  }
+}
+
+
+.minecraft-section-title h2 {
+  animation: sectionTitleGlow 3.5s ease-in-out infinite;
+}
+
+@keyframes sectionTitleGlow {
+  0%, 100% {
+    text-shadow:
+      4px 4px 0 #111,
+      0 0 0 rgba(255,255,255,0);
+  }
+
+  50% {
+    text-shadow:
+      4px 4px 0 #111,
+      0 0 14px rgba(166,107,255,.22);
+  }
+}
+
+
+/* =========================================================
+   FINAL DECORATION + CREATIONS MOBILE FIX
+========================================================= */
+
+/* Replace the confusing parrot decoration with a clean
+   Minecraft-style pixel flower. */
+.minecraft-category-card::after,
+.rank-card::after,
+.creation-vault::after {
+  background-image: url("/assets/decor/minecraft-flower-pixel.svg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  image-rendering: pixelated;
+}
+
+.minecraft-category-card::after {
+  right: 12px;
+  bottom: 8px;
+  width: 46px;
+  height: 58px;
+  transform: rotate(0deg);
+}
+
+.rank-card::after {
+  right: 12px;
+  bottom: 8px;
+  width: 46px;
+  height: 58px;
+  transform: rotate(0deg);
+}
+
+.rank-card.featured::after {
+  transform: rotate(-4deg) scale(1.02);
+}
+
+.creation-vault::after {
+  right: 18px;
+  top: 14px;
+  width: 52px;
+  height: 66px;
+  transform: rotate(0deg);
+}
+
+/* Clean mobile stacking for Zynox Creations */
+@media (max-width: 900px) {
+  .creation-vault {
+    grid-template-columns: 1fr;
+    gap: 18px;
+    padding: 18px;
+  }
+
+  .creation-vault-art {
+    min-height: 220px;
+  }
+
+  .creation-vault-copy {
+    width: 100%;
+    text-align: center;
+  }
+
+  .creation-vault-copy h3 {
+    max-width: 100%;
+    font-size: 13px;
+    line-height: 1.65;
+  }
+
+  .creation-vault-copy p {
+    max-width: 100%;
+    font-size: 11px;
+    line-height: 1.7;
+  }
+
+  .creation-slots {
+    justify-content: center;
+  }
+
+  .creation-vault-copy .coming-soon {
+    display: inline-block;
+    margin-top: 4px;
+  }
+}
+
+@media (max-width: 650px) {
+  .creation-vault {
+    margin-top: 24px;
+    padding: 12px;
+    gap: 12px;
+  }
+
+  .creation-vault-art {
+    min-height: 195px;
+  }
+
+  .creation-character {
+    width: 125px;
+    height: 125px;
+  }
+
+  .creation-diamond {
+    width: 36px;
+    height: 36px;
+    right: 20px;
+    bottom: 18px;
+  }
+
+  .creation-vault-copy {
+    padding: 8px 6px 12px;
+  }
+
+  .creation-vault-copy h3 {
+    margin-top: 12px;
+    font-size: 10px;
+    line-height: 1.7;
+  }
+
+  .creation-vault-copy p {
+    margin-top: 10px;
+    font-size: 9px;
+    line-height: 1.7;
+  }
+
+  .creation-slots {
+    gap: 6px;
+    margin-top: 14px;
+  }
+
+  .creation-slots span {
+    padding: 7px 8px;
+    font-size: 5px;
+  }
+
+  .creation-vault::after {
+    right: 8px;
+    top: 8px;
+    width: 38px;
+    height: 48px;
+  }
+}
+
+/* FINAL: Minecraft flower decorations for cosmetic cards */
+.minecraft-category-card:nth-child(1)::after,
+.minecraft-category-card:nth-child(2)::after,
+.minecraft-category-card:nth-child(3)::after {
+  content: "";
+  position: absolute;
+  right: 10px;
+  bottom: 8px;
+  width: 58px;
+  height: 70px;
+  background: url("/assets/decor/minecraft-flower-pixel.svg") center / contain no-repeat;
+  image-rendering: pixelated;
+  z-index: 4;
+  pointer-events: none;
+  filter: drop-shadow(3px 5px 0 rgba(0,0,0,.42));
+  transform: none;
+}
+
+@media (max-width: 650px) {
+  .minecraft-category-card:nth-child(1)::after,
+  .minecraft-category-card:nth-child(2)::after,
+  .minecraft-category-card:nth-child(3)::after {
+    width: 46px;
+    height: 58px;
+    right: 8px;
+    bottom: 6px;
+  }
+}
+
+/* Random Minecraft flower set for cosmetic cards */
+.minecraft-category-card:nth-child(1)::after {
+  background-image: url("/assets/decor/flower-poppy.svg");
+}
+
+.minecraft-category-card:nth-child(2)::after {
+  background-image: url("/assets/decor/flower-dandelion.svg");
+}
+
+.minecraft-category-card:nth-child(3)::after {
+  background-image: url("/assets/decor/flower-blue.svg");
+}
+
+/* Center the visible player inside the creation portal */
+.creation-vault-art .creation-character {
+  left: 50%;
+  top: 50%;
+  bottom: auto;
+  transform: translate(-58%, -50%);
+}
+
+@media (max-width: 650px) {
+  .creation-vault-art .creation-character {
+    transform: translate(-58%, -50%);
+  }
+}
+
+/* FINAL CENTER FIX: keep the player centered inside the portal */
+.creation-vault-art .creation-character {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  bottom: auto;
+  width: 150px;
+  height: 150px;
+  transform: translate(-65%, -50%);
+}
+
+@media (max-width: 650px) {
+  .creation-vault-art .creation-character {
+    width: 125px;
+    height: 125px;
+    transform: translate(-65%, -50%);
+  }
+}
+
+/* Dynamic random decorations */
+.minecraft-category-card::after,
+.rank-card::after,
+.creation-vault::after {
+  background-image: var(--zynox-random-decor) !important;
+}
+
+/* Creations: use one random decoration instead of the old fixed diamond */
+.creation-vault-art .creation-diamond {
+  display: none;
+}
+
+/* =========================================================
+   SERVER DETAIL PAGE: keep rendered sections visible
+   The homepage reveal observer is not loaded on server.html.
+========================================================= */
+
+body.server-page .mc-section,
+body.server-page .minecraft-footer-cta {
+  opacity: 1;
+  transform: none;
+}
+
+.rank-icon img {
+  width: 52px;
+  height: 52px;
+  object-fit: contain;
+  display: block;
+  image-rendering: auto;
+}
+

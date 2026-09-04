@@ -204,7 +204,7 @@ function renderServer(server) {
       <div class="footer-links">
         <a href="/#servers">Servers</a>
         <a href="/#creations">Creations</a>
-        <a href="/#ranks">Store</a>
+        <a href="/#ranks">Support</a>
         <a href="/#community">Community</a>
       </div>
     </footer>
