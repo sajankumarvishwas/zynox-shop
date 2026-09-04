@@ -191,3 +191,44 @@ function scrollToRanks() {
 window.scrollToRanks = scrollToRanks;
 
 loadProducts();
+
+document.querySelectorAll(".mc-server-copy").forEach(button => {
+  button.addEventListener("click", async () => {
+    const address = button.dataset.copy;
+
+    try {
+      await navigator.clipboard.writeText(address);
+      const original = button.textContent;
+      button.textContent = "COPIED ✓";
+
+      setTimeout(() => {
+        button.textContent = original;
+      }, 1600);
+    } catch (error) {
+      console.warn("[Zynox Hub] Clipboard unavailable:", error);
+    }
+  });
+});
+
+document.querySelectorAll(".mc-server-card[data-server]").forEach(card => {
+  const openServer = () => {
+    document.body.classList.add("zynox-page-leaving");
+
+    setTimeout(() => {
+      window.location.href =
+        `/server.html?server=${encodeURIComponent(card.dataset.server)}`;
+    }, 280);
+  };
+
+  card.addEventListener("click", event => {
+    if (event.target.closest(".mc-server-copy")) return;
+    openServer();
+  });
+
+  card.addEventListener("keydown", event => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      openServer();
+    }
+  });
+});

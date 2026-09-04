@@ -1,0 +1,35 @@
+{
+  "servers": [
+    {
+      "id": "zynoxsmp",
+      "name": "ZynoxSMP",
+      "tag": "SERVER 01",
+      "type": "SURVIVAL SMP",
+      "ip": "147.185.221.29",
+      "port": "31894",
+      "version": "Latest Bedrock",
+      "description": "The main ZynoxSMP survival world.",
+      "features": [
+        "Survival gameplay",
+        "Zynox rank system",
+        "Custom server features"
+      ],
+      "memories": []
+    },
+    {
+      "id": "zynox-enhanced",
+      "name": "Zynox Enhanced",
+      "tag": "SERVER 02",
+      "type": "BETTER ON BEDROCK",
+      "ip": "147.185.221.213",
+      "port": "25892",
+      "version": "Latest Bedrock",
+      "description": "An enhanced Bedrock world powered by Better on Bedrock and additional content.",
+      "features": [
+        "Better on Bedrock",
+        "Additional custom content"
+      ],
+      "memories": []
+    }
+  ]
+}

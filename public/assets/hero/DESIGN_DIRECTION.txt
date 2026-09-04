@@ -1,0 +1,20 @@
+ZYNOX HOMEPAGE VISUAL DIRECTION
+
+Theme:
+Minecraft pixel world + superhero/cosmic energy.
+
+References:
+Marvel/Avengers cinematic energy, heroic composition,
+power tiers, futuristic HUD panels, team/network feeling.
+
+Do not use:
+Official Marvel/Avengers logos,
+official movie promotional artwork,
+uncleared character artwork.
+
+Use:
+Original pixel-art inspired silhouettes,
+CC0/licensed decorative assets,
+existing Zynox screenshots,
+pixel particles, energy effects,
+block/item UI textures.

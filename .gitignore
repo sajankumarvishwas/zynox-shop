@@ -2,3 +2,10 @@ node_modules/
 *.backup
 index.js.before-products
 public/index-v*.html
+public/*.before-*.html
+public/*.before-*.css
+public/*.before-*.js
+
+public/server.js.before-*.js
+server.js.before-*.js
+*.log

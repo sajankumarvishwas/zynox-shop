@@ -13,23 +13,24 @@
 <div class="pixel-sky"></div>
 <div class="pixel-stars"></div>
 
+
 <header class="mc-navbar">
 
   <a href="/" class="mc-brand">
-    <span class="mc-brand-block">⚡</span>
+    <span class="mc-brand-block mc-brand-z">Z</span>
     <span class="mc-brand-text">
-      Zynox<span>SMP</span>
+      Zynox
     </span>
   </a>
 
   <nav class="mc-nav">
-    <a class="active" href="#ranks">Ranks</a>
-    <a href="#cosmetics">Cosmetics</a>
-    <a href="#bundles">Bundles</a>
+    <a class="active" href="#servers">Servers</a>
+    <a href="#ranks">Ranks</a>
+    <a href="#creations">Creations</a>
+    <a href="#community">Community</a>
   </nav>
 
-  <a href="#ranks" class="mc-inventory-btn">
-    <span>▣</span>
+  <a href="#ranks" class="mc-inventory-btn mc-store-button">
     STORE
   </a>
 
@@ -70,34 +71,58 @@
 
     </div>
 
-    <div class="minecraft-stats">
+    <div class="zy-world-showcase">
 
-      <div class="stat-item">
-        <span class="stat-icon">👥</span>
-        <div>
-          <strong>10</strong>
-          <small>PLAYER SLOTS</small>
-        </div>
+      <div class="world-showcase-header">
+        <span class="world-kicker">ZYNOX WORLD HUB</span>
+        <span class="world-live">
+          <i></i>
+          TWO WORLDS
+        </span>
       </div>
 
-      <div class="stat-divider"></div>
+      <div class="world-showcase-grid">
 
-      <div class="stat-item">
-        <span class="stat-icon">⚔</span>
-        <div>
-          <strong>SMP</strong>
-          <small>SURVIVAL</small>
-        </div>
-      </div>
+        <a class="world-mini-card world-mini-main"
+           href="#servers"
+           aria-label="Explore ZynoxSMP">
 
-      <div class="stat-divider"></div>
+          <div class="world-mini-art">
+            <span class="world-art-block world-art-grass"></span>
+            <span class="world-art-block world-art-stone"></span>
+            <span class="world-art-block world-art-ore"></span>
+          </div>
 
-      <div class="stat-item">
-        <span class="stat-icon">★</span>
-        <div>
-          <strong>3</strong>
-          <small>RANK TIERS</small>
-        </div>
+          <div class="world-mini-content">
+            <span>WORLD 01</span>
+            <strong>ZynoxSMP</strong>
+            <small>Survival SMP</small>
+          </div>
+
+          <b>→</b>
+
+        </a>
+
+        <a class="world-mini-card world-mini-enhanced"
+           href="#servers"
+           aria-label="Explore Zynox Enhanced">
+
+          <div class="world-mini-art">
+            <span class="world-art-block world-art-purple"></span>
+            <span class="world-art-block world-art-deep"></span>
+            <span class="world-art-block world-art-crystal"></span>
+          </div>
+
+          <div class="world-mini-content">
+            <span>WORLD 02</span>
+            <strong>Zynox Enhanced</strong>
+            <small>Better on Bedrock</small>
+          </div>
+
+          <b>→</b>
+
+        </a>
+
       </div>
 
     </div>
@@ -108,6 +133,149 @@
   <div class="hero-floating-item item-emerald">♦</div>
   <div class="hero-floating-item item-gold">✦</div>
 
+</section>
+
+<section class="mc-section mc-server-section" id="servers">
+
+  <div class="minecraft-section-title">
+    <div class="title-line"></div>
+    <div>
+      <span class="section-kicker">CONNECT TO ZYNOX</span>
+      <h2>SERVER WORLD</h2>
+    </div>
+    <div class="title-line"></div>
+  </div>
+
+  <p class="section-description">
+    Two independent Bedrock worlds, each with its own identity and connection details.
+  </p>
+
+  <div class="mc-server-grid">
+
+    <article class="mc-server-card server-main server-visual-card" data-server="zynoxsmp" tabindex="0" role="link" aria-label="Open ZynoxSMP server page">
+
+      <div class="server-art server-art-main">
+        <img class="server-art-character"
+             src="/assets/characters/adventurer/adventurer_idle.png"
+             alt=""
+             aria-hidden="true">
+        <img class="server-art-item server-art-diamond"
+             src="/assets/minecraft/items/ore_diamond.png"
+             alt=""
+             aria-hidden="true">
+        <img class="server-art-item server-art-pick"
+             src="/assets/minecraft/items/pick_diamond.png"
+             alt=""
+             aria-hidden="true">
+        <img class="server-art-particle server-art-particle-a"
+             src="/assets/minecraft/particles/swirl_blue.png"
+             alt=""
+             aria-hidden="true">
+        <img class="server-art-particle server-art-particle-b"
+             src="/assets/minecraft/particles/square_blue.png"
+             alt=""
+             aria-hidden="true">
+      </div>
+
+      <div class="server-card-top">
+        <div>
+          <span class="server-badge">SERVER 01</span>
+          <h3>ZynoxSMP</h3>
+        </div>
+        <span class="server-status-dot" aria-hidden="true"></span>
+      </div>
+
+      <div class="server-type">SURVIVAL SMP</div>
+
+      <div class="server-connect">
+        <div class="server-connect-row">
+          <span>IP</span>
+          <strong>147.185.221.29</strong>
+        </div>
+        <div class="server-connect-row">
+          <span>PORT</span>
+          <strong>31894</strong>
+        </div>
+      </div>
+
+      <button class="mc-button mc-server-copy" type="button"
+        data-copy="147.185.221.29:31894">
+        COPY ADDRESS
+      </button>
+
+      <div class="server-enter-hint">
+        <span>OPEN WORLD</span>
+        <strong>VIEW SERVER →</strong>
+      </div>
+    </article>
+
+    <article class="mc-server-card server-enhanced server-visual-card" data-server="zynox-enhanced" tabindex="0" role="link" aria-label="Open Zynox Enhanced server page">
+
+      <div class="server-art server-art-enhanced">
+        <img class="server-art-character"
+             src="/assets/characters/zombie/zombie_idle.png"
+             alt=""
+             aria-hidden="true">
+        <img class="server-art-character secondary"
+             src="/assets/characters/soldier/soldier_idle.png"
+             alt=""
+             aria-hidden="true">
+        <img class="server-art-item server-art-emerald"
+             src="/assets/minecraft/items/ore_emerald.png"
+             alt=""
+             aria-hidden="true">
+        <img class="server-art-item server-art-sword"
+             src="/assets/minecraft/items/sword_gold.png"
+             alt=""
+             aria-hidden="true">
+        <img class="server-art-particle server-art-particle-a"
+             src="/assets/minecraft/particles/swirl_orange.png"
+             alt=""
+             aria-hidden="true">
+        <img class="server-art-particle server-art-particle-b"
+             src="/assets/minecraft/particles/square_orange.png"
+             alt=""
+             aria-hidden="true">
+      </div>
+
+      <div class="server-card-top">
+        <div>
+          <span class="server-badge">SERVER 02</span>
+          <h3>Zynox Enhanced</h3>
+        </div>
+        <span class="server-status-dot" aria-hidden="true"></span>
+      </div>
+
+      <div class="server-type">BETTER ON BEDROCK</div>
+
+      <div class="server-connect">
+        <div class="server-connect-row">
+          <span>IP</span>
+          <strong>147.185.221.213</strong>
+        </div>
+        <div class="server-connect-row">
+          <span>PORT</span>
+          <strong>25892</strong>
+        </div>
+      </div>
+
+      <button class="mc-button mc-server-copy" type="button"
+        data-copy="147.185.221.213:25892">
+        COPY ADDRESS
+      </button>
+
+      <div class="server-enter-hint">
+        <span>OPEN WORLD</span>
+        <strong>VIEW SERVER →</strong>
+      </div>
+    </article>
+
+  </div>
+
+</section>
+
+<section class="minecraft-divider">
+  <span>◆</span>
 </section>
 
 <section class="minecraft-announcement">
@@ -159,6 +327,10 @@
 
   </div>
 
+</section>
+
+<section class="minecraft-divider">
+  <span>◆</span>
 </section>
 
 <section class="minecraft-divider">
@@ -301,6 +473,131 @@
 
   </div>
 
+</section>
+
+<section class="mc-section mc-creations-section" id="creations">
+
+  <div class="minecraft-section-title">
+    <div class="title-line"></div>
+    <div>
+      <span class="section-kicker">MADE BY ZYNOX</span>
+      <h2>ZYNOX CREATIONS</h2>
+    </div>
+    <div class="title-line"></div>
+  </div>
+
+  <p class="section-description">
+    Apps, websites and projects created under the Zynox banner will appear here.
+  </p>
+
+  <div class="creation-vault">
+    <div class="creation-vault-art">
+      <div class="creation-orbit orbit-a"></div>
+      <div class="creation-orbit orbit-b"></div>
+      <img
+        src="/assets/characters/player/player_idle.png"
+        alt=""
+        class="creation-character"
+        aria-hidden="true">
+      <img
+        src="/assets/minecraft/items/ore_diamond.png"
+        alt=""
+        class="creation-diamond"
+        aria-hidden="true">
+    </div>
+
+    <div class="creation-vault-copy">
+      <span class="category-tag">PROJECT VAULT</span>
+      <h3>MORE CREATIONS ARE LOADING</h3>
+      <p>
+        This space is reserved for Zynox apps, tools, websites and future projects.
+        New creations can be added later without rebuilding the whole homepage.
+      </p>
+
+      <div class="creation-slots">
+        <span>APP SLOT</span>
+        <span>WEB SLOT</span>
+        <span>PROJECT SLOT</span>
+      </div>
+
+      <span class="coming-soon">COMING SOON</span>
+    </div>
+  </div>
+
+</section>
+
+<section class="minecraft-divider">
+  <span>◆</span>
+</section>
+
+<section class="mc-section mc-community-section" id="community">
+
+  <div class="minecraft-section-title">
+    <div class="title-line"></div>
+    <div>
+      <span class="section-kicker">JOIN THE COMMUNITY</span>
+      <h2>ZYNOX SOCIAL</h2>
+    </div>
+    <div class="title-line"></div>
+  </div>
+
+  <p class="section-description">
+    Follow the builds, join the community and stay close to the next Zynox adventure.
+  </p>
+
+  <div class="social-grid">
+
+    <a class="social-card social-youtube"
+       href="https://youtube.com/@zynox-7777"
+       target="_blank"
+       rel="noopener noreferrer">
+      <div class="social-icon-frame">
+        <img src="/assets/social/youtube.svg" alt="YouTube">
+      </div>
+      <div class="social-copy">
+        <span class="social-kicker">WATCH ZYNOX</span>
+        <h3>YOUTUBE</h3>
+        <p>Videos, gameplay and Zynox moments.</p>
+      </div>
+      <strong class="social-arrow">OPEN →</strong>
+    </a>
+
+    <a class="social-card social-discord"
+       href="https://discord.gg/mDzZqxhnJ"
+       target="_blank"
+       rel="noopener noreferrer">
+      <div class="social-icon-frame">
+        <img src="/assets/social/discord.svg" alt="Discord">
+      </div>
+      <div class="social-copy">
+        <span class="social-kicker">JOIN ZYNOX</span>
+        <h3>DISCORD</h3>
+        <p>Community chat, server updates and support.</p>
+      </div>
+      <strong class="social-arrow">JOIN →</strong>
+    </a>
+
+    <a class="social-card social-instagram"
+       href="https://www.instagram.com/sajankumarvishwas"
+       target="_blank"
+       rel="noopener noreferrer">
+      <div class="social-icon-frame">
+        <img src="/assets/social/instagram.svg" alt="Instagram">
+      </div>
+      <div class="social-copy">
+        <span class="social-kicker">FOLLOW ZYNOX</span>
+        <h3>INSTAGRAM</h3>
+        <p>Photos, updates and behind-the-scenes moments.</p>
+      </div>
+      <strong class="social-arrow">VIEW →</strong>
+    </a>
+
+  </div>
+
+</section>
+
+<section class="minecraft-divider">
+  <span>◆</span>
 </section>
 
 <section class="minecraft-feature-strip">
