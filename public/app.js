@@ -3,29 +3,91 @@ const productContainer = document.getElementById("products");
 const fallbackProducts = [
   {
     id: "pizza",
-    name: "Treat Admin a Pizza",
-    price: 49,
-    icon: "🍕"
-  },
-  {
-    id: "fanta",
-    name: "Treat Admin a Fanta",
+    name: "Fanta Ki Chhoti Bottle",
     price: 29,
     icon: "🥤"
   },
   {
+    id: "fanta",
+    name: "Fanta Ki Badi Bottle",
+    price: 49,
+    icon: "🧃"
+  },
+  {
     id: "ration",
-    name: "Admin ka Ration",
+    name: "Chai-Nashta",
     price: 79,
-    icon: "🍱"
+    icon: "☕"
   },
   {
     id: "server",
-    name: "Support the Server",
-    price: 99,
-    icon: "⛏"
+    name: "Zynox Recharge Fund",
+    price: 349,
+    icon: "📱"
   }
 ];
+
+
+/* ---------- Zynox UI SFX ---------- */
+
+/* ---------- Zynox Global Meow SFX ---------- */
+
+const zynoxMeow = new Audio("/assets/audio/zynox/meow.ogg");
+zynoxMeow.preload = "auto";
+zynoxMeow.volume = 0.16;
+
+function playZynoxMeow() {
+  try {
+    zynoxMeow.currentTime = 0;
+    const playback = zynoxMeow.play();
+    if (playback?.catch) playback.catch(() => {});
+  } catch (_) {}
+}
+
+document.addEventListener("click", event => {
+  const target = event.target.closest("a, button, [role='button'], input, select, textarea");
+
+  if (!target) {
+    playZynoxMeow();
+    return;
+  }
+
+  const hasDedicatedSfx =
+    target.matches(
+      ".buy-button, .mc-server-copy, .mc-server-card, " +
+      ".server-play-button, .server-copy-button, .memory-video-wrap"
+    );
+
+  if (!hasDedicatedSfx) {
+    playZynoxMeow();
+  }
+}, { passive: true });
+
+
+
+const zynoxSfx = {
+  click: new Audio("/assets/audio/zynox/click_001.ogg"),
+  select: new Audio("/assets/audio/zynox/select_001.ogg"),
+  confirm: new Audio("/assets/audio/zynox/confirmation_001.ogg"),
+  open: new Audio("/assets/audio/zynox/open_001.ogg"),
+  close: new Audio("/assets/audio/zynox/close_001.ogg")
+};
+
+Object.values(zynoxSfx).forEach(audio => {
+  audio.preload = "auto";
+  audio.volume = 0.32;
+});
+
+function playZynoxSfx(name) {
+  const source = zynoxSfx[name];
+  if (!source) return;
+
+  try {
+    source.currentTime = 0;
+    const playback = source.play();
+    if (playback?.catch) playback.catch(() => {});
+  } catch (_) {}
+}
 
 function escapeHtml(value) {
   return String(value)
@@ -62,7 +124,7 @@ function getDonationDescription(id) {
   }
 
   if (id === "server") {
-    return "Put your support directly toward the Zynox server.";
+    return "A little boost for the Zynox journey. 🚀";
   }
 
   return "Every little bit helps keep Zynox running.";
@@ -84,14 +146,14 @@ function renderProducts(products) {
 
       <div class="rank-top">
         <div class="rank-icon">${getDonationIcon(product)}</div>
-        <span class="rank-label">SUPPORT</span>
+        <span class="rank-label">ZYNOX GOODIES</span>
       </div>
 
       <h3>${name}</h3>
 
       <div class="rank-price">
         <strong>₹${price}</strong>
-        <span>donation</span>
+        <span>good vibes</span>
       </div>
 
       <p class="rank-description">
@@ -99,15 +161,32 @@ function renderProducts(products) {
       </p>
 
       <div class="perks">
-        <div class="perk">❤ No rank required</div>
-        <div class="perk">◆ Pure server support</div>
+        <div class="perk">◆ Good vibes delivered 😎</div>
+        ${id === "pizza" ? `
+          <div class="perk">🥤 Admin ki Fanta incoming 😎</div>
+        ` : id === "fanta" ? `
+          <div class="perk">🥤 Badi bottle, badi khushi 😂</div>
+          <div class="perk">◆ Admin approved ✅</div>
+        ` : id === "ration" ? `
+          <div class="perk">☕ Chai-Nashta unlocked</div>
+          <div class="perk">😎 Admin ka mood set</div>
+          <div class="perk">◆ Zynox ko thoda extra pyaar</div>
+        ` : id === "server" ? `
+          <div class="perk">📱 Recharge fund me gaya</div>
+          <div class="perk">😂 Net chalu = Zynox chalu</div>
+          <div class="perk">🎮 Game on, boss</div>
+          <div class="perk">◆ Admin officially thankful</div>
+          <div class="perk">💋 Zynox ki taraf se gili pappi 😘</div>
+        ` : `
+          <div class="perk">😎 Bas chill, tumne apna kaam kar diya</div>
+        `}
       </div>
 
       <button
         class="buy-button donation-button"
         data-product="${name}"
         data-price="${price}">
-        DONATE ₹${price} →
+        SEND ₹${price} →
       </button>
     `;
 
@@ -125,7 +204,7 @@ function renderProducts(products) {
       <span class="rank-label">YOUR CHOICE</span>
     </div>
 
-    <h3>Custom Donation</h3>
+    <h3>Custom Treat</h3>
 
     <div class="rank-price">
       <strong>₹?</strong>
@@ -133,12 +212,13 @@ function renderProducts(products) {
     </div>
 
     <p class="rank-description">
-      Choose exactly how much you want to contribute to Zynox.
+      Pick your own amount and send some good vibes to Zynox. 😎
     </p>
 
     <div class="perks">
-      <div class="perk">❤ You choose the amount</div>
-      <div class="perk">◆ Optional message to Admin</div>
+      <div class="perk">❤ Jitna mann kare, utna hi</div>
+      <div class="perk">◆ Apna message bhi chhod sakte ho</div>
+      <div class="perk">😎 Baaki vibe Admin sambhal lega</div>
     </div>
 
     <button
@@ -153,6 +233,8 @@ function renderProducts(products) {
 
   document.querySelectorAll(".buy-button").forEach(button => {
     button.addEventListener("click", () => {
+      playZynoxSfx("click");
+
       const product = button.dataset.product;
       const price = button.dataset.price;
 
@@ -201,6 +283,7 @@ document.querySelectorAll(".mc-server-copy").forEach(button => {
 
     try {
       await navigator.clipboard.writeText(address);
+      playZynoxSfx("confirm");
       const original = button.textContent;
       button.textContent = "COPIED ✓";
 
@@ -215,6 +298,7 @@ document.querySelectorAll(".mc-server-copy").forEach(button => {
 
 document.querySelectorAll(".mc-server-card[data-server]").forEach(card => {
   const openServer = () => {
+    playZynoxSfx("open");
     document.body.classList.add("zynox-page-leaving");
 
     setTimeout(() => {

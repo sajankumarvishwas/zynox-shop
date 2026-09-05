@@ -1,3 +1,64 @@
+/* ---------- Zynox Server Page SFX ---------- */
+
+/* ---------- Zynox Global Meow SFX ---------- */
+
+const zynoxMeow = new Audio("/assets/audio/zynox/meow.ogg");
+zynoxMeow.preload = "auto";
+zynoxMeow.volume = 0.16;
+
+function playZynoxMeow() {
+  try {
+    zynoxMeow.currentTime = 0;
+    const playback = zynoxMeow.play();
+    if (playback?.catch) playback.catch(() => {});
+  } catch (_) {}
+}
+
+document.addEventListener("click", event => {
+  const target = event.target.closest("a, button, [role='button'], input, select, textarea");
+
+  if (!target) {
+    playZynoxMeow();
+    return;
+  }
+
+  const hasDedicatedSfx =
+    target.matches(
+      ".buy-button, .mc-server-copy, .mc-server-card, " +
+      ".server-play-button, .server-copy-button, .memory-video-wrap"
+    );
+
+  if (!hasDedicatedSfx) {
+    playZynoxMeow();
+  }
+}, { passive: true });
+
+
+
+const zynoxSfx = {
+  open: new Audio("/assets/audio/zynox/open_001.ogg"),
+  confirm: new Audio("/assets/audio/zynox/confirmation_001.ogg"),
+  click: new Audio("/assets/audio/zynox/click_001.ogg"),
+  select: new Audio("/assets/audio/zynox/select_001.ogg"),
+  close: new Audio("/assets/audio/zynox/close_001.ogg")
+};
+
+Object.values(zynoxSfx).forEach(audio => {
+  audio.preload = "auto";
+  audio.volume = 0.32;
+});
+
+function playZynoxSfx(name) {
+  const source = zynoxSfx[name];
+  if (!source) return;
+
+  try {
+    source.currentTime = 0;
+    const playback = source.play();
+    if (playback?.catch) playback.catch(() => {});
+  } catch (_) {}
+}
+
 const page = document.getElementById("serverPage");
 
 function escapeHtml(value) {
@@ -21,10 +82,17 @@ function renderServer(server) {
   document.title = `${server.name} • Zynox World`;
 
   const features = (server.features || [])
-    .map(feature => `<span class="server-feature">◆ ${escapeHtml(feature)}</span>`)
+    .map(feature => {
+      const parts = String(feature).split(" • ");
+      return `<span class="server-feature">
+        ${parts.map(part => escapeHtml(part)).join("<br>")}
+      </span>`;
+    })
     .join("");
 
-  const memories = Array.isArray(server.memories) ? server.memories : [];
+  const memories = Array.isArray(server.memories)
+    ? [...server.memories].sort(() => Math.random() - 0.5)
+    : [];
 
   const memoryMarkup = memories.length
     ? memories.map((memory, index) => `
@@ -44,8 +112,6 @@ function renderServer(server) {
                       preload="auto"
                       class="memory-video">
                     </video>
-                    <span class="memory-video-badge">VIDEO</span>
-                    <span class="memory-video-tap">TAP TO EXPAND</span>
                   </div>`
                 : `<img
                     src="${escapeHtml(memory.media)}"
@@ -87,8 +153,6 @@ function renderServer(server) {
 
   page.innerHTML = `
     <section class="server-hero-panel">
-
-      <a class="server-back" href="/#servers">← BACK TO SERVERS</a>
 
       <div class="server-hero-main">
         <div>
@@ -154,8 +218,48 @@ function renderServer(server) {
         <div class="title-line"></div>
       </div>
 
-      <div class="server-feature-panel">
-        ${features}
+      <div class="server-feature-scene">
+
+        <div class="server-scene-sky"></div>
+
+        <img
+          class="server-scene-clouds"
+          src="/assets/server/world-pack/skybox_side.png"
+          alt=""
+          aria-hidden="true">
+
+        <img
+          class="server-scene-moon"
+          src="/assets/server/world-pack/skybox_top.png"
+          alt=""
+          aria-hidden="true">
+
+        <img
+          class="server-scene-terrain"
+          src="/assets/server/world-pack/skybox_bottom.png"
+          alt=""
+          aria-hidden="true">
+
+        <div class="server-scene-landmark" aria-hidden="true">
+          <div class="landmark-block landmark-block-a"></div>
+          <div class="landmark-block landmark-block-b"></div>
+          <div class="landmark-block landmark-block-c"></div>
+          <div class="landmark-crystal"></div>
+        </div>
+
+        <div class="server-about-copy">
+          ${(server.about || "")
+            .split("\n")
+            .map(line => line.trim()
+              ? `<p>${escapeHtml(line)}</p>`
+              : `<div class="about-gap"></div>`)
+            .join("")}
+        </div>
+
+        <div class="server-feature-panel">
+          ${features}
+        </div>
+
       </div>
 
     </section>
@@ -175,8 +279,24 @@ function renderServer(server) {
         Only memories belonging to ${escapeHtml(server.name)} are shown here.
       </p>
 
-      <div class="server-memory-grid">
-        ${memoryMarkup}
+      <div class="server-memory-gallery">
+
+        <span class="memory-side-asset memory-side-ore memory-side-left" aria-hidden="true">
+          <img src="/assets/server/world-pack/ore_ruby.png" alt="">
+        </span>
+
+        <span class="memory-side-asset memory-side-pick memory-side-right" aria-hidden="true">
+          <img src="/assets/server/world-pack/pick_iron.png" alt="">
+        </span>
+
+        <span class="memory-side-particle memory-particle-a" aria-hidden="true"></span>
+        <span class="memory-side-particle memory-particle-b" aria-hidden="true"></span>
+        <span class="memory-side-particle memory-particle-c" aria-hidden="true"></span>
+
+        <div class="server-memory-grid">
+          ${memoryMarkup}
+        </div>
+
       </div>
 
     </section>
@@ -210,10 +330,17 @@ function renderServer(server) {
     </footer>
   `;
 
+  document.querySelectorAll(".server-play-button").forEach(button => {
+    button.addEventListener("click", () => {
+      playZynoxSfx("open");
+    });
+  });
+
   document.querySelectorAll(".server-copy-button").forEach(button => {
     button.addEventListener("click", async () => {
       try {
         await navigator.clipboard.writeText(button.dataset.copy);
+        playZynoxSfx("confirm");
         const original = button.textContent;
         button.textContent = "COPIED ✓";
         setTimeout(() => {
@@ -302,6 +429,7 @@ document.addEventListener("click", async event => {
   if (!video) return;
 
   try {
+    playZynoxSfx("click");
     video.muted = false;
     video.controls = true;
 
