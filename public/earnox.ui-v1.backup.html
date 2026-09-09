@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#05070d">
+  <meta name="color-scheme" content="dark">
+  <title>EARN0X • Sign In</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #05070d;
+      --text: #f7f8ff;
+      --muted: #98a0b5;
+      --line: rgba(255,255,255,.12);
+      --glass: rgba(255,255,255,.075);
+      --glass-strong: rgba(255,255,255,.11);
+      --blue: #69d9ff;
+      --violet: #9577ff;
+      --cyan: #7af2ff;
+    }
+
+    html,
+    body {
+      min-height: 100%;
+      margin: 0;
+    }
+
+    body {
+      color: var(--text);
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "SF Pro Display",
+        "SF Pro Text", "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 15% 15%, rgba(78, 188, 255, .15), transparent 28%),
+        radial-gradient(circle at 85% 18%, rgba(144, 94, 255, .18), transparent 30%),
+        radial-gradient(circle at 50% 100%, rgba(53, 133, 255, .10), transparent 35%),
+        linear-gradient(135deg, #03050a 0%, #070b14 48%, #05060c 100%);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: -20%;
+      pointer-events: none;
+      background:
+        radial-gradient(circle, rgba(117, 221, 255, .07) 0 1px, transparent 2px);
+      background-size: 38px 38px;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,.65), transparent 85%);
+      animation: drift 20s linear infinite;
+    }
+
+    @keyframes drift {
+      from { transform: translate3d(0,0,0); }
+      to   { transform: translate3d(38px,38px,0); }
+    }
+
+    .ambient {
+      position: fixed;
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      filter: blur(70px);
+      opacity: .24;
+      pointer-events: none;
+      animation: float 9s ease-in-out infinite;
+    }
+
+    .ambient.one {
+      top: 7%;
+      left: -90px;
+      background: #2ac9ff;
+    }
+
+    .ambient.two {
+      right: -100px;
+      bottom: 8%;
+      background: #754cff;
+      animation-delay: -4s;
+    }
+
+    @keyframes float {
+      0%,100% { transform: translateY(0) translateX(0); }
+      50% { transform: translateY(-24px) translateX(16px); }
+    }
+
+    .page {
+      min-height: 100svh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      position: relative;
+      isolation: isolate;
+    }
+
+    .glass-shell {
+      width: min(100%, 430px);
+      position: relative;
+    }
+
+    .glass-shell::before {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      border-radius: 34px;
+      background: linear-gradient(
+        135deg,
+        rgba(255,255,255,.28),
+        rgba(255,255,255,.06) 35%,
+        rgba(113,207,255,.14) 62%,
+        rgba(159,110,255,.20)
+      );
+      z-index: -1;
+      filter: blur(.2px);
+    }
+
+    .card {
+      padding: 28px;
+      border-radius: 34px;
+      border: 1px solid var(--line);
+      background:
+        linear-gradient(145deg, rgba(255,255,255,.105), rgba(255,255,255,.045)),
+        rgba(9,12,20,.54);
+      backdrop-filter: blur(30px) saturate(150%);
+      -webkit-backdrop-filter: blur(30px) saturate(150%);
+      box-shadow:
+        0 28px 80px rgba(0,0,0,.45),
+        inset 0 1px 0 rgba(255,255,255,.10),
+        inset 0 -1px 0 rgba(255,255,255,.035);
+    }
+
+    .brand {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 22px;
+    }
+
+    .brand-mark {
+      width: 76px;
+      height: 76px;
+      display: grid;
+      place-items: center;
+      border-radius: 24px;
+      border: 1px solid rgba(255,255,255,.12);
+      background:
+        linear-gradient(145deg, rgba(107,226,255,.13), rgba(142,88,255,.12)),
+        rgba(255,255,255,.055);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.14),
+        0 18px 42px rgba(55, 170, 255, .12);
+      overflow: hidden;
+    }
+
+    .brand-mark span {
+      font-size: 24px;
+      font-weight: 900;
+      letter-spacing: -.06em;
+      background: linear-gradient(135deg, #9af2ff, #74cfff 42%, #a883ff 80%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      filter: drop-shadow(0 4px 18px rgba(103,213,255,.22));
+    }
+
+    .eyebrow {
+      text-align: center;
+      color: #bfc7dc;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    h1 {
+      margin: 0;
+      text-align: center;
+      font-size: clamp(30px, 7vw, 40px);
+      letter-spacing: -.045em;
+      line-height: 1.05;
+    }
+
+    .subtitle {
+      max-width: 310px;
+      margin: 11px auto 26px;
+      text-align: center;
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: 14px;
+    }
+
+    .tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      padding: 5px;
+      gap: 5px;
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(0,0,0,.16);
+      border-radius: 16px;
+      margin-bottom: 22px;
+    }
+
+    .tab {
+      appearance: none;
+      border: 0;
+      border-radius: 12px;
+      padding: 11px 10px;
+      font: inherit;
+      font-size: 13px;
+      font-weight: 750;
+      color: #929ab0;
+      background: transparent;
+      cursor: pointer;
+      transition: .22s ease;
+    }
+
+    .tab.active {
+      color: #fff;
+      background: rgba(255,255,255,.10);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.09),
+        0 4px 20px rgba(0,0,0,.12);
+    }
+
+    .view {
+      display: none;
+    }
+
+    .view.active {
+      display: block;
+      animation: reveal .24s ease;
+    }
+
+    @keyframes reveal {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .field {
+      margin-bottom: 14px;
+    }
+
+    .field label {
+      display: block;
+      margin: 0 0 8px 3px;
+      color: #c6ccda;
+      font-size: 12px;
+      font-weight: 650;
+    }
+
+    .input-wrap {
+      position: relative;
+    }
+
+    .input-wrap input {
+      width: 100%;
+      border: 1px solid rgba(255,255,255,.10);
+      outline: none;
+      border-radius: 16px;
+      padding: 14px 15px;
+      font: inherit;
+      font-size: 15px;
+      color: #fff;
+      background: rgba(255,255,255,.055);
+      transition: .2s ease;
+    }
+
+    .input-wrap input::placeholder {
+      color: #747d92;
+    }
+
+    .input-wrap input:focus {
+      border-color: rgba(111,215,255,.45);
+      background: rgba(255,255,255,.075);
+      box-shadow: 0 0 0 4px rgba(90,195,255,.08);
+    }
+
+    .phone-row {
+      display: grid;
+      grid-template-columns: 74px 1fr;
+      gap: 8px;
+    }
+
+    .country-code {
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: 16px;
+      background: rgba(255,255,255,.055);
+      color: #eef1f8;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .primary-btn {
+      width: 100%;
+      border: 0;
+      border-radius: 16px;
+      padding: 15px 16px;
+      margin-top: 8px;
+      font: inherit;
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: .01em;
+      color: #051019;
+      cursor: pointer;
+      background: linear-gradient(100deg, #83e8ff, #74c9ff 45%, #a68aff);
+      box-shadow:
+        0 12px 30px rgba(87,187,255,.18),
+        inset 0 1px 0 rgba(255,255,255,.58);
+      transition: transform .18s ease, filter .18s ease;
+    }
+
+    .primary-btn:hover {
+      filter: brightness(1.06);
+      transform: translateY(-1px);
+    }
+
+    .helper {
+      margin-top: 14px;
+      text-align: center;
+      color: #777f92;
+      font-size: 11px;
+      line-height: 1.6;
+    }
+
+    .terms {
+      margin-top: 20px;
+      padding-top: 17px;
+      border-top: 1px solid rgba(255,255,255,.07);
+      text-align: center;
+      color: #6f778a;
+      font-size: 10.5px;
+      line-height: 1.6;
+    }
+
+    .terms span {
+      color: #aeb8cf;
+    }
+
+    .brand-foot {
+      margin-top: 18px;
+      text-align: center;
+      color: #5e6679;
+      font-size: 10px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    @media (max-width: 500px) {
+      .page {
+        padding: 16px;
+      }
+
+      .card {
+        padding: 22px 18px;
+        border-radius: 28px;
+      }
+
+      .glass-shell::before {
+        border-radius: 28px;
+      }
+
+      .brand-mark {
+        width: 68px;
+        height: 68px;
+        border-radius: 21px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="ambient one"></div>
+  <div class="ambient two"></div>
+
+  <main class="page">
+    <div class="glass-shell">
+      <section class="card">
+
+        <div class="brand">
+          <div class="brand-mark" aria-label="EARN0X">
+            <span>EX</span>
+          </div>
+        </div>
+
+        <div class="eyebrow">Private access</div>
+        <h1>Welcome to EARN0X</h1>
+        <p class="subtitle">
+          Sign in to your account or create a new one using your mobile number.
+        </p>
+
+        <div class="tabs" role="tablist">
+          <button class="tab active" type="button" data-tab="login">Sign In</button>
+          <button class="tab" type="button" data-tab="signup">Create Account</button>
+        </div>
+
+        <div class="view active" id="login">
+          <form onsubmit="return false;">
+            <div class="field">
+              <label for="login-phone">Mobile number</label>
+              <div class="phone-row">
+                <div class="country-code">+91</div>
+                <div class="input-wrap">
+                  <input
+                    id="login-phone"
+                    type="tel"
+                    inputmode="numeric"
+                    autocomplete="tel"
+                    maxlength="10"
+                    placeholder="Enter mobile number"
+                  >
+                </div>
+              </div>
+            </div>
+
+            <button class="primary-btn" type="button">
+              Continue with OTP
+            </button>
+
+            <div class="helper">
+              We'll send a one-time verification code to your mobile number.
+            </div>
+          </form>
+        </div>
+
+        <div class="view" id="signup">
+          <form onsubmit="return false;">
+            <div class="field">
+              <label for="signup-name">Full name</label>
+              <div class="input-wrap">
+                <input
+                  id="signup-name"
+                  type="text"
+                  autocomplete="name"
+                  placeholder="Enter your name"
+                >
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="signup-phone">Mobile number</label>
+              <div class="phone-row">
+                <div class="country-code">+91</div>
+                <div class="input-wrap">
+                  <input
+                    id="signup-phone"
+                    type="tel"
+                    inputmode="numeric"
+                    autocomplete="tel"
+                    maxlength="10"
+                    placeholder="Enter mobile number"
+                  >
+                </div>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="signup-username">Username</label>
+              <div class="input-wrap">
+                <input
+                  id="signup-username"
+                  type="text"
+                  autocomplete="username"
+                  placeholder="Choose a username"
+                >
+              </div>
+            </div>
+
+            <button class="primary-btn" type="button">
+              Create account with OTP
+            </button>
+
+            <div class="helper">
+              Your mobile number will be verified with a one-time code.
+            </div>
+          </form>
+        </div>
+
+        <div class="terms">
+          By continuing, you agree to the <span>Terms</span> and <span>Privacy Policy</span>.
+        </div>
+
+      </section>
+
+      <div class="brand-foot">EARN0X • Secure access</div>
+    </div>
+  </main>
+
+  <script>
+    const tabs = document.querySelectorAll(".tab");
+    const views = document.querySelectorAll(".view");
+
+    tabs.forEach(tab => {
+      tab.addEventListener("click", () => {
+        const target = tab.dataset.tab;
+
+        tabs.forEach(item => item.classList.remove("active"));
+        views.forEach(view => view.classList.remove("active"));
+
+        tab.classList.add("active");
+        document.getElementById(target).classList.add("active");
+      });
+    });
+  </script>
+</body>
+</html>

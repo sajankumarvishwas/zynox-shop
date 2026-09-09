@@ -1,0 +1,87 @@
+/* =========================================================
+   Canvas renderer for the Zynox Grasslands arena.
+========================================================= */
+
+import { WORLD } from "./config.js";
+
+const PALETTE = {
+  skyTop: "#1c2116", skyBottom: "#10120c", cloud: "rgba(245,241,223,0.10)",
+  farHill: "#20281a", midHill: "#283420", grass: "#3b9d2b", grassEdge: "#55d63f",
+  dirt: "#5a4326", stone: "#3f3a2e", zoneSafe: "rgba(85,214,63,0.28)", zoneEdge: "#55d63f",
+  water: "#4fa8ff", waterLight: "#8fd3ff", playerBody: "#3b9d2b", playerAccent: "#a66bff", ghost: "rgba(245,241,223,0.35)"
+};
+
+export class Renderer {
+  constructor(canvas) {
+    this.canvas = canvas;
+    this.ctx = canvas.getContext("2d");
+    this.clouds = Array.from({ length: 5 }, (_, i) => ({ x: (i / 5) * WORLD.width + Math.random() * 60, y: 40 + Math.random() * 120, w: 60 + Math.random() * 50, speed: 4 + Math.random() * 6 }));
+  }
+
+  resize(displayWidth, displayHeight) {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    this.canvas.width = Math.round(displayWidth * dpr);
+    this.canvas.height = Math.round(displayHeight * dpr);
+    this.canvas.style.width = `${displayWidth}px`;
+    this.canvas.style.height = `${displayHeight}px`;
+    this.scale = this.canvas.width / WORLD.width;
+    this.ctx.setTransform(this.scale, 0, 0, this.scale, 0, 0);
+  }
+
+  updateClouds(dt) { for (const c of this.clouds) { c.x += c.speed * dt; if (c.x > WORLD.width + 80) c.x = -80; } }
+  clear() { this.ctx.clearRect(0, 0, WORLD.width, WORLD.height); }
+
+  drawBackground(darkDrop) {
+    const ctx = this.ctx;
+    const grad = ctx.createLinearGradient(0, 0, 0, WORLD.height);
+    grad.addColorStop(0, PALETTE.skyTop); grad.addColorStop(1, PALETTE.skyBottom);
+    ctx.fillStyle = grad; ctx.fillRect(0, 0, WORLD.width, WORLD.height);
+    ctx.fillStyle = PALETTE.cloud;
+    for (const c of this.clouds) { ctx.fillRect(c.x, c.y, c.w, 14); ctx.fillRect(c.x + 10, c.y - 8, c.w * 0.6, 12); }
+    ctx.fillStyle = PALETTE.farHill; ctx.fillRect(0, WORLD.height - 220, WORLD.width, 60);
+    ctx.fillStyle = PALETTE.midHill; ctx.fillRect(0, WORLD.height - 170, WORLD.width, 50);
+    if (darkDrop) { ctx.fillStyle = "rgba(0,0,0,0.55)"; ctx.fillRect(0, 0, WORLD.width, WORLD.height); }
+  }
+
+  drawGround(groundY) {
+    const ctx = this.ctx;
+    ctx.fillStyle = PALETTE.dirt; ctx.fillRect(0, groundY + 10, WORLD.width, WORLD.height - groundY - 10);
+    ctx.fillStyle = PALETTE.grass; ctx.fillRect(0, groundY, WORLD.width, 12);
+    ctx.fillStyle = PALETTE.grassEdge; ctx.fillRect(0, groundY, WORLD.width, 3);
+  }
+
+  drawLandingZone(zoneCenterX, zoneHalfWidth, groundY) {
+    const ctx = this.ctx; const left = zoneCenterX - zoneHalfWidth;
+    ctx.fillStyle = PALETTE.zoneSafe; ctx.fillRect(left, groundY - 4, zoneHalfWidth * 2, 8);
+    ctx.strokeStyle = PALETTE.zoneEdge; ctx.lineWidth = 2; ctx.strokeRect(left, groundY - 4, zoneHalfWidth * 2, 8);
+  }
+
+  drawWater(x, groundY, progress) {
+    const ctx = this.ctx; const width = 56 * Math.min(1, progress * 1.6); const height = 14;
+    ctx.fillStyle = PALETTE.water; ctx.fillRect(x - width / 2, groundY - height, width, height);
+    ctx.fillStyle = PALETTE.waterLight; ctx.fillRect(x - width / 2, groundY - height, width, 3);
+  }
+
+  drawPlayer(player, cosmeticColor, hasWater) {
+    const ctx = this.ctx; const { x, y, width, height } = player;
+    ctx.save(); ctx.translate(x, y);
+    ctx.fillStyle = PALETTE.playerBody; ctx.fillRect(-width / 2, -height / 2, width, height * 0.68);
+    ctx.fillStyle = "#e8c79a"; ctx.fillRect(-width / 2 + 4, -height / 2 - 12, width - 8, 14);
+    ctx.fillStyle = PALETTE.playerAccent; ctx.fillRect(-width / 2, -height / 2 + height * 0.3, width, 5);
+    ctx.fillStyle = "#2b2b26";
+    ctx.fillRect(-width / 2 + 3, height * 0.18, width * 0.35, height * 0.16);
+    ctx.fillRect(width / 2 - width * 0.35 - 3, height * 0.18, width * 0.35, height * 0.16);
+    if (hasWater) { ctx.fillStyle = cosmeticColor || "#8a8a8a"; ctx.fillRect(width / 2 - 4, -4, 12, 12); }
+    ctx.restore();
+  }
+
+  drawGhost(ghostX, ghostY, width, height) {
+    const ctx = this.ctx; ctx.save(); ctx.globalAlpha = 0.5; ctx.fillStyle = PALETTE.ghost;
+    ctx.fillRect(ghostX - width / 2, ghostY - height / 2, width, height * 0.68); ctx.restore();
+  }
+
+  drawTrajectoryGuide(startX, startY, groundY) {
+    const ctx = this.ctx; ctx.save(); ctx.strokeStyle = "rgba(255,216,74,0.5)"; ctx.setLineDash([4, 4]); ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(startX, startY); ctx.lineTo(startX, groundY); ctx.stroke(); ctx.restore();
+  }
+}

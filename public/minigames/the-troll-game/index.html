@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#05070d">
+<title>The Troll Game | Zynox</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main id="app" class="app calm">
+  <div class="ambient-grid"></div>
+  <div id="particles" class="particles" aria-hidden="true"></div>
+  <div class="scanlines"></div>
+
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="Back to Zynox">ZYNOX<span>/</span>MINIGAMES</a>
+    <div class="top-actions">
+      <button id="soundBtn" class="icon-btn" type="button" aria-label="Toggle sound">SOUND ON</button>
+      <button id="fsBtn" class="icon-btn" type="button" aria-label="Toggle fullscreen">FULLSCREEN</button>
+    </div>
+  </header>
+
+  <section id="startView" class="view start-view">
+    <div class="eyebrow">SYSTEM 07 · EXPERIENCE READY</div>
+    <h1>THE TROLL <span>GAME</span></h1>
+    <p class="tagline">GET READY.</p>
+    <div class="start-stage">
+      <div class="halo halo-a"></div><div class="halo halo-b"></div>
+      <button id="startBtn" class="start-btn" type="button">
+        <span id="startLabel">START GAME</span>
+        <span id="clickMsg" class="click-msg" aria-live="polite"></span>
+        <span class="btn-shine"></span>
+      </button>
+      <div id="startStatus" class="start-status" aria-live="polite"></div>
+    </div>
+    <div id="friendBanner" class="friend-banner hidden">YOUR FRIEND THINKS YOU CAN START THIS. 💀</div>
+  </section>
+
+  <section id="loadingView" class="view loading-view hidden" aria-live="polite">
+    <div class="loading-core">
+      <div class="loading-orb"><div class="orb-ring ring-1"></div><div class="orb-ring ring-2"></div><div class="orb-core"></div></div>
+      <div id="loadingStatus" class="loading-status">ADMIN IS COOKING...</div>
+      <div id="loadingHint" class="loading-hint">INITIALIZING...</div>
+      <button id="loadingClick" class="loading-click" type="button" aria-label="Interact with loading screen"></button>
+      <div id="loadingToast" class="loading-toast" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <section id="resultView" class="view result-view hidden">
+    <div class="result-glow"></div>
+    <div class="result-card">
+      <div class="result-badge">TROLL COMPLETE</div>
+      <h2>YOU GOT FUCKING <span>TROLLED 💀</span></h2>
+      <p id="resultRoast" class="result-roast">NAH BRO, YOU ACTUALLY FELL FOR THAT 💀</p>
+      <div class="stats-grid">
+        <div><small>CLICKS</small><strong id="statClicks">100</strong></div>
+        <div><small>TIME WASTED</small><strong id="statTime">0.0s</strong></div>
+        <div><small>TROLL LEVEL</small><strong id="statLevel">ABSOLUTE VICTIM 💀</strong></div>
+      </div>
+      <div class="result-actions">
+        <button id="retryBtn" class="action-btn primary" type="button">TRY AGAIN</button>
+        <button id="shareBtn" class="action-btn" type="button">TROLL YOUR FRIENDS 🔗</button>
+        <a class="action-btn link-btn" href="/">BACK TO ZYNOX</a>
+      </div>
+      <div id="shareNote" class="share-note" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <footer class="footer">ZYNOX · THE GAME WAS YOU.</footer>
+</main>
+<script src="script.js"></script>
+</body>
+</html>

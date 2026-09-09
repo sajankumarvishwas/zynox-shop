@@ -1,0 +1,2 @@
+import React from 'react';
+export const BottleWineSharp = (props) => React.createElement('svg', Object.assign({viewBox: '0 0 24 24', width: '24', height: '24', fill: 'currentColor', xmlns: 'http://www.w3.org/2000/svg'}, props), React.createElement('path', {d: "M9 1h6v2H9zm0 2h2v4H9zm4 0h2v4h-2zM7 7h2v2H7zm8 0h2v2h-2zm2 2h2v12h-2zM5 9h2v12H5zm0 12h14v2H5z"}));

@@ -1,0 +1,2 @@
+import React from 'react';
+export const Wind = (props) => React.createElement('svg', Object.assign({viewBox: '0 0 24 24', width: '24', height: '24', fill: 'currentColor', xmlns: 'http://www.w3.org/2000/svg'}, props), React.createElement('path', {d: "M2 7h10v2H2zm10-4h2v4h-2zM7 1h5v2H7zM2 11h18v2H2zm18-4h2v4h-2zm-4-2h4v2h-4zM2 17h12v-2H2zm12 2h2v-2h-2zm-5 2h5v-2H9z"}));

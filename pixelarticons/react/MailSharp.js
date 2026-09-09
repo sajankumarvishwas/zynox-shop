@@ -1,0 +1,2 @@
+import React from 'react';
+export const MailSharp = (props) => React.createElement('svg', Object.assign({viewBox: '0 0 24 24', width: '24', height: '24', fill: 'currentColor', xmlns: 'http://www.w3.org/2000/svg'}, props), React.createElement('path', {d: "M6 8h2v2H6zm2 2h2v2H8zm10-2h-2v2h2zm-2 2h-2v2h2zm-6 2h4v2h-4zM2 6h2v12H2zm18 0h2v12h-2zM2 4h20v2H2zm0 14h20v2H2z"}));

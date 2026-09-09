@@ -1,0 +1,481 @@
+/* =========================================================
+   ZYNOX MLG WATER BUCKET — dynamic camera framing
+   Keeps the real player/bucket art and reframes the world around
+   the falling action so mobile screens waste less vertical space.
+========================================================= */
+
+import { WORLD } from "./config.js";
+
+const PALETTE = {
+  skyTop: "#1c2116",
+  skyBottom: "#10120c",
+  cloud: "rgba(245,241,223,0.10)",
+  farHill: "#20281a",
+  midHill: "#283420",
+  grass: "#3b9d2b",
+  grassEdge: "#55d63f",
+  dirt: "#5a4326",
+  zoneSafe: "rgba(85,214,63,0.28)",
+  zoneEdge: "#55d63f",
+  water: "#4fa8ff",
+  waterLight: "#8fd3ff",
+  ghost: "rgba(245,241,223,0.28)",
+  impact: "#dce9a5",
+  bucketFallback: "#aeb6be",
+  fallGlow: "rgba(141,211,255,0.28)"
+};
+
+export class Renderer {
+  constructor(canvas) {
+    this.canvas = canvas;
+    this.ctx = canvas.getContext("2d");
+    this.animTime = 0;
+    this.terrainSeed = Array.from({ length: 12 }, (_, i) => ({
+      x: i * 38 + (i % 3) * 11,
+      h: 18 + ((i * 17) % 42),
+      w: 28 + ((i * 13) % 34)
+    }));
+    this.landingFx = [];
+    this.waterFx = [];
+    this.camera = { x: 0, y: 0, zoom: 1, targetY: 0 };
+
+    this.clouds = Array.from({ length: 5 }, (_, i) => ({
+      x: (i / 5) * WORLD.width + Math.random() * 60,
+      y: 40 + Math.random() * 120,
+      w: 60 + Math.random() * 50,
+      speed: 4 + Math.random() * 6
+    }));
+
+    this.playerImage = new Image();
+    this.playerImageLoaded = false;
+    this.playerImage.onload = () => { this.playerImageLoaded = true; };
+    this.playerImage.src = "/assets/characters/player/player_idle.png";
+
+    this.bucketImage = new Image();
+    this.bucketImageLoaded = false;
+    this.bucketImage.onload = () => { this.bucketImageLoaded = true; };
+    this.bucketImage.src = "/assets/minecraft/items/bucket.png";
+  }
+
+  resize(displayWidth, displayHeight) {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    this.canvas.width = Math.round(displayWidth * dpr);
+    this.canvas.height = Math.round(displayHeight * dpr);
+    this.canvas.style.width = `${displayWidth}px`;
+    this.canvas.style.height = `${displayHeight}px`;
+    this.scale = this.canvas.width / WORLD.width;
+    this.ctx.setTransform(this.scale, 0, 0, this.scale, 0, 0);
+  }
+
+  updateClouds(dt) {
+    this.animTime += dt;
+
+    for (const c of this.clouds) {
+      c.x += c.speed * dt;
+      if (c.x > WORLD.width + 80) c.x = -80;
+    }
+
+    for (const fx of this.landingFx) fx.age += dt;
+    this.landingFx = this.landingFx.filter(fx => fx.age < fx.life);
+
+    for (const fx of this.waterFx) fx.age += dt;
+    this.waterFx = this.waterFx.filter(fx => fx.age < fx.life);
+  }
+
+  setCamera({
+    playerY = WORLD.height * 0.5,
+    groundY = WORLD.height - 96,
+    roundHeight = 300,
+    active = false,
+    reducedMotion = false,
+    playerVelocityY = 0
+  } = {}) {
+    if (!active) {
+      this.camera.x = 0;
+      this.camera.y = 0;
+      this.camera.targetY = 0;
+      this.camera.zoom = 1;
+      return;
+    }
+
+    const fitZoom = WORLD.height / Math.max(360, roundHeight + 110);
+    const zoomTarget = Math.max(
+      0.92,
+      Math.min(reducedMotion ? 1.14 : 1.18, fitZoom)
+    );
+
+    const visibleHeight = WORLD.height / zoomTarget;
+    const lookAhead = Math.min(24, Math.max(0, playerVelocityY) * 0.028);
+
+    /* Keep both the player and the landing surface inside the
+       same readable frame even on very tall rounds. */
+    let targetY =
+      ((playerY + groundY) * 0.5) -
+      (visibleHeight * 0.5) +
+      lookAhead;
+
+    const topLimit = 0;
+    const bottomLimit = Math.max(
+      0,
+      groundY - visibleHeight + 86
+    );
+
+    targetY = Math.max(topLimit, Math.min(bottomLimit, targetY));
+    this.camera.targetY = targetY;
+
+    const distance = targetY - this.camera.y;
+    const smoothing = reducedMotion
+      ? 0.16
+      : (Math.abs(distance) > 80 ? 0.22 : 0.145);
+
+    this.camera.y += distance * smoothing;
+
+    const zoomDistance = zoomTarget - this.camera.zoom;
+    this.camera.zoom += zoomDistance * (reducedMotion ? 0.12 : 0.085);
+  }
+
+  beginCamera() {
+    const ctx = this.ctx;
+    const z = this.camera.zoom;
+    ctx.save();
+    ctx.translate(WORLD.width / 2, WORLD.height / 2);
+    ctx.scale(z, z);
+    ctx.translate(-WORLD.width / 2, -WORLD.height / 2 - this.camera.y);
+  }
+
+  endCamera() {
+    this.ctx.restore();
+  }
+
+  triggerLandingImpact(x, y, grade = "GOOD") {
+    const power = grade === "PERFECT MLG" ? 1.35 : grade === "MLG" ? 1.15 : 1;
+    this.landingFx.push({ x, y, age: 0, life: 0.55, power });
+    this.waterFx.push({ x, y, age: 0, life: 0.75, power });
+  }
+
+  triggerWaterPlace(x, y) {
+    this.waterFx.push({ x, y, age: 0, life: 0.62, power: 0.82 });
+  }
+
+  clear() {
+    this.ctx.clearRect(0, 0, WORLD.width, WORLD.height);
+  }
+
+  drawBackground(darkDrop) {
+    const ctx = this.ctx;
+    const grad = ctx.createLinearGradient(0, 0, 0, WORLD.height);
+    grad.addColorStop(0, "#293321");
+    grad.addColorStop(0.48, "#182016");
+    grad.addColorStop(1, PALETTE.skyBottom);
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, WORLD.width, WORLD.height);
+
+    /* ZYNOX LIGHTING POLISH */
+    ctx.save();
+    const sunX = WORLD.width * 0.78;
+    const sunY = 88;
+    const sun = ctx.createRadialGradient(sunX, sunY, 2, sunX, sunY, 82);
+    sun.addColorStop(0, "rgba(220,233,165,0.20)");
+    sun.addColorStop(0.55, "rgba(220,233,165,0.06)");
+    sun.addColorStop(1, "rgba(220,233,165,0)");
+    ctx.fillStyle = sun;
+    ctx.fillRect(sunX - 82, sunY - 82, 164, 164);
+    ctx.restore();
+
+    ctx.fillStyle = "rgba(245,241,223,0.13)";
+    for (const c of this.clouds) {
+      ctx.fillRect(c.x, c.y, c.w, 14);
+      ctx.fillRect(c.x + 10, c.y - 8, c.w * 0.6, 12);
+    }
+
+    ctx.fillStyle = PALETTE.farHill;
+    ctx.fillRect(0, WORLD.height - 220, WORLD.width, 60);
+    ctx.fillStyle = PALETTE.midHill;
+    ctx.fillRect(0, WORLD.height - 170, WORLD.width, 50);
+
+    /* ZYNOX ARENA DEPTH */
+    ctx.save();
+    ctx.globalAlpha = 0.95;
+    for (const t of this.terrainSeed) {
+      const x = t.x % WORLD.width;
+      const baseY = WORLD.height - 118;
+      ctx.fillStyle = '#303c25';
+      ctx.fillRect(x, baseY - t.h, t.w, t.h);
+      ctx.fillStyle = '#435735';
+      ctx.fillRect(x + 4, baseY - t.h - 5, Math.max(8, t.w - 8), 5);
+      ctx.fillStyle = '#1b2416';
+      ctx.fillRect(x + 7, baseY - t.h + 9, 6, 8);
+      if (t.w > 38) ctx.fillRect(x + t.w - 14, baseY - t.h + 16, 6, 10);
+    }
+    ctx.restore();
+
+    ctx.save();
+    ctx.globalAlpha = 0.07;
+    ctx.fillStyle = '#8fd3ff';
+    for (let y = 120; y < WORLD.height - 170; y += 92) {
+      ctx.fillRect(0, y, WORLD.width, 2);
+    }
+    ctx.restore();
+
+    if (darkDrop) {
+      const darkGrad = ctx.createLinearGradient(0, 0, 0, WORLD.height);
+      darkGrad.addColorStop(0, "rgba(0,0,0,0.36)");
+      darkGrad.addColorStop(0.65, "rgba(0,0,0,0.30)");
+      darkGrad.addColorStop(1, "rgba(0,0,0,0.40)");
+      ctx.fillStyle = darkGrad;
+      ctx.fillRect(0, 0, WORLD.width, WORLD.height);
+    }
+  }
+
+  drawGround(groundY) {
+    const ctx = this.ctx;
+    ctx.fillStyle = PALETTE.dirt;
+    ctx.fillRect(0, groundY + 10, WORLD.width, WORLD.height - groundY - 10);
+    ctx.fillStyle = PALETTE.grass;
+    ctx.fillRect(0, groundY, WORLD.width, 12);
+    ctx.fillStyle = PALETTE.grassEdge;
+    ctx.fillRect(0, groundY, WORLD.width, 3);
+
+    /* ZYNOX LANDING LIP */
+    ctx.fillStyle = '#78e85a';
+    ctx.fillRect(0, groundY - 2, WORLD.width, 2);
+
+    ctx.fillStyle = "rgba(255,255,255,0.035)";
+    for (let x = 0; x < WORLD.width; x += 28) {
+      ctx.fillRect(x + 3, groundY + 14, 12, 3);
+    }
+  }
+
+  drawLandingZone(zoneCenterX, zoneHalfWidth, groundY) {
+    const ctx = this.ctx;
+    const left = zoneCenterX - zoneHalfWidth;
+    const pulse = 0.78 + Math.sin(this.animTime * 5) * 0.12;
+
+    ctx.save();
+    ctx.globalAlpha = pulse;
+    ctx.fillStyle = PALETTE.zoneSafe;
+    ctx.fillRect(left, groundY - 4, zoneHalfWidth * 2, 8);
+    ctx.strokeStyle = PALETTE.zoneEdge;
+    ctx.lineWidth = 2;
+    ctx.strokeRect(left, groundY - 4, zoneHalfWidth * 2, 8);
+    ctx.globalAlpha = 0.3;
+    ctx.fillStyle = PALETTE.zoneEdge;
+    ctx.fillRect(zoneCenterX - 2, groundY - 12, 4, 24);
+    ctx.restore();
+  }
+
+  drawHeightMarkers(roundConfig = null) {
+    if (!roundConfig) return;
+    const ctx = this.ctx;
+    const groundY = roundConfig.groundY;
+    const topY = roundConfig.spawnY;
+    const span = Math.max(1, groundY - topY);
+    const steps = Math.max(2, Math.min(6, Math.ceil(roundConfig.height / 100)));
+
+    ctx.save();
+    ctx.font = '7px Press Start 2P, monospace';
+    ctx.textBaseline = 'middle';
+    for (let i = 1; i <= steps; i++) {
+      const ratio = i / (steps + 1);
+      const y = groundY - span * ratio;
+      ctx.globalAlpha = 0.28;
+      ctx.fillStyle = '#dce9a5';
+      ctx.fillRect(12, y, 22, 1);
+      ctx.globalAlpha = 0.42;
+      ctx.fillStyle = '#8f9d70';
+      ctx.fillText(String(Math.round(roundConfig.height * ratio)) + 'm', 40, y);
+    }
+    ctx.globalAlpha = 0.42;
+    ctx.strokeStyle = '#dce9a5';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([3, 5]);
+    ctx.beginPath();
+    ctx.moveTo(10, topY);
+    ctx.lineTo(10, groundY);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.restore();
+  }
+
+  drawWater(x, groundY, progress) {
+    const ctx = this.ctx;
+    const reveal = Math.min(1, Math.max(0, progress * 1.75));
+    const width = 58 * reveal;
+    const height = 14 + Math.sin(this.animTime * 12) * 1.2;
+
+    ctx.save();
+    ctx.fillStyle = PALETTE.water;
+    ctx.fillRect(x - width / 2, groundY - height, width, height);
+    ctx.fillStyle = PALETTE.waterLight;
+    ctx.fillRect(x - width / 2, groundY - height, width, 3);
+    ctx.globalAlpha = 0.45 + reveal * 0.35;
+    ctx.fillRect(x - width / 2 + 4, groundY - height + 5, Math.max(0, width - 8), 2);
+    ctx.restore();
+
+    this._drawWaterRipples();
+  }
+
+  _drawWaterRipples() {
+    const ctx = this.ctx;
+    for (const fx of this.waterFx) {
+      const t = fx.age / fx.life;
+      if (t < 0 || t > 1) continue;
+
+      const radius = 8 + t * 38 * fx.power;
+      ctx.save();
+      ctx.globalAlpha = (1 - t) * 0.75;
+      ctx.strokeStyle = PALETTE.waterLight;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.ellipse(fx.x, fx.y - 2, radius, 4 + radius * 0.12, 0, 0, Math.PI * 2);
+      ctx.stroke();
+
+      if (t < 0.55) {
+        ctx.globalAlpha = (1 - t / 0.55) * 0.45;
+        ctx.fillStyle = PALETTE.waterLight;
+        ctx.fillRect(fx.x - 2, fx.y - 18 - t * 12, 4, 4);
+      }
+      ctx.restore();
+    }
+  }
+
+  drawPlayer(player, cosmeticColor, hasWater) {
+    const ctx = this.ctx;
+    const { x, y, width, height } = player;
+    const fallingFast = player.velocityY > 300;
+    const speedRatio = Math.min(1, Math.abs(player.velocityY) / 1250);
+    const bob = Math.sin(this.animTime * 9) * 0.7;
+    const lean = Math.max(-0.24, Math.min(0.24, player.velocityX * 0.0008));
+    const stretch = 1 + speedRatio * 0.08;
+    const squash = 1 - speedRatio * 0.05;
+
+    ctx.save();
+    ctx.translate(x, y + bob);
+    ctx.rotate(lean);
+    ctx.scale(player.facing < 0 ? -1 : 1, 1);
+
+    if (fallingFast) {
+      ctx.save();
+      ctx.globalAlpha = 0.16 + speedRatio * 0.1;
+      ctx.fillStyle = PALETTE.fallGlow;
+      ctx.fillRect(-width * 0.7, -height * 0.25, width * 1.4, 3 + speedRatio * 8);
+      ctx.restore();
+
+      ctx.strokeStyle = "rgba(141,211,255,0.22)";
+      ctx.lineWidth = 2;
+      ctx.setLineDash([3, 6]);
+      ctx.beginPath();
+      ctx.moveTo(-width * 0.55, -height * 0.1);
+      ctx.lineTo(-width * 0.55, -height * 0.1 - 22 - speedRatio * 22);
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+
+    ctx.globalAlpha = 0.16;
+    ctx.fillStyle = "#000";
+    ctx.fillRect(-width * 0.42, height * 0.34, width * 0.84, 5);
+    ctx.globalAlpha = 1;
+    ctx.scale(stretch, squash);
+
+    if (this.playerImageLoaded) {
+      const drawW = Math.max(width * 1.58, 54);
+      const ratio = this.playerImage.naturalHeight / Math.max(1, this.playerImage.naturalWidth);
+      const drawH = drawW * ratio;
+      ctx.imageSmoothingEnabled = false;
+      ctx.drawImage(this.playerImage, -drawW / 2, -drawH / 2 - 4, drawW, drawH);
+    } else {
+      this._drawFallbackPlayer(width * 1.28, height * 1.28);
+    }
+
+    if (hasWater) {
+      const bx = width * 0.34;
+      const by = -7;
+      const bw = 21;
+      const bh = this.bucketImageLoaded
+        ? bw * (this.bucketImage.naturalHeight / Math.max(1, this.bucketImage.naturalWidth))
+        : 18;
+
+      if (this.bucketImageLoaded) {
+        ctx.imageSmoothingEnabled = false;
+        ctx.drawImage(this.bucketImage, bx, by, bw, bh);
+      } else {
+        ctx.fillStyle = cosmeticColor || PALETTE.bucketFallback;
+        ctx.fillRect(bx, by + 1, bw - 2, 13);
+        ctx.fillStyle = PALETTE.water;
+        ctx.fillRect(bx + 4, by + 2, 10, 6);
+      }
+
+      if (fallingFast) {
+        ctx.globalAlpha = 0.25 + speedRatio * 0.2;
+        ctx.fillStyle = PALETTE.waterLight;
+        ctx.fillRect(bx + 5, by + bh + 3, 7, 2);
+        ctx.globalAlpha = 1;
+      }
+    }
+
+    ctx.restore();
+    this._drawLandingFx();
+  }
+
+  _drawFallbackPlayer(width, height) {
+    const ctx = this.ctx;
+    ctx.fillStyle = "#3b9d2b";
+    ctx.fillRect(-width / 2, -height / 2, width, height * 0.68);
+    ctx.fillStyle = "#e8c79a";
+    ctx.fillRect(-width / 2 + 4, -height / 2 - 12, width - 8, 14);
+    ctx.fillStyle = "#2b2b26";
+    ctx.fillRect(-width / 2 + 3, height * 0.18, width * 0.35, height * 0.16);
+    ctx.fillRect(width / 2 - width * 0.35 - 3, height * 0.18, width * 0.35, height * 0.16);
+  }
+
+  _drawLandingFx() {
+    const ctx = this.ctx;
+    for (const fx of this.landingFx) {
+      const t = fx.age / fx.life;
+      const ease = 1 - Math.pow(1 - t, 3);
+
+      ctx.save();
+      ctx.globalAlpha = (1 - t) * 0.8;
+      ctx.strokeStyle = PALETTE.impact;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.ellipse(fx.x, fx.y - 2, 8 + ease * 34 * fx.power, 3 + ease * 11, 0, 0, Math.PI * 2);
+      ctx.stroke();
+
+      ctx.globalAlpha = (1 - t) * 0.42;
+      ctx.fillStyle = PALETTE.impact;
+      const burst = 12 + ease * 34 * fx.power;
+      for (let i = 0; i < 8; i++) {
+        const a = (Math.PI * 2 / 8) * i;
+        ctx.fillRect(
+          fx.x + Math.cos(a) * burst - 2,
+          fx.y - 3 + Math.sin(a) * burst * 0.23 - 2,
+          4, 4
+        );
+      }
+      ctx.restore();
+    }
+  }
+
+  drawGhost(ghostX, ghostY, width, height) {
+    const ctx = this.ctx;
+    ctx.save();
+    ctx.globalAlpha = 0.5;
+    ctx.fillStyle = PALETTE.ghost;
+    ctx.fillRect(ghostX - width / 2, ghostY - height / 2, width, height * 0.68);
+    ctx.restore();
+  }
+
+  drawTrajectoryGuide(startX, startY, groundY) {
+    const ctx = this.ctx;
+    ctx.save();
+    ctx.strokeStyle = "rgba(255,216,74,0.5)";
+    ctx.setLineDash([4, 4]);
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(startX, startY);
+    ctx.lineTo(startX, groundY);
+    ctx.stroke();
+    ctx.restore();
+  }
+}

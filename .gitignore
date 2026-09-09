@@ -9,3 +9,6 @@ public/*.before-*.js
 public/server.js.before-*.js
 server.js.before-*.js
 *.log
+
+.premium-assets/
+.tmp-zynox-voxel/

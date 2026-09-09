@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#10100d">
+  <title>Zynox • Meet The Admin</title>
+  <link rel="stylesheet" href="/style.css">
+  <style>
+    .admin-page {
+      min-height: 100vh;
+      padding-bottom: 80px;
+    }
+
+    .admin-hero {
+      width: min(1180px, 92%);
+      margin: 0 auto;
+      padding: 70px 0 42px;
+      display: grid;
+      grid-template-columns: minmax(280px, 410px) 1fr;
+      gap: 48px;
+      align-items: center;
+    }
+
+    .admin-portrait-wrap {
+      position: relative;
+      padding: 12px;
+      background: #171810;
+      border: 3px solid #5d477e;
+      box-shadow: 10px 10px 0 #070806;
+    }
+
+    .admin-portrait-wrap::before {
+      content: "ADMIN PROFILE";
+      position: absolute;
+      top: -14px;
+      left: 16px;
+      z-index: 2;
+      padding: 7px 9px;
+      background: #15150f;
+      border: 2px solid #5d477e;
+      color: #c7abff;
+      font-family: "Press Start 2P", monospace;
+      font-size: 7px;
+    }
+
+    .admin-portrait {
+      display: block;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      image-rendering: auto;
+      border: 2px solid #332f25;
+    }
+
+    .admin-hero-copy .mc-achievement {
+      display: inline-flex;
+      margin-bottom: 18px;
+    }
+
+    .admin-hero-copy h1 {
+      margin: 0;
+      color: #fff;
+      font-family: "Press Start 2P", monospace;
+      font-size: clamp(27px, 5vw, 56px);
+      line-height: 1.2;
+      text-shadow: 4px 4px 0 #000;
+    }
+
+    .admin-hero-copy h1 span {
+      display: block;
+      margin-top: 8px;
+      color: var(--mc-purple);
+    }
+
+    .admin-alias {
+      margin: 20px 0 0;
+      color: #bbb7a7;
+      font-family: "Press Start 2P", monospace;
+      font-size: 10px;
+      line-height: 1.8;
+    }
+
+    .admin-role {
+      margin-top: 18px;
+      color: #70e958;
+      font-family: "Press Start 2P", monospace;
+      font-size: 9px;
+      letter-spacing: .4px;
+    }
+
+    .admin-intro {
+      max-width: 720px;
+      margin: 22px 0 0;
+      color: var(--mc-muted);
+      font-size: 15px;
+      line-height: 1.9;
+    }
+
+    .admin-grid {
+      width: min(1180px, 92%);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 22px;
+    }
+
+    .admin-card {
+      padding: 24px;
+      background: #171810;
+      border: 2px solid #3f402d;
+      box-shadow: 7px 7px 0 #090a07;
+    }
+
+    .admin-card-wide {
+      grid-column: 1 / -1;
+    }
+
+    .admin-card-label {
+      margin-bottom: 16px;
+      color: #c7abff;
+      font-family: "Press Start 2P", monospace;
+      font-size: 8px;
+      letter-spacing: .5px;
+    }
+
+    .admin-card h2 {
+      margin: 0 0 14px;
+      color: #fff;
+      font-family: "Press Start 2P", monospace;
+      font-size: clamp(15px, 2vw, 22px);
+      line-height: 1.5;
+      text-shadow: 2px 2px 0 #000;
+    }
+
+    .admin-card p {
+      margin: 0;
+      color: var(--mc-muted);
+      font-size: 14px;
+      line-height: 1.85;
+    }
+
+    .admin-status-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .admin-status-box {
+      padding: 15px 12px;
+      border: 2px solid #332f25;
+      background: #10100d;
+    }
+
+    .admin-status-box strong {
+      display: block;
+      color: #fff;
+      font-family: "Press Start 2P", monospace;
+      font-size: 9px;
+      line-height: 1.5;
+    }
+
+    .admin-status-box span {
+      display: block;
+      margin-top: 8px;
+      color: #9d72ff;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .admin-interest-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-top: 18px;
+    }
+
+    .admin-interest {
+      padding: 9px 11px;
+      color: #dce9a5;
+      background: #252b1a;
+      border: 2px solid #62694a;
+      font-family: "Press Start 2P", monospace;
+      font-size: 7px;
+    }
+
+    .admin-funny {
+      margin-top: 18px;
+      padding: 15px;
+      border-left: 4px solid #9d72ff;
+      background: rgba(166,107,255,.06);
+      color: #c9c6b8;
+      font-size: 13px;
+      line-height: 1.8;
+    }
+
+    .admin-socials {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .admin-socials a {
+      display: inline-block;
+      padding: 11px 13px;
+      color: #fff;
+      text-decoration: none;
+      font-family: "Press Start 2P", monospace;
+      font-size: 7px;
+      background: #15150f;
+      border: 2px solid #5d477e;
+      box-shadow: 3px 3px 0 #090a07;
+    }
+
+    .admin-socials a:hover {
+      transform: translate(-1px,-1px);
+      background: rgba(166,107,255,.12);
+    }
+
+    .admin-credits {
+      width: min(760px, 92%);
+      margin: 70px auto 0;
+      padding: 34px 20px 20px;
+      text-align: center;
+      border-top: 2px solid #332f25;
+    }
+
+    .admin-credits h2 {
+      margin: 0 0 18px;
+      color: #c7abff;
+      font-family: "Press Start 2P", monospace;
+      font-size: 13px;
+      letter-spacing: 1px;
+    }
+
+    .admin-credit-line {
+      margin: 9px 0;
+      color: #aaa696;
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    .admin-credit-line strong {
+      color: #fff;
+      font-family: "Press Start 2P", monospace;
+      font-size: 8px;
+    }
+
+    .admin-final {
+      margin-top: 24px;
+      color: #70e958;
+      font-family: "Press Start 2P", monospace;
+      font-size: 8px;
+      line-height: 1.8;
+    }
+
+    @media (max-width: 800px) {
+      .admin-hero,
+      .admin-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .admin-card-wide {
+        grid-column: auto;
+      }
+
+      .admin-status-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .admin-hero {
+        padding-top: 52px;
+      }
+    }
+  </style>
+</head>
+
+<body class="server-page">
+  <div class="pixel-sky"></div>
+  <div class="pixel-stars"></div>
+
+  <header class="mc-navbar">
+    <a href="/" class="mc-brand">
+      <span class="mc-brand-block mc-brand-z">Z</span>
+      <span class="mc-brand-text">Zynox</span>
+    </a>
+
+    <nav class="mc-nav">
+      <a href="/#servers">Servers</a>
+      <a href="/#ranks">More</a>
+      <a href="/#creations">Creations</a>
+      <a href="/#community">Community</a>
+      <a href="/#minigames">Minigames</a>
+    </nav>
+
+    <a href="/" class="mc-inventory-btn">HOME</a>
+
+    <button class="zy-menu-toggle" type="button" aria-label="Open Zynox menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+
+    <div class="zy-menu-panel" aria-hidden="true">
+      <div class="zy-menu-title">ZYNOX MENU</div>
+      <a href="/#servers">SERVERS</a>
+      <a href="/#ranks">MORE</a>
+      <a href="/#creations">CREATIONS</a>
+      <a href="/#community">COMMUNITY</a>
+      <a href="/#minigames">MINIGAMES</a>
+      <a href="/about-admin.html">ABOUT ADMIN</a>
+    </div>
+  </header>
+
+  <main class="admin-page">
+    <section class="admin-hero">
+      <div class="admin-portrait-wrap">
+        <img class="admin-portrait" src="/assets/admin/spiderman-admin.jpg" alt="Zynox admin profile">
+      </div>
+
+      <div class="admin-hero-copy">
+        <div class="mc-achievement">
+          <span class="achievement-icon">★</span>
+          <span>ZYNOX ADMIN PROFILE</span>
+        </div>
+
+        <h1>MEET THE <span>ADMIN</span></h1>
+
+        <p class="admin-alias">ZYNOX · aka SAJAN KUMAR VISHWAS</p>
+        <div class="admin-role">ROLE: CREATOR • BUILDER • ADMIN</div>
+
+        <p class="admin-intro">
+          A disciplined, curious problem-solver building things, learning things,
+          breaking things, fixing things, and occasionally wondering why the
+          syllabus has decided to become a final boss.
+        </p>
+      </div>
+    </section>
+
+    <section class="admin-grid">
+      <article class="admin-card admin-card-wide">
+        <div class="admin-card-label">CURRENT STATUS</div>
+        <h2>12TH GRADE SURVIVAL MODE</h2>
+        <p>
+          Currently in 12th, suffering from a hyper syllabus situation while
+          still making room for code, gaming, ideas and random “let's build this”
+          moments.
+        </p>
+
+        <div class="admin-status-grid">
+          <div class="admin-status-box">
+            <strong>CLASS</strong>
+            <span>12TH</span>
+          </div>
+          <div class="admin-status-box">
+            <strong>MODE</strong>
+            <span>BUILD + LEARN</span>
+          </div>
+          <div class="admin-status-box">
+            <strong>SYLLABUS</strong>
+            <span>FINAL BOSS 💀</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="admin-card">
+        <div class="admin-card-label">ABOUT ME</div>
+        <h2>THE PERSON BEHIND ZYNOX</h2>
+        <p>
+          Focused on practical skills, deep work and continuous learning.
+          The goal is simple: understand things properly, build useful stuff,
+          keep experimenting and turn ideas into something people can actually use.
+        </p>
+        <div class="admin-funny">
+          Translation: opens the editor for “five minutes” and somehow ends up
+          redesigning an entire website.
+        </div>
+      </article>
+
+      <article class="admin-card">
+        <div class="admin-card-label">STUDIES & ACADEMICS</div>
+        <h2>LEARNING WHILE THE SYLLABUS ATTACKS</h2>
+        <p>
+          Academic focus: building a strong foundation while connecting theory
+          with practical problem solving. Research, structured thinking and
+          end-to-end execution are part of the journey.
+        </p>
+        <div class="admin-funny">
+          Current academic perk unlocked: somehow thinking about coding while
+          studying a completely different chapter.
+        </div>
+      </article>
+
+      <article class="admin-card admin-card-wide">
+        <div class="admin-card-label">INTERESTS & PURSUITS</div>
+        <h2>WHAT KEEPS THE ADMIN BUSY</h2>
+        <p>
+          Gaming, music, Marvel, web development, coding and building apps.
+          Basically, anything that involves creating, exploring or making a
+          digital idea come alive has a pretty good chance of getting attention.
+        </p>
+
+        <div class="admin-interest-list">
+          <span class="admin-interest">🎮 GAMING</span>
+          <span class="admin-interest">🎧 MUSIC</span>
+          <span class="admin-interest">🕷️ MARVEL</span>
+          <span class="admin-interest">🌐 WEB DEV</span>
+          <span class="admin-interest">💻 CODING</span>
+          <span class="admin-interest">📱 APP BUILDING</span>
+        </div>
+      </article>
+
+      <article class="admin-card admin-card-wide">
+        <div class="admin-card-label">ADMIN LOG</div>
+        <h2>REAL LIFE PATCH NOTES</h2>
+        <p>
+          <strong>v12.x:</strong> unlocked harder chapters, heavier syllabus,
+          more ideas, more coding and absolutely no patch note promising
+          “less homework.”
+        </p>
+        <div class="admin-funny">
+          ZYNOX development continues. Sleep.exe may stop responding without warning.
+        </div>
+      </article>
+
+      <article class="admin-card admin-card-wide">
+        <div class="admin-card-label">CONNECT</div>
+        <h2>THE ZYNOX OUTPOSTS</h2>
+        <p>Some places where Zynox exists outside this page.</p>
+
+        <div class="admin-socials">
+          <a href="https://youtube.com/@zynox-7777" target="_blank" rel="noopener noreferrer">YOUTUBE ↗</a>
+          <a href="https://discord.gg/mDzZqxhnJ" target="_blank" rel="noopener noreferrer">DISCORD ↗</a>
+          <a href="https://www.instagram.com/sajankumarvishwas" target="_blank" rel="noopener noreferrer">INSTAGRAM ↗</a>
+        </div>
+      </article>
+    </section>
+
+    <section class="admin-credits">
+      <h2>CREDITS</h2>
+      <div class="admin-credit-line"><strong>ZYNOX</strong> · Creator</div>
+      <div class="admin-credit-line"><strong>ZYNOX</strong> · Builder</div>
+      <div class="admin-credit-line"><strong>ZYNOX</strong> · Worlds & Projects</div>
+      <div class="admin-credit-line"><strong>ZYNOX</strong> · Ideas, Code & Controlled Chaos</div>
+      <div class="admin-credit-line"><strong>AKA SAJAN KUMAR VISHWAS</strong></div>
+      <div class="admin-final">THANKS FOR VISITING THE ZYNOX WORLD.</div>
+    </section>
+  </main>
+
+  <script>
+    const menuToggle = document.querySelector(".zy-menu-toggle");
+    const menuPanel = document.querySelector(".zy-menu-panel");
+
+    menuToggle.addEventListener("click", function () {
+      const open = this.getAttribute("aria-expanded") === "true";
+      this.setAttribute("aria-expanded", String(!open));
+      menuPanel.setAttribute("aria-hidden", String(open));
+      menuPanel.classList.toggle("is-open", !open);
+    });
+
+    document.querySelectorAll(".zy-menu-panel a").forEach(link => {
+      link.addEventListener("click", () => {
+        menuToggle.setAttribute("aria-expanded", "false");
+        menuPanel.setAttribute("aria-hidden", "true");
+        menuPanel.classList.remove("is-open");
+      });
+    });
+  </script>
+</body>
+</html>

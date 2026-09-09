@@ -9765,3 +9765,1406 @@ body.server-page {
   }
 }
 
+
+
+/* ZYNOX MINIGAMES */
+.mc-minigames-section{padding-top:86px}.minigames-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;align-items:stretch}.minigame-feature-card{width:100%;overflow:hidden;background:#171810;border:2px solid #3f402d;box-shadow:9px 9px 0 #0b0c08;display:flex;flex-direction:column;min-width:0}.minigame-banner-wrap,.minigame-troll-banner{position:relative;width:100%;aspect-ratio:16/6;overflow:hidden;background:#10120c}.minigame-banner-wrap img{display:block;width:100%;height:100%;object-fit:cover}.minigame-banner-overlay{position:absolute;inset:0;background:linear-gradient(90deg,rgba(8,10,7,.18),rgba(8,10,7,.42))}.minigame-banner-label{position:absolute;top:18px;right:18px;padding:9px 12px;border:2px solid #a7b56b;background:#15180f;color:#dce9a5;font-family:"Press Start 2P",monospace;font-size:8px;letter-spacing:.5px;box-shadow:4px 4px 0 #090a07}.minigame-card-content{display:flex;flex:1;align-items:center;justify-content:space-between;gap:24px;padding:24px}.minigame-kicker{color:#b69d7d;font-family:"Press Start 2P",monospace;font-size:8px;letter-spacing:.6px}.minigame-card-content h3{margin:10px 0 8px;color:#fff;font-family:"Press Start 2P",monospace;font-size:clamp(16px,2.2vw,24px);line-height:1.35;text-shadow:3px 3px 0 #0b0c08}.minigame-card-content p{max-width:620px;margin:0;color:var(--mc-muted);font-size:13px;line-height:1.7}.minigame-play-button{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;flex:0 0 auto;padding:14px 18px;border:2px solid #62694a;background:#252b1a;color:#dce9a5;font-family:"Press Start 2P",monospace;font-size:9px;letter-spacing:.4px;box-shadow:5px 5px 0 #0a0b08;cursor:pointer;transition:transform .16s ease,box-shadow .16s ease,filter .16s ease}.minigame-play-button:hover{transform:translate(-2px,-2px);box-shadow:7px 7px 0 #0a0b08;filter:brightness(1.08)}.minigame-play-button-hot{border-color:#ff5ca8;background:#291522;color:#ffd8ea;box-shadow:5px 5px 0 #12070d}.minigame-play-button-hot:hover{box-shadow:7px 7px 0 #12070d}.minigame-troll-banner{background:radial-gradient(circle at 70% 35%,rgba(255,92,168,.35),transparent 34%),linear-gradient(135deg,#120812 0%,#26101e 52%,#0c1115 100%);display:flex;align-items:center;justify-content:center}.minigame-troll-banner::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(255,255,255,.04) 0 1px,transparent 1px 5px);opacity:.55;pointer-events:none}.minigame-troll-glitch{position:relative;z-index:2;color:#fff;font-family:"Press Start 2P",monospace;font-size:clamp(46px,8vw,82px);letter-spacing:3px;text-shadow:4px 0 #ff5ca8,-4px 0 #6ce5ff,0 8px 0 rgba(0,0,0,.4);animation:minigameTrollGlitch 2.7s steps(1,end) infinite}.minigame-troll-scan{position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,transparent 0%,rgba(255,92,168,.1) 48%,transparent 52%);background-size:100% 9px;mix-blend-mode:screen;animation:minigameTrollScan 3s linear infinite}.minigame-troll-chip,.minigame-troll-warning{position:absolute;z-index:3;font-family:"Press Start 2P",monospace;font-size:7px;letter-spacing:.5px;padding:8px 10px;border:1px solid #ff5ca8;background:rgba(17,8,16,.84);color:#ffd8ea;box-shadow:3px 3px 0 rgba(0,0,0,.55)}.minigame-troll-chip{top:16px;left:16px}.minigame-troll-warning{right:16px;bottom:16px}.minigame-troll-card{border-color:#6d2f52;background:linear-gradient(180deg,#1a1219,#141014)}.minigame-troll-card .minigame-kicker{color:#ff8cbc}.minigame-troll-card .minigame-card-content p{max-width:680px}@keyframes minigameTrollGlitch{0%,92%,100%{transform:translate(0)}93%{transform:translate(-3px,1px) skewX(-4deg)}94%{transform:translate(3px,-1px) skewX(4deg)}95%{transform:translate(0)}}@keyframes minigameTrollScan{0%{transform:translateY(-30%)}100%{transform:translateY(30%)}}@media(max-width:900px){.minigames-grid{grid-template-columns:1fr}}@media(max-width:700px){.minigame-banner-wrap,.minigame-troll-banner{aspect-ratio:16/9}.minigame-banner-label{top:12px;right:12px;padding:8px 9px;font-size:7px}.minigame-card-content{flex-direction:column;align-items:stretch;padding:20px}.minigame-play-button{width:100%}.minigame-troll-chip{top:12px;left:12px}.minigame-troll-warning{right:12px;bottom:12px;font-size:6px}}@media(prefers-reduced-motion:reduce){.minigame-troll-glitch,.minigame-troll-scan{animation:none}}
+
+
+@media (max-width: 650px){
+  .mc-nav{gap:0;justify-content:space-between;overflow-x:visible;width:100%;}
+  .mc-nav a{padding:9px 6px;font-size:6px;letter-spacing:-.2px;}
+}
+
+
+/* ===== THE TROLL GAME : CODE-ONLY CINEMATIC BANNER ===== */
+.troll-code-banner{
+  position:relative;
+  min-height:300px;
+  overflow:hidden;
+  isolation:isolate;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  background:
+    radial-gradient(circle at 72% 48%,rgba(72,231,255,.11),transparent 23%),
+    radial-gradient(circle at 24% 72%,rgba(92,94,255,.09),transparent 30%),
+    linear-gradient(135deg,#050913 0%,#08111d 48%,#04070d 100%);
+  border:1px solid rgba(115,235,255,.18);
+  box-shadow:inset 0 0 70px rgba(0,0,0,.55),0 18px 55px rgba(0,0,0,.35);
+}
+
+.troll-code-grid{
+  position:absolute;
+  inset:0;
+  opacity:.35;
+  background-image:
+    linear-gradient(rgba(120,235,255,.055) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(120,235,255,.055) 1px,transparent 1px);
+  background-size:34px 34px;
+  transform:perspective(650px) rotateX(58deg) scale(1.35);
+  transform-origin:center bottom;
+  animation:trollGridDrift 8s linear infinite;
+}
+
+.troll-code-noise{
+  position:absolute;
+  inset:0;
+  opacity:.12;
+  pointer-events:none;
+  background:
+    repeating-linear-gradient(0deg,transparent 0 3px,rgba(255,255,255,.04) 4px),
+    repeating-linear-gradient(90deg,rgba(55,230,255,.015) 0 1px,transparent 1px 5px);
+  mix-blend-mode:screen;
+  animation:trollNoise 1.8s steps(2,end) infinite;
+}
+
+.troll-code-scan{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:linear-gradient(180deg,transparent 0%,rgba(108,242,255,.08) 48%,transparent 53%);
+  transform:translateY(-120%);
+  animation:trollScan 5.5s linear infinite;
+}
+
+.troll-code-kicker{
+  position:relative;
+  z-index:4;
+  margin-bottom:12px;
+  font:700 10px/1 monospace;
+  letter-spacing:.28em;
+  color:#77efff;
+  text-transform:uppercase;
+  text-shadow:0 0 18px rgba(119,239,255,.35);
+}
+
+.troll-code-title{
+  position:relative;
+  z-index:4;
+  font:900 clamp(38px,7vw,82px)/.88 system-ui,sans-serif;
+  letter-spacing:-.055em;
+  text-align:center;
+  color:#f4f8ff;
+  text-shadow:0 0 24px rgba(133,241,255,.15),0 10px 40px rgba(0,0,0,.55);
+  animation:trollTitlePulse 3.4s ease-in-out infinite;
+}
+
+.troll-code-title span{
+  color:#6df3ff;
+  text-shadow:
+    0 0 8px rgba(109,243,255,.65),
+    0 0 28px rgba(109,243,255,.3);
+}
+
+.troll-code-title::before,
+.troll-code-title::after{
+  content:attr(data-text);
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  overflow:hidden;
+  opacity:0;
+}
+
+.troll-code-title::before{
+  color:#ff3f83;
+  transform:translateX(-2px);
+  animation:trollGlitchA 4.2s infinite steps(1,end);
+}
+
+.troll-code-title::after{
+  color:#64f6ff;
+  transform:translateX(2px);
+  animation:trollGlitchB 3.7s infinite steps(1,end);
+}
+
+.troll-code-sub{
+  position:relative;
+  z-index:4;
+  margin-top:16px;
+  font:700 12px/1 monospace;
+  letter-spacing:.34em;
+  color:#93a2b8;
+  text-transform:uppercase;
+}
+
+.troll-code-orb{
+  position:absolute;
+  right:8%;
+  top:50%;
+  width:145px;
+  height:145px;
+  transform:translateY(-50%);
+  opacity:.7;
+}
+
+.troll-code-orb-core{
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:30px;
+  height:30px;
+  transform:translate(-50%,-50%);
+  border-radius:50%;
+  background:#6df3ff;
+  box-shadow:0 0 15px #6df3ff,0 0 55px rgba(109,243,255,.5);
+  animation:trollCorePulse 1.8s ease-in-out infinite;
+}
+
+.troll-code-orb-ring{
+  position:absolute;
+  inset:14%;
+  border:1px solid rgba(109,243,255,.45);
+  border-radius:50%;
+}
+
+.ring-a{animation:trollRingA 6s linear infinite}
+.ring-b{
+  inset:27%;
+  border-color:rgba(155,107,255,.4);
+  animation:trollRingB 4s linear infinite reverse;
+}
+
+.troll-code-status{
+  position:absolute;
+  z-index:5;
+  left:20px;
+  bottom:18px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font:700 9px/1 monospace;
+  letter-spacing:.16em;
+  color:#718196;
+}
+
+.troll-code-dot{
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:#6df3ff;
+  box-shadow:0 0 12px #6df3ff;
+  animation:trollDot 1.2s ease-in-out infinite;
+}
+
+.troll-code-particle{
+  position:absolute;
+  width:3px;
+  height:3px;
+  border-radius:50%;
+  background:#8cf5ff;
+  box-shadow:0 0 10px #8cf5ff;
+  opacity:.65;
+}
+
+.p1{left:18%;top:24%;animation:trollFloat1 5s ease-in-out infinite}
+.p2{left:32%;top:70%;animation:trollFloat2 6s ease-in-out infinite}
+.p3{right:27%;top:22%;animation:trollFloat1 7s ease-in-out infinite reverse}
+.p4{right:17%;bottom:25%;animation:trollFloat2 5.5s ease-in-out infinite reverse}
+
+@keyframes trollGridDrift{
+  from{background-position:0 0}
+  to{background-position:0 34px}
+}
+@keyframes trollNoise{
+  0%,100%{transform:translate(0)}
+  25%{transform:translate(-1px,1px)}
+  50%{transform:translate(1px,-1px)}
+  75%{transform:translate(1px,1px)}
+}
+@keyframes trollScan{
+  to{transform:translateY(120%)}
+}
+@keyframes trollTitlePulse{
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(1.012)}
+}
+@keyframes trollGlitchA{
+  0%,89%,100%{opacity:0}
+  90%{opacity:.28;clip-path:inset(12% 0 63% 0)}
+  92%{opacity:0}
+  94%{opacity:.18;clip-path:inset(67% 0 12% 0)}
+}
+@keyframes trollGlitchB{
+  0%,84%,100%{opacity:0}
+  85%{opacity:.25;clip-path:inset(58% 0 24% 0)}
+  87%{opacity:0}
+  91%{opacity:.16;clip-path:inset(22% 0 61% 0)}
+}
+@keyframes trollCorePulse{
+  0%,100%{transform:translate(-50%,-50%) scale(.85);opacity:.7}
+  50%{transform:translate(-50%,-50%) scale(1.18);opacity:1}
+}
+@keyframes trollRingA{to{transform:rotate(360deg)}}
+@keyframes trollRingB{to{transform:rotate(360deg) scale(1.08)}}
+@keyframes trollDot{
+  0%,100%{opacity:.35}
+  50%{opacity:1}
+}
+@keyframes trollFloat1{
+  0%,100%{transform:translate(0,0);opacity:.2}
+  50%{transform:translate(16px,-18px);opacity:.85}
+}
+@keyframes trollFloat2{
+  0%,100%{transform:translate(0,0);opacity:.15}
+  50%{transform:translate(-12px,15px);opacity:.75}
+}
+
+@media(max-width:700px){
+  .troll-code-banner{min-height:245px}
+  .troll-code-orb{right:-18px;width:120px;height:120px;opacity:.45}
+  .troll-code-title{font-size:clamp(34px,10vw,58px);max-width:92%}
+  .troll-code-sub{font-size:9px}
+}
+
+/* =========================================================
+   ZYNOX HAMBURGER MENU
+========================================================= */
+
+.zy-menu-toggle,
+.zy-menu-panel {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .mc-navbar {
+    flex-wrap: nowrap;
+  }
+
+  .mc-nav,
+  .mc-inventory-btn {
+    display: none;
+  }
+
+  .zy-menu-toggle {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    width: 46px;
+    height: 46px;
+    flex: 0 0 46px;
+    padding: 8px;
+    background: #171810;
+    border: 2px solid #5d477e;
+    box-shadow: 4px 4px 0 #090a07;
+    cursor: pointer;
+  }
+
+  .zy-menu-toggle span {
+    display: block;
+    width: 22px;
+    height: 3px;
+    background: #c7abff;
+    box-shadow: 2px 2px 0 #000;
+    transition: transform .18s ease, opacity .18s ease;
+  }
+
+  .zy-menu-toggle[aria-expanded="true"] span:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+  }
+
+  .zy-menu-toggle[aria-expanded="true"] span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .zy-menu-toggle[aria-expanded="true"] span:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+  }
+
+  .zy-menu-panel {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 14px;
+    width: min(290px, calc(100vw - 28px));
+    padding: 10px;
+    background: linear-gradient(180deg, #191911, #10100d);
+    border: 2px solid #5d477e;
+    box-shadow: 7px 7px 0 #050604;
+    z-index: 110;
+  }
+
+  .zy-menu-panel.is-open {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .zy-menu-title {
+    padding: 13px 12px 11px;
+    color: #c7abff;
+    font-family: "Press Start 2P", monospace;
+    font-size: 9px;
+    letter-spacing: .5px;
+    border-bottom: 2px solid #332f25;
+    text-shadow: 2px 2px 0 #000;
+  }
+
+  .zy-menu-panel a {
+    display: block;
+    padding: 13px 12px;
+    color: #bbb7a7;
+    text-decoration: none;
+    font-family: "Press Start 2P", monospace;
+    font-size: 8px;
+    border: 2px solid transparent;
+    background: rgba(166,107,255,.03);
+    transition: .15s ease;
+  }
+
+  .zy-menu-panel a:hover {
+    color: #fff;
+    background: rgba(166,107,255,.10);
+    border-color: #5d477e;
+    transform: translateX(2px);
+  }
+}
+
+/* =========================================================
+   ZYNOX ABOUT ADMIN PANEL
+========================================================= */
+
+.zy-about-admin {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(5,6,4,.82);
+  backdrop-filter: blur(6px);
+}
+
+.zy-about-admin.is-visible {
+  display: flex;
+}
+
+.zy-about-admin-card {
+  width: min(560px, 100%);
+  padding: 22px;
+  background: linear-gradient(180deg, #191911, #10100d);
+  border: 3px solid #5d477e;
+  box-shadow: 10px 10px 0 #050604, inset 0 0 0 2px rgba(255,255,255,.025);
+}
+
+.zy-about-admin-card h2 {
+  margin: 20px 0 12px;
+  color: #fff;
+  font-family: "Press Start 2P", monospace;
+  font-size: clamp(14px, 3vw, 22px);
+  line-height: 1.5;
+  text-shadow: 3px 3px 0 #000;
+}
+
+.zy-about-admin-card p {
+  margin: 0 0 20px;
+  color: var(--mc-muted);
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.zy-about-admin-card > a {
+  display: inline-block;
+  padding: 11px 14px;
+  color: #c7abff;
+  text-decoration: none;
+  font-family: "Press Start 2P", monospace;
+  font-size: 8px;
+  border: 2px solid #5d477e;
+  background: rgba(166,107,255,.08);
+  box-shadow: 4px 4px 0 #090a07;
+}
+
+.zy-about-admin-card > a:hover {
+  color: #fff;
+  background: rgba(166,107,255,.16);
+  transform: translate(-1px,-1px);
+}
+
+
+/* =========================================================
+   ZYNOX CREATION: MINIGAMES
+========================================================= */
+
+.zy-creation-minigames {
+  position: relative;
+  display: grid;
+  grid-template-columns: 90px 1fr auto;
+  gap: 22px;
+  align-items: center;
+  margin-top: 22px;
+  padding: 22px 24px;
+  overflow: hidden;
+  text-decoration: none;
+  background:
+    radial-gradient(circle at 12% 30%, rgba(157,114,255,.12), transparent 32%),
+    linear-gradient(145deg, #29271f, #12110e);
+  border: 4px solid #514b3d;
+  box-shadow:
+    inset 0 0 0 2px rgba(255,255,255,.025),
+    0 8px 0 #090907,
+    0 20px 45px rgba(0,0,0,.28);
+  transition: transform .16s ease, border-color .16s ease, filter .16s ease;
+}
+
+.zy-creation-minigames:hover {
+  transform: translate(-2px,-2px);
+  border-color: #6c5590;
+  filter: brightness(1.05);
+}
+
+.zy-creation-minigames-icon {
+  width: 78px;
+  height: 78px;
+  display: grid;
+  place-items: center;
+  background: #10100d;
+  border: 3px solid #3c382f;
+  box-shadow: 5px 5px 0 #090907;
+  font-size: 34px;
+}
+
+.zy-creation-minigames > div:nth-child(2) {
+  min-width: 0;
+}
+
+.zy-creation-minigames h3 {
+  margin: 9px 0 8px;
+  color: #fff;
+  font-family: "Press Start 2P", monospace;
+  font-size: 17px;
+  line-height: 1.5;
+  text-shadow: 3px 3px 0 #000;
+}
+
+.zy-creation-minigames p {
+  margin: 0;
+  max-width: 680px;
+  color: #aaa394;
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.zy-creation-minigames-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 145px;
+  padding: 12px 13px;
+  color: #dce9a5;
+  background: #252b1a;
+  border: 2px solid #62694a;
+  box-shadow: 4px 4px 0 #090a07;
+  font-family: "Press Start 2P", monospace;
+  font-size: 7px;
+  white-space: nowrap;
+}
+
+@media (max-width: 760px) {
+  .zy-creation-minigames {
+    grid-template-columns: 70px 1fr;
+    gap: 16px;
+    padding: 18px;
+  }
+
+  .zy-creation-minigames-icon {
+    width: 62px;
+    height: 62px;
+    font-size: 28px;
+  }
+
+  .zy-creation-minigames h3 {
+    font-size: 13px;
+  }
+
+  .zy-creation-minigames p {
+    font-size: 12px;
+  }
+
+  .zy-creation-minigames-arrow {
+    grid-column: 1 / -1;
+    width: 100%;
+  }
+}
+
+
+/* =========================================================
+   ZYNOX CREATIONS PROJECT GRID
+========================================================= */
+
+.zy-creations-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: 32px;
+}
+
+.zy-project-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 315px;
+  padding: 20px;
+  overflow: hidden;
+  text-decoration: none;
+  background:
+    radial-gradient(circle at 88% 12%, rgba(157,114,255,.10), transparent 28%),
+    linear-gradient(145deg, #29271f, #12110e);
+  border: 3px solid #514b3d;
+  box-shadow:
+    inset 0 0 0 2px rgba(255,255,255,.025),
+    6px 7px 0 #090907;
+  transition: transform .16s ease, border-color .16s ease, filter .16s ease;
+}
+
+.zy-project-card:hover {
+  transform: translate(-2px,-2px);
+  border-color: #6c5590;
+  filter: brightness(1.05);
+}
+
+.zy-project-card-icon,
+.zy-project-icon {
+  width: 68px;
+  height: 68px;
+  display: grid;
+  place-items: center;
+  margin-bottom: 18px;
+  background: #10100d;
+  border: 3px solid #3c382f;
+  box-shadow: 4px 4px 0 #090907;
+  font-size: 29px;
+}
+
+.zy-project-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.zy-project-status {
+  padding: 7px 8px;
+  color: #dce9a5;
+  border: 2px solid #62694a;
+  background: #202618;
+  font-family: "Press Start 2P", monospace;
+  font-size: 6px;
+  line-height: 1.4;
+}
+
+.zy-project-card-wip .zy-project-status {
+  color: #c7abff;
+  border-color: #5d477e;
+  background: rgba(166,107,255,.08);
+}
+
+.zy-project-card-soon .zy-project-status {
+  color: #e6cc72;
+  border-color: #6d6040;
+  background: rgba(230,204,114,.06);
+}
+
+.zy-project-card h3 {
+  margin: 13px 0 10px;
+  color: #fff;
+  font-family: "Press Start 2P", monospace;
+  font-size: 16px;
+  line-height: 1.55;
+  text-shadow: 3px 3px 0 #000;
+}
+
+.zy-project-card p {
+  margin: 0;
+  color: #aaa394;
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+.zy-project-action {
+  margin-top: auto;
+  padding-top: 20px;
+  color: #dce9a5;
+  font-family: "Press Start 2P", monospace;
+  font-size: 7px;
+  line-height: 1.7;
+}
+
+.zy-project-action-muted {
+  color: #827f72;
+}
+
+.zy-project-card-playable {
+  border-color: #514b3d;
+}
+
+@media (max-width: 900px) {
+  .zy-creations-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .zy-project-card {
+    min-height: 0;
+  }
+}
+
+/* Compact Zynox creation cards */
+.zy-creations-grid {
+  gap: 14px;
+}
+
+.zy-project-card {
+  min-height: 255px;
+  padding: 17px;
+}
+
+.zy-project-icon {
+  width: 58px;
+  height: 58px;
+  margin-bottom: 13px;
+  font-size: 25px;
+}
+
+.zy-project-card h3 {
+  margin: 10px 0 8px;
+  font-size: 14px;
+}
+
+.zy-project-card p {
+  font-size: 11px;
+  line-height: 1.65;
+}
+
+.zy-project-action {
+  padding-top: 15px;
+  font-size: 6px;
+}
+
+@media (max-width: 760px) {
+  .zy-project-card {
+    min-height: 0;
+    padding: 16px;
+  }
+
+  .zy-project-icon {
+    width: 56px;
+    height: 56px;
+  }
+}
+
+/* ZYNOX coming-soon cards + toast */
+.zy-soon-card {
+  width: 100%;
+  color: inherit;
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.zy-soon-card:focus-visible {
+  outline: 2px solid #c7abff;
+  outline-offset: 3px;
+}
+
+.zy-soon-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 28px;
+  z-index: 250;
+  width: min(370px, calc(100vw - 32px));
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  background: linear-gradient(180deg, #1b1b14, #10100d);
+  border: 3px solid #5d477e;
+  box-shadow: 7px 7px 0 #050604;
+  transform: translate(-50%, 28px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .22s ease, transform .22s ease;
+}
+
+.zy-soon-toast.is-visible {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.zy-soon-toast-kicker {
+  color: #9d72ff;
+  font-family: "Press Start 2P", monospace;
+  font-size: 7px;
+  letter-spacing: .5px;
+}
+
+.zy-soon-toast strong {
+  color: #fff;
+  font-family: "Press Start 2P", monospace;
+  font-size: 12px;
+  line-height: 1.5;
+  text-shadow: 2px 2px 0 #000;
+}
+
+#zy-soon-toast-project {
+  color: #aaa394;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.zy-soon-card,
+.zy-soon-card:hover,
+.zy-soon-card:active,
+.zy-soon-card:focus {
+  color: inherit;
+  background:
+    radial-gradient(circle at 88% 12%, rgba(157,114,255,.10), transparent 28%),
+    linear-gradient(145deg, #29271f, #12110e);
+}
+
+.zy-soon-card:focus {
+  outline: none;
+}
+
+.zy-soon-card:focus-visible {
+  outline: 2px solid #c7abff;
+  outline-offset: 3px;
+}
+
+@media (hover: none) {
+  .zy-soon-card:active {
+    transform: none;
+    filter: brightness(1);
+  }
+}
+
+
+/* Better Zynox coming-soon toast placement */
+.zy-soon-toast {
+  top: 92px;
+  bottom: auto;
+  left: 50%;
+  transform: translate(-50%, -18px);
+}
+
+.zy-soon-toast.is-visible {
+  transform: translate(-50%, 0);
+}
+
+@media (max-width: 650px) {
+  .zy-soon-toast {
+    top: 82px;
+    width: min(330px, calc(100vw - 28px));
+    padding: 14px 15px;
+  }
+
+  .zy-soon-toast strong {
+    font-size: 10px;
+  }
+
+  #zy-soon-toast-project {
+    font-size: 10px;
+  }
+}
+
+/* Center the Zynox coming-soon toast in the viewport */
+.zy-soon-toast {
+  top: 50%;
+  bottom: auto;
+  left: 50%;
+  transform: translate(-50%, calc(-50% + 18px));
+}
+
+.zy-soon-toast.is-visible {
+  transform: translate(-50%, -50%);
+}
+
+
+/* =========================================================
+   ZYNOX FEATURED CREATION
+========================================================= */
+
+.zy-featured-creation {
+  padding-top: 58px;
+}
+
+.zy-featured-creation-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 0;
+  overflow: hidden;
+  margin-top: 28px;
+  text-decoration: none;
+  background:
+    radial-gradient(circle at 85% 15%, rgba(157,114,255,.11), transparent 30%),
+    linear-gradient(145deg, #29271f, #11110e);
+  border: 4px solid #514b3d;
+  box-shadow:
+    inset 0 0 0 2px rgba(255,255,255,.025),
+    9px 9px 0 #090907,
+    0 24px 55px rgba(0,0,0,.28);
+  transition: transform .16s ease, border-color .16s ease, filter .16s ease;
+}
+
+.zy-featured-creation-card:hover {
+  transform: translate(-2px,-2px);
+  border-color: #6c5590;
+  filter: brightness(1.04);
+}
+
+.zy-featured-art {
+  position: relative;
+  min-height: 310px;
+  overflow: hidden;
+  background: #10100d;
+  border-right: 3px solid #3c382f;
+}
+
+.zy-featured-art img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 310px;
+  object-fit: cover;
+}
+
+.zy-featured-scan {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(8,10,7,.08), rgba(8,10,7,.48));
+}
+
+.zy-featured-scan::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(255,255,255,.035) 0 1px,
+    transparent 1px 5px
+  );
+  opacity: .45;
+}
+
+.zy-featured-badge {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  padding: 9px 11px;
+  color: #dce9a5;
+  background: #15180f;
+  border: 2px solid #62694a;
+  box-shadow: 4px 4px 0 #090a07;
+  font-family: "Press Start 2P", monospace;
+  font-size: 7px;
+}
+
+.zy-featured-copy {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+  padding: 30px;
+}
+
+.zy-featured-copy h3 {
+  margin: 14px 0 13px;
+  color: #fff;
+  font-family: "Press Start 2P", monospace;
+  font-size: clamp(18px, 3vw, 30px);
+  line-height: 1.5;
+  text-shadow: 3px 3px 0 #000;
+}
+
+.zy-featured-copy p {
+  margin: 0;
+  color: #aaa394;
+  font-size: 13px;
+  line-height: 1.85;
+}
+
+.zy-featured-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 22px;
+}
+
+.zy-featured-meta span {
+  padding: 8px 9px;
+  color: #c7abff;
+  background: rgba(166,107,255,.06);
+  border: 2px solid #4d3d68;
+  font-family: "Press Start 2P", monospace;
+  font-size: 6px;
+}
+
+.zy-featured-action {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 24px;
+  padding: 13px 14px;
+  width: fit-content;
+  color: #dce9a5;
+  background: #252b1a;
+  border: 2px solid #62694a;
+  box-shadow: 4px 4px 0 #090a07;
+  font-family: "Press Start 2P", monospace;
+  font-size: 7px;
+}
+
+@media (max-width: 800px) {
+  .zy-featured-creation-card {
+    grid-template-columns: 1fr;
+  }
+
+  .zy-featured-art {
+    min-height: 210px;
+    border-right: 0;
+    border-bottom: 3px solid #3c382f;
+  }
+
+  .zy-featured-art img {
+    min-height: 210px;
+  }
+
+  .zy-featured-copy {
+    padding: 21px;
+  }
+}
+
+/* =========================================================
+   ZYNOX HUB STATUS
+========================================================= */
+
+.zy-hub-status {
+  width: min(1180px, 92%);
+  margin: 28px auto 10px;
+  padding: 20px 22px;
+  background:
+    radial-gradient(circle at 85% 20%, rgba(157,114,255,.08), transparent 30%),
+    linear-gradient(145deg, #29271f, #12110e);
+  border: 3px solid #514b3d;
+  box-shadow:
+    inset 0 0 0 2px rgba(255,255,255,.02),
+    7px 7px 0 #090907;
+}
+
+.zy-hub-status-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding-bottom: 14px;
+  border-bottom: 2px solid #332f25;
+}
+
+.zy-hub-status-head .section-kicker {
+  margin: 0;
+}
+
+.zy-hub-status-head strong {
+  color: #aaa394;
+  font-family: "Press Start 2P", monospace;
+  font-size: 7px;
+  line-height: 1.6;
+  text-align: right;
+}
+
+.zy-hub-status-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-top: 14px;
+}
+
+.zy-hub-status-item {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  min-width: 0;
+  padding: 10px 13px;
+  border-right: 2px solid #332f25;
+}
+
+.zy-hub-status-item:last-child {
+  border-right: 0;
+}
+
+.zy-hub-status-icon {
+  width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
+  display: grid;
+  place-items: center;
+  background: #10100d;
+  border: 2px solid #3c382f;
+  box-shadow: 3px 3px 0 #090907;
+  color: #c7abff;
+  font-size: 16px;
+}
+
+.zy-hub-status-item strong {
+  display: block;
+  color: #fff;
+  font-family: "Press Start 2P", monospace;
+  font-size: 7px;
+  line-height: 1.5;
+}
+
+.zy-hub-status-item small {
+  display: block;
+  margin-top: 4px;
+  color: #817d70;
+  font-size: 10px;
+  line-height: 1.4;
+}
+
+@media (max-width: 800px) {
+  .zy-hub-status {
+    padding: 16px;
+  }
+
+  .zy-hub-status-head {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 7px;
+  }
+
+  .zy-hub-status-head strong {
+    text-align: left;
+  }
+
+  .zy-hub-status-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .zy-hub-status-item {
+    border-right: 0;
+    border-bottom: 2px solid #332f25;
+    padding: 11px 7px;
+  }
+
+  .zy-hub-status-item:nth-child(odd) {
+    border-right: 2px solid #332f25;
+  }
+
+  .zy-hub-status-item:nth-last-child(-n+2) {
+    border-bottom: 0;
+  }
+}
+
+/* Compact Home page dividers */
+body:not(.server-page) .minecraft-divider {
+  margin: 14px auto;
+}
+
+@media (max-width: 650px) {
+  body:not(.server-page) .minecraft-divider {
+    margin: 9px auto;
+  }
+}
+
+.zy-project-icon img,
+.zy-hub-status-icon img {
+  width: 30px;
+  height: 30px;
+  display: block;
+  image-rendering: pixelated;
+  filter: drop-shadow(2px 2px 0 #000);
+}
+
+.zy-project-icon img {
+  width: 34px;
+  height: 34px;
+}
+
+.zy-project-card .zy-project-icon:has(img) {
+  padding: 0;
+  overflow: hidden;
+}
+
+.zy-project-card .zy-project-icon img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+
+/* =========================================================
+   ZYNOX UPDATE INTRO
+========================================================= */
+
+.zy-update-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(5,6,4,.88);
+  backdrop-filter: blur(8px);
+}
+
+.zy-update-card {
+  position: relative;
+  width: min(520px, 100%);
+  padding: 28px;
+  background:
+    radial-gradient(circle at 85% 10%, rgba(157,114,255,.13), transparent 30%),
+    linear-gradient(145deg, #29271f, #10100d);
+  border: 4px solid #514b3d;
+  box-shadow:
+    inset 0 0 0 2px rgba(255,255,255,.025),
+    10px 10px 0 #050604,
+    0 24px 70px rgba(0,0,0,.5);
+}
+
+.zy-update-close {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  color: #fff;
+  background: #171810;
+  border: 2px solid #5d477e;
+  box-shadow: 3px 3px 0 #090a07;
+  font-size: 25px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.zy-update-close:hover {
+  background: rgba(166,107,255,.12);
+  transform: translate(-1px,-1px);
+}
+
+.zy-update-kicker {
+  margin-bottom: 18px;
+  color: #9d72ff;
+  font-family: "Press Start 2P", monospace;
+  font-size: 9px;
+  letter-spacing: 1px;
+}
+
+.zy-update-status {
+  display: inline-block;
+  margin-bottom: 14px;
+  padding: 7px 9px;
+  color: #dce9a5;
+  background: #202618;
+  border: 2px solid #62694a;
+  font-family: "Press Start 2P", monospace;
+  font-size: 6px;
+}
+
+.zy-update-step h2 {
+  margin: 0 0 15px;
+  color: #fff;
+  font-family: "Press Start 2P", monospace;
+  font-size: clamp(18px, 4vw, 28px);
+  line-height: 1.5;
+  text-shadow: 3px 3px 0 #000;
+}
+
+.zy-update-step p {
+  margin: 0;
+  color: #aaa394;
+  font-size: 14px;
+  line-height: 1.85;
+}
+
+.zy-update-step p strong {
+  color: #fff;
+}
+
+.zy-update-access {
+  margin-top: 22px;
+  padding: 14px;
+  background: #10100d;
+  border: 2px solid #3c382f;
+}
+
+.zy-update-access span,
+.zy-update-access strong {
+  display: block;
+  font-family: "Press Start 2P", monospace;
+}
+
+.zy-update-access span {
+  margin-bottom: 8px;
+  color: #817d70;
+  font-size: 6px;
+}
+
+.zy-update-access strong {
+  color: #c7abff;
+  font-size: 7px;
+  line-height: 1.7;
+}
+
+.zy-update-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 24px;
+  padding-top: 13px;
+  border-top: 2px solid #332f25;
+  color: #706c60;
+  font-family: "Press Start 2P", monospace;
+  font-size: 6px;
+}
+
+@media (max-width: 650px) {
+  .zy-update-overlay {
+    padding: 14px;
+  }
+
+  .zy-update-card {
+    padding: 22px 18px;
+  }
+
+  .zy-update-step h2 {
+    font-size: 16px;
+  }
+
+  .zy-update-step p {
+    font-size: 12px;
+  }
+}
+
+.zy-update-overlay[aria-hidden="true"] {
+  display: none;
+}
+
+body.zy-update-locked {
+  overflow: hidden;
+}
+
+.zy-update-overlay.zy-update-finished {
+  display: none;
+}
+
+/* ZYNOX UPDATE POPUP INTERACTION */
+.zy-update-step {
+  cursor: pointer;
+  position: relative;
+  animation: zyUpdateStepIn .38s steps(5, end);
+}
+
+.zy-update-step::after {
+  content: "";
+  display: block;
+  margin-top: 18px;
+  padding: 11px 12px;
+  color: #c7abff;
+  background: #171612;
+  border: 2px solid #51436a;
+  box-shadow: 4px 4px 0 #080806;
+  font-family: "Press Start 2P", monospace;
+  font-size: 7px;
+  line-height: 1.7;
+  text-align: center;
+  transition: transform .12s steps(2, end), background .12s steps(2, end);
+}
+
+.zy-update-step[data-update-step="1"]::after {
+  content: "CLICK TO GO TO MINIGAMES";
+}
+
+.zy-update-step[data-update-step="2"]::after {
+  content: "CLICK TO GO TO ZYNOXIFY";
+}
+
+.zy-update-step:hover::after {
+  background: #211a2b;
+  transform: translate(-2px, -2px);
+}
+
+.zy-update-step:active::after {
+  transform: translate(2px, 2px);
+}
+
+.zy-update-card {
+  animation: zyUpdateCardIn .45s steps(6, end);
+}
+
+.zy-update-close {
+  transition: transform .12s steps(2, end), background .12s steps(2, end);
+}
+
+@keyframes zyUpdateCardIn {
+  0% {
+    opacity: 0;
+    transform: translateY(18px) scale(.94);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(-3px) scale(1.015);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes zyUpdateStepIn {
+  0% {
+    opacity: 0;
+    transform: translateX(12px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .zy-update-card,
+  .zy-update-step {
+    animation: none;
+  }
+}
+
+.zy-update-access {
+  cursor: pointer;
+  transition: transform .12s steps(2, end), border-color .12s steps(2, end), background .12s steps(2, end);
+}
+
+.zy-update-access:hover {
+  border-color: #7659a0;
+  background: #18151d;
+  transform: translate(-2px, -2px);
+}
+
+.zy-update-access:active {
+  transform: translate(2px, 2px);
+}
+
+.zy-update-access strong {
+  text-align: center;
+}
+
+.zy-update-step:hover h2 {
+  color: #d8c8ff;
+}
+
+/* Remove duplicate generated CTA from update cards */
+.zy-update-step::after {
+  content: none !important;
+  display: none !important;
+}
+

@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#10100d">
+  <title>Zynox • Minigames Arcade</title>
+  <link rel="stylesheet" href="/style.css">
+  <style>
+    .zy-arcade-page {
+      width: min(1180px, 92%);
+      margin: 0 auto;
+      padding: 65px 0 90px;
+    }
+
+    .zy-arcade-head {
+      text-align: center;
+      margin-bottom: 38px;
+    }
+
+    .zy-arcade-head .mc-achievement {
+      display: inline-flex;
+      margin-bottom: 18px;
+    }
+
+    .zy-arcade-head h1 {
+      margin: 0;
+      color: #fff;
+      font-family: "Press Start 2P", monospace;
+      font-size: clamp(25px, 5vw, 52px);
+      line-height: 1.35;
+      text-shadow: 4px 4px 0 #000;
+    }
+
+    .zy-arcade-head h1 span {
+      color: var(--mc-purple);
+    }
+
+    .zy-arcade-head p {
+      max-width: 720px;
+      margin: 18px auto 0;
+      color: var(--mc-muted);
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    .zy-game-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 22px;
+    }
+
+    .zy-game-card {
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      background: #171810;
+      border: 2px solid #3f402d;
+      box-shadow: 8px 8px 0 #090a07;
+      text-decoration: none;
+      transition: transform .15s ease, border-color .15s ease;
+    }
+
+    .zy-game-card:hover {
+      transform: translate(-2px,-2px);
+      border-color: #5d477e;
+    }
+
+    .zy-game-banner {
+      position: relative;
+      height: 220px;
+      overflow: hidden;
+      background: #10120c;
+    }
+
+    .zy-game-banner img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+    }
+
+    .zy-game-banner-mlg img {
+      filter: saturate(.92) brightness(.86);
+    }
+
+    .zy-game-banner-troll {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background:
+        radial-gradient(circle at 70% 35%, rgba(255,92,168,.35), transparent 34%),
+        linear-gradient(135deg, #120812 0%, #26101e 52%, #0c1115 100%);
+    }
+
+    .zy-game-banner-troll::before {
+      content: "TROLL";
+      color: #fff;
+      font-family: "Press Start 2P", monospace;
+      font-size: clamp(30px, 5vw, 54px);
+      letter-spacing: 2px;
+      text-shadow: 4px 0 #ff5ca8, -4px 0 #6ce5ff, 0 7px 0 rgba(0,0,0,.45);
+    }
+
+    .zy-game-banner-bro18 {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background:
+        radial-gradient(circle at 30% 30%, rgba(112,233,88,.17), transparent 35%),
+        linear-gradient(135deg, #0d120d, #20261a, #10100d);
+    }
+
+    .zy-game-banner-bro18::before {
+      content: "18+?";
+      color: #fff;
+      font-family: "Press Start 2P", monospace;
+      font-size: clamp(32px, 5vw, 58px);
+      text-shadow: 4px 4px 0 #000;
+    }
+
+    .zy-game-label {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      padding: 8px 10px;
+      color: #dce9a5;
+      background: #151810;
+      border: 2px solid #62694a;
+      box-shadow: 4px 4px 0 #090a07;
+      font-family: "Press Start 2P", monospace;
+      font-size: 7px;
+    }
+
+    .zy-game-copy {
+      flex: 1;
+      padding: 22px;
+    }
+
+    .zy-game-kicker {
+      color: #b69d7d;
+      font-family: "Press Start 2P", monospace;
+      font-size: 7px;
+      letter-spacing: .5px;
+    }
+
+    .zy-game-copy h2 {
+      margin: 10px 0 10px;
+      color: #fff;
+      font-family: "Press Start 2P", monospace;
+      font-size: clamp(15px, 2.3vw, 22px);
+      line-height: 1.5;
+      text-shadow: 3px 3px 0 #000;
+    }
+
+    .zy-game-copy p {
+      margin: 0;
+      color: var(--mc-muted);
+      font-size: 13px;
+      line-height: 1.75;
+    }
+
+    .zy-game-play {
+      display: inline-flex;
+      margin: 20px 22px 22px;
+      align-items: center;
+      justify-content: center;
+      padding: 13px 15px;
+      color: #dce9a5;
+      background: #252b1a;
+      border: 2px solid #62694a;
+      box-shadow: 4px 4px 0 #090a07;
+      font-family: "Press Start 2P", monospace;
+      font-size: 8px;
+    }
+
+    .zy-game-card-wide {
+      grid-column: 1 / -1;
+    }
+
+    .zy-arcade-footer {
+      margin-top: 48px;
+      text-align: center;
+      color: #777566;
+      font-family: "Press Start 2P", monospace;
+      font-size: 7px;
+      line-height: 1.9;
+    }
+
+    @media (max-width: 800px) {
+      .zy-game-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .zy-game-card-wide {
+        grid-column: auto;
+      }
+
+      .zy-game-banner {
+        height: 190px;
+      }
+    }
+  </style>
+</head>
+
+<body class="server-page">
+  <div class="pixel-sky"></div>
+  <div class="pixel-stars"></div>
+
+  <header class="mc-navbar">
+    <a href="/" class="mc-brand">
+      <span class="mc-brand-block mc-brand-z">Z</span>
+      <span class="mc-brand-text">Zynox</span>
+    </a>
+
+    <nav class="mc-nav">
+      <a href="/#servers">Servers</a>
+      <a href="/more.html">More</a>
+      <a href="/#creations">Creations</a>
+      <a href="/#community">Community</a>
+      <a class="active" href="/minigames.html">Minigames</a>
+    </nav>
+
+    <a href="/" class="mc-inventory-btn">HOME</a>
+
+    <button class="zy-menu-toggle" type="button" aria-label="Open Zynox menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+
+    <div class="zy-menu-panel" aria-hidden="true">
+      <div class="zy-menu-title">ZYNOX MENU</div>
+      <a href="/#servers">SERVERS</a>
+      <a href="/minigames.html">MINIGAMES</a>
+      <a href="/#creations">CREATIONS</a>
+      <a href="/#community">COMMUNITY</a>
+      <a href="/about-admin.html">ABOUT ADMIN</a>
+      <a href="/more.html">MORE</a>
+    </div>
+  </header>
+
+  <main class="zy-arcade-page">
+    <section class="zy-arcade-head">
+      <div class="mc-achievement">
+        <span class="achievement-icon">★</span>
+        <span>ZYNOX ARCADE</span>
+      </div>
+      <h1>MINI<span>GAMES</span></h1>
+      <p>
+        Small games, questionable decisions and perfectly valid reasons to
+        waste a few minutes. Everything here is part of the Zynox arcade.
+      </p>
+    </section>
+
+    <section class="zy-game-grid">
+
+      <a class="zy-game-card" href="/minigames/mlg-water-bucket/">
+        <div class="zy-game-banner zy-game-banner-mlg">
+          <img src="/assets/minigames/mlg-water-bucket-banner.png" alt="MLG Water Bucket">
+          <span class="zy-game-label">PLAYABLE</span>
+        </div>
+        <div class="zy-game-copy">
+          <span class="zy-game-kicker">🪣 ZYNOX ARCADE</span>
+          <h2>MLG WATER BUCKET</h2>
+          <p>Fall. Time the bucket. Survive. Then do it again because apparently one near-death experience was not enough.</p>
+        </div>
+        <span class="zy-game-play">PLAY GAME →</span>
+      </a>
+
+      <a class="zy-game-card" href="/minigames/bro-youre-not-18/">
+        <div class="zy-game-banner zy-game-banner-bro18">
+          <span class="zy-game-label">PLAYABLE</span>
+        </div>
+        <div class="zy-game-copy">
+          <span class="zy-game-kicker">🎮 ZYNOX CHALLENGE</span>
+          <h2>BRO, YOU'RE NOT 18+</h2>
+          <p>One more Zynox creation where the game has absolutely no business being this confident about itself.</p>
+        </div>
+        <span class="zy-game-play">PLAY GAME →</span>
+      </a>
+
+      <a class="zy-game-card zy-game-card-wide" href="/minigames/the-troll-game/">
+        <div class="zy-game-banner zy-game-banner-troll">
+          <span class="zy-game-label">TROLL MODE</span>
+        </div>
+        <div class="zy-game-copy">
+          <span class="zy-game-kicker">💀 ZYNOX TROLL LAB</span>
+          <h2>THE TROLL GAME</h2>
+          <p>There is a button. You will click it. You will regret it. The Zynox admin would like to remind you that this was your decision.</p>
+        </div>
+        <span class="zy-game-play">ENTER TROLL LAB →</span>
+      </a>
+
+    </section>
+
+    <div class="zy-arcade-footer">
+      MORE ZYNOX GAMES MAY APPEAR HERE.<br>
+      LOADING... EVENTUALLY.
+    </div>
+  </main>
+
+  <script>
+    const menuToggle = document.querySelector(".zy-menu-toggle");
+    const menuPanel = document.querySelector(".zy-menu-panel");
+
+    menuToggle?.addEventListener("click", function () {
+      const open = this.getAttribute("aria-expanded") === "true";
+      this.setAttribute("aria-expanded", String(!open));
+      menuPanel?.setAttribute("aria-hidden", String(open));
+      menuPanel?.classList.toggle("is-open", !open);
+    });
+
+    document.querySelectorAll(".zy-menu-panel a").forEach(link => {
+      link.addEventListener("click", () => {
+        menuToggle?.setAttribute("aria-expanded", "false");
+        menuPanel?.setAttribute("aria-hidden", "true");
+        menuPanel?.classList.remove("is-open");
+      });
+    });
+  </script>
+</body>
+</html>

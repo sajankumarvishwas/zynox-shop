@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zynoxify • Gaming Playlist</title>
+  <link rel="stylesheet" href="/style.css">
+  <style>
+    body{margin:0;background:#111;color:#fff;overflow:hidden}
+    .zyf-page{min-height:100svh;background:linear-gradient(180deg,rgba(0,0,0,.35),rgba(0,0,0,.72)),url('/assets/zynoxify/hero.png') center/cover no-repeat}
+  
+.zyf-page{position:fixed;inset:0;width:100%;height:100svh;min-height:0;overflow:hidden}
+.zyf-top{position:absolute;top:24px;left:20px;right:20px;display:flex;justify-content:space-between;align-items:center;z-index:2;font:600 11px/1.2 Arial,sans-serif;letter-spacing:2px;text-transform:uppercase}
+.zyf-live{color:#8ff0b0}
+.zyf-label{color:rgba(255,255,255,.72)}
+.zyf-hero-text{position:absolute;left:24px;right:24px;top:27%;z-index:2}
+.zyf-kicker{display:block;margin-bottom:10px;font:700 12px/1 Arial,sans-serif;letter-spacing:4px;color:rgba(255,255,255,.68)}
+.zyf-hero-text h1{margin:0;font:800 clamp(42px,12vw,78px)/.88 Arial,sans-serif;letter-spacing:-2px;color:#fff;text-shadow:0 4px 24px rgba(0,0,0,.55)}
+.zyf-hero-text p{max-width:340px;margin:18px 0 0;font:400 14px/1.5 Arial,sans-serif;color:rgba(255,255,255,.78);letter-spacing:.3px}
+.zyf-pills{display:flex;gap:10px;margin-top:22px}
+.zyf-pills button{border:1px solid rgba(255,255,255,.2);background:rgba(20,20,20,.55);backdrop-filter:blur(10px);color:#fff;border-radius:999px;padding:10px 16px;font:700 11px Arial,sans-serif;letter-spacing:1px}
+.zyf-player{position:absolute;left:14px;right:14px;bottom:14px;padding:13px 14px 11px;background:rgba(10,10,10,.74);border:1px solid rgba(255,255,255,.16);border-radius:24px;backdrop-filter:blur(22px);z-index:3;box-shadow:0 16px 45px rgba(0,0,0,.42)}
+.zyf-player-main{display:flex;align-items:center;gap:11px}
+.zyf-cover{width:52px;height:52px;min-width:52px;border-radius:15px;background:rgba(255,255,255,.055);display:grid;place-items:center;overflow:hidden}
+.zyf-disc{width:36px;height:36px;border-radius:50%;display:block;background:repeating-radial-gradient(circle,#101010 0 2px,#3b3b3b 2.5px 3.5px);border:2px solid rgba(255,255,255,.18);box-shadow:0 0 14px rgba(255,255,255,.1);position:relative}
+.zyf-disc:after{content:"";position:absolute;left:50%;top:50%;width:8px;height:8px;transform:translate(-50%,-50%);border-radius:50%;background:#bdbdbd;box-shadow:0 0 0 3px #171717}
+.zyf-track-info{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px}
+.zyf-track-info strong{font:700 12px Arial,sans-serif;letter-spacing:.5px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.zyf-track-info span{display:none;font:500 8px Arial,sans-serif;letter-spacing:1.1px;color:rgba(255,255,255,.46);white-space:nowrap}
+.zyf-controls{display:flex;align-items:center;gap:5px}
+.zyf-controls button{border:0;background:transparent;color:rgba(255,255,255,.72);width:30px;height:38px;padding:0;display:grid;place-items:center;font-size:15px}
+.zyf-controls button:active{transform:scale(.88)}
+.zyf-controls .zyf-play{width:44px;height:44px;border-radius:50%;background:#f4f4f4;color:#111;font-size:16px;box-shadow:0 5px 18px rgba(0,0,0,.3)}
+.zyf-progress{height:3px;margin-top:12px;border-radius:99px;background:rgba(255,255,255,.14);overflow:hidden}
+.zyf-progress span{display:block;width:0;height:100%;background:rgba(255,255,255,.9);border-radius:99px}
+.zyf-player.playing .zyf-disc{animation:zyfSpin 2.6s linear infinite}
+@keyframes zyfSpin{to{transform:rotate(360deg)}}
+.zyf-library{position:fixed;left:14px;right:14px;bottom:14px;height:62svh;max-height:62svh;padding:14px;background:rgba(10,10,10,.92);border:1px solid rgba(255,255,255,.14);border-radius:22px;backdrop-filter:blur(22px);z-index:5;transform:none;opacity:0;pointer-events:none;transition:opacity .18s ease;box-shadow:0 18px 50px rgba(0,0,0,.5);overflow:hidden}
+ .zyf-library.open{opacity:1;pointer-events:auto}
+.zyf-library-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;font:700 11px Arial,sans-serif;letter-spacing:2px}
+.zyf-library-head button{border:0;background:rgba(255,255,255,.08);color:#fff;width:30px;height:30px;border-radius:50%;font-size:20px}
+.zyf-library-list{display:none;max-height:48svh;overflow:auto}
+.zyf-song{display:flex;align-items:center;gap:10px;padding:11px 8px;border-bottom:1px solid rgba(255,255,255,.07);cursor:pointer}
+.zyf-song:last-child{border-bottom:0}
+.zyf-song-num{width:24px;color:rgba(255,255,255,.35);font:600 10px Arial,sans-serif}
+.zyf-song-name{font:600 12px Arial,sans-serif;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.zyf-pills button{cursor:pointer}
+.zyf-playlist-list{margin-bottom:10px}
+.zyf-playlist-card{display:flex;align-items:center;gap:12px;padding:11px 8px;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.04);border-radius:16px;cursor:pointer}
+.zyf-playlist-art{width:48px;height:48px;display:grid;place-items:center;border-radius:13px;background:rgba(255,255,255,.08);font-size:22px}
+.zyf-playlist-info{flex:1;display:flex;flex-direction:column;gap:5px}
+.zyf-playlist-info strong{font:700 12px Arial,sans-serif;letter-spacing:1px;color:#fff}
+.zyf-playlist-info span{font:500 8px Arial,sans-serif;letter-spacing:1px;color:rgba(255,255,255,.45)}
+.zyf-playlist-arrow{font-size:26px;color:rgba(255,255,255,.55)}
+.zyf-search{display:none;width:100%;box-sizing:border-box;margin:0 0 10px;padding:11px 13px;border:1px solid rgba(255,255,255,.1);border-radius:13px;background:rgba(255,255,255,.06);color:#fff;outline:none;font:500 12px Arial,sans-serif}.zyf-search::placeholder{color:rgba(255,255,255,.4)}
+
+.zyf-page:after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 50% 42%,transparent 20%,rgba(0,0,0,.16) 68%,rgba(0,0,0,.48) 100%);z-index:1}
+.zyf-top,.zyf-hero-text,.zyf-player{z-index:4}
+.zyf-top{top:22px}
+.zyf-live,.zyf-label{padding:7px 11px;border:1px solid rgba(255,255,255,.08);border-radius:999px;background:rgba(8,8,8,.28);backdrop-filter:blur(8px)}
+.zyf-hero-text{top:28%;left:26px;right:26px}
+.zyf-kicker{font-size:11px;letter-spacing:5px;color:rgba(255,255,255,.58)}
+.zyf-hero-text h1{font-size:clamp(44px,12.5vw,80px);line-height:.86;letter-spacing:-2.5px;text-shadow:0 5px 28px rgba(0,0,0,.7)}
+.zyf-hero-text p{margin-top:17px;color:rgba(255,255,255,.72);font-size:13px}
+.zyf-pills{margin-top:19px}
+.zyf-pills button{background:rgba(8,8,8,.48);border-color:rgba(255,255,255,.16);box-shadow:0 6px 18px rgba(0,0,0,.18)}
+.zyf-player{bottom:16px;background:rgba(8,8,8,.76);border-color:rgba(255,255,255,.18);box-shadow:0 18px 50px rgba(0,0,0,.48)}
+.zyf-cover{background:rgba(255,255,255,.065);box-shadow:inset 0 0 0 1px rgba(255,255,255,.05)}
+.zyf-track-info strong{font-size:13px}
+.zyf-controls .zyf-play{width:48px;height:48px}
+.zyf-progress{height:3px;background:rgba(255,255,255,.13)}
+
+.zyf-page:before{content:"";position:absolute;left:0;right:0;top:0;height:42%;pointer-events:none;background:linear-gradient(180deg,rgba(0,0,0,.42),transparent);z-index:2}
+.zyf-hero-text{top:29%;max-width:390px}
+.zyf-kicker{margin-bottom:12px;text-shadow:0 2px 12px rgba(0,0,0,.7)}
+.zyf-hero-text h1{font-weight:850;text-shadow:0 6px 32px rgba(0,0,0,.78)}
+.zyf-hero-text p{max-width:315px;text-shadow:0 2px 10px rgba(0,0,0,.7)}
+.zyf-pills button{min-width:108px;padding:11px 18px;font-size:10px;letter-spacing:1.4px}
+.zyf-player{padding:12px 14px 10px;border-radius:21px}
+.zyf-player-main{gap:13px}
+.zyf-cover{width:50px;height:50px;min-width:50px;border-radius:14px}
+.zyf-track-info strong{letter-spacing:.35px}
+.zyf-controls{gap:7px}
+.zyf-controls button{width:32px;height:40px;color:rgba(255,255,255,.62)}
+.zyf-controls .zyf-play{width:48px;height:48px}
+.zyf-progress{margin-top:11px;height:2px}
+.zyf-player:after{content:"";position:absolute;left:14px;right:14px;bottom:7px;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent);pointer-events:none}
+
+
+/* ZYNOXIFY FINAL VISUAL OVERRIDES */
+.zyf-top{top:20px;left:18px;right:18px}
+.zyf-live,.zyf-label{font-size:10px;letter-spacing:1.8px;padding:8px 12px;background:rgba(8,8,8,.38);border:1px solid rgba(255,255,255,.12);box-shadow:0 6px 20px rgba(0,0,0,.18)}
+.zyf-hero-text{top:27%;left:25px;right:25px}
+.zyf-kicker{font-size:10px;letter-spacing:5px;margin-bottom:13px;color:rgba(255,255,255,.62)}
+.zyf-hero-text h1{font-size:clamp(46px,13vw,82px);line-height:.84;letter-spacing:-3px;text-shadow:0 7px 30px rgba(0,0,0,.82)}
+.zyf-hero-text p{font-size:13px;line-height:1.45;margin-top:18px;color:rgba(255,255,255,.7);text-shadow:0 3px 12px rgba(0,0,0,.65)}
+.zyf-pills{gap:9px;margin-top:20px}
+.zyf-pills button{min-width:106px;padding:11px 18px;background:rgba(10,10,10,.54);border:1px solid rgba(255,255,255,.16);box-shadow:0 8px 24px rgba(0,0,0,.22);font-size:10px;letter-spacing:1.5px}
+.zyf-player{left:14px;right:14px;bottom:15px;padding:12px 13px 10px;border-radius:23px;background:rgba(7,7,7,.8);border:1px solid rgba(255,255,255,.18);box-shadow:0 18px 48px rgba(0,0,0,.52)}
+.zyf-player-main{gap:12px}
+.zyf-cover{width:54px;height:54px;min-width:54px;border-radius:15px;background:rgba(255,255,255,.055)}
+.zyf-disc{width:38px;height:38px}
+.zyf-track-info strong{font-size:13px;letter-spacing:.2px}
+.zyf-controls{gap:4px}
+.zyf-controls button{width:34px;height:42px;color:rgba(255,255,255,.68);font-size:14px}
+.zyf-controls .zyf-play{width:50px;height:50px;background:#f7f7f7;color:#111;box-shadow:0 7px 24px rgba(0,0,0,.38)}
+.zyf-progress{height:3px;margin-top:11px;background:rgba(255,255,255,.12)}
+.zyf-page:after{background:radial-gradient(circle at 50% 40%,transparent 18%,rgba(0,0,0,.13) 58%,rgba(0,0,0,.5) 100%)}
+</style>
+</head>
+<body>
+  <main class="zyf-page">
+  <header class="zyf-top">
+    <span class="zyf-live">● LIVE SESSION</span>
+    <span class="zyf-label">GAMING PLAYLIST</span>
+  </header>
+  <section class="zyf-hero-text">
+    <span class="zyf-kicker">ZYNOXIFY</span>
+    <h1>GAMING<br>PLAYLIST</h1>
+    <p>Late-night gaming. Good music. No distractions.</p>
+<div class="zyf-pills"><button>PLAYLISTS</button><button>SONGS</button></div>
+  </section>
+<div class="zyf-player">
+  <div class="zyf-player-main">
+    <div class="zyf-cover"><span class="zyf-disc"></span></div>
+    <div class="zyf-track-info">
+      <strong>SELECT A SONG</strong>
+      <span>ZYNOXIFY GAMING PLAYLIST</span>
+    </div>
+    <div class="zyf-controls">
+      <button class="zyf-prev" aria-label="Previous song">⏮</button>
+      <button class="zyf-play" aria-label="Play or pause">▶</button>
+      <button class="zyf-next" aria-label="Next song">⏭</button>
+    </div>
+  </div>
+  <div class="zyf-progress"><span></span></div>
+</div>
+<div class="zyf-library" id="zyf-library" aria-hidden="true">
+  <div class="zyf-library-head">
+    <strong id="zyf-library-title">PLAYLISTS</strong>
+    <button id="zyf-close" aria-label="Close">×</button>
+  </div>
+  <div class="zyf-playlist-list" id="zyf-playlist-list">
+  <div class="zyf-playlist-card" id="gaming-vibe">
+    <div class="zyf-playlist-art">🎮</div>
+    <div class="zyf-playlist-info">
+      <strong>GAMING VIBE</strong>
+      <span>92 SONGS · ZYNOXIFY</span>
+    </div>
+    <span class="zyf-playlist-arrow">›</span>
+  </div>
+</div>
+<input id="zyf-search" class="zyf-search" type="search" placeholder="Search songs..." autocomplete="off">
+<div class="zyf-library-list" id="zyf-library-list"></div>
+</div>
+</main>
+<script src="/zynoxify.js"></script></body>
+</html>

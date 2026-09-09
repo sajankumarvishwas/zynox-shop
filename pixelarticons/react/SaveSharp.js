@@ -1,0 +1,2 @@
+import React from 'react';
+export const SaveSharp = (props) => React.createElement('svg', Object.assign({viewBox: '0 0 24 24', width: '24', height: '24', fill: 'currentColor', xmlns: 'http://www.w3.org/2000/svg'}, props), React.createElement('path', {d: "M16 20V14H8V20H16ZM12 10H6V6H12V10ZM20 6H18V4H20V6ZM20 20V6H22V22H2V2H18V4H4V20H6V12H18V20H20Z"}));

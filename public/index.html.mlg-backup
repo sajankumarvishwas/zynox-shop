@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#10100d">
+  <title>Zynox • Gaming Hub</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+
+<div class="pixel-sky"></div>
+<div class="pixel-stars"></div>
+
+
+<header class="mc-navbar">
+
+  <a href="/" class="mc-brand">
+    <span class="mc-brand-block mc-brand-z">Z</span>
+    <span class="mc-brand-text">
+      Zynox
+    </span>
+  </a>
+
+  <nav class="mc-nav">
+    <a class="active" href="#servers">Servers</a>
+    <a href="#ranks">More</a>
+    <a href="#creations">Creations</a>
+    <a href="#community">Community</a>
+    <a href="#minigames">Minigames</a>
+  </nav>
+
+  <a href="#creations" class="mc-inventory-btn mc-store-button">
+    PROJECTS
+  </a>
+
+</header>
+
+<main>
+
+<section class="mc-hero">
+
+  <div class="hero-content">
+
+    <div class="mc-achievement">
+      <span class="achievement-icon">★</span>
+      <span>ZYNOX GAMING HUB</span>
+    </div>
+
+    <h1>
+      ENTER THE
+      <span>ZYNOX WORLD</span>
+    </h1>
+
+    <p class="hero-description">
+      Minecraft worlds, gaming projects and everything built under the Zynox name.
+    </p>
+
+    <div class="hero-buttons">
+
+      <a href="#servers" class="mc-button mc-button-primary">
+        <span class="button-icon">⛏</span>
+        EXPLORE WORLDS
+      </a>
+
+      <a href="#creations" class="mc-button mc-button-secondary">
+        <span class="button-icon">✦</span>
+        MY CREATIONS
+      </a>
+
+    </div>
+
+    <div class="zy-world-showcase" id="servers">
+
+      <div class="world-showcase-header">
+        <span class="world-kicker">ZYNOX WORLD HUB</span>
+        <span class="world-live">
+          <i></i>
+          TWO WORLDS
+        </span>
+      </div>
+
+      <div class="world-showcase-grid">
+
+        <a class="world-mini-card world-mini-main"
+           href="/server.html?server=zynoxsmp"
+           aria-label="Explore ZynoxSMP">
+
+          <div class="world-mini-art world-mini-art-image">
+            <img src="/assets/worlds/marvel-world-01.jpg"
+                 alt=""
+                 aria-hidden="true">
+          </div>
+
+          <div class="world-mini-content">
+            <span>WORLD 01</span>
+            <strong>ZynoxSMP</strong>
+            <small>Survival SMP</small>
+          </div>
+
+          <b>→</b>
+
+        </a>
+
+        <a class="world-mini-card world-mini-enhanced"
+           href="/server.html?server=zynox-enhanced"
+           aria-label="Explore ZynoxSMP Enhanced">
+
+          <div class="world-mini-art world-mini-art-image">
+            <img src="/assets/worlds/marvel-world-02.jpg"
+                 alt=""
+                 aria-hidden="true">
+          </div>
+
+          <div class="world-mini-content">
+            <span>WORLD 02</span>
+            <strong>ZynoxSMP Enhanced</strong>
+            <small>Better on Bedrock</small>
+          </div>
+
+          <b>→</b>
+
+        </a>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="hero-floating-item item-diamond">◆</div>
+  <div class="hero-floating-item item-emerald">♦</div>
+  <div class="hero-floating-item item-gold">✦</div>
+
+</section>
+
+<section class="minecraft-divider">
+  <span>◆</span>
+</section>
+
+<section class="minecraft-announcement">
+
+  <div class="announcement-icon">!</div>
+
+  <div>
+    <strong>ZYNOX GAMING NETWORK</strong>
+    <span>
+      Discover Zynox worlds, creations and new gaming projects as they are built.
+    </span>
+  </div>
+
+  <div class="announcement-xp">
+    <div class="xp-label">XP</div>
+    <div class="xp-bar">
+      <div class="xp-fill"></div>
+    </div>
+  </div>
+
+</section>
+
+<section class="mc-section" id="ranks">
+
+  <div class="minecraft-section-title">
+
+    <div class="title-line"></div>
+
+    <div>
+      <span class="section-kicker">OPTIONAL SUPPORT</span>
+      <h2>KEEP ZYNOX GOING</h2>
+    </div>
+
+    <div class="title-line"></div>
+
+  </div>
+
+  <p class="section-description">
+    Want to chip in? This optional section is here for anyone who feels like supporting the Zynox project.
+  </p>
+
+  <div id="products" class="minecraft-rank-grid">
+
+    <div class="minecraft-loading">
+      <div class="loading-pixel"></div>
+      <span>LOADING INVENTORY...</span>
+    </div>
+
+  </div>
+
+</section>
+
+<section class="minecraft-divider">
+  <span>◆</span>
+</section>
+
+<section class="minecraft-divider">
+  <span>◆</span>
+</section>
+
+
+
+<section class="minecraft-divider">
+  <span>◆</span>
+</section>
+
+
+
+<section class="mc-section mc-creations-section" id="creations">
+
+  <div class="minecraft-section-title">
+    <div class="title-line"></div>
+    <div>
+      <span class="section-kicker">MADE BY ZYNOX</span>
+      <h2>ZYNOX CREATIONS</h2>
+    </div>
+    <div class="title-line"></div>
+  </div>
+
+  <p class="section-description">
+    Apps, websites and projects created under the Zynox banner will appear here.
+  </p>
+
+  <div class="creation-vault">
+    <div class="creation-vault-art">
+      <div class="creation-orbit orbit-a"></div>
+      <div class="creation-orbit orbit-b"></div>
+      <img
+        src="/assets/characters/player/player_idle.png"
+        alt=""
+        class="creation-character"
+        aria-hidden="true">
+      <img
+        src="/assets/minecraft/items/ore_diamond.png"
+        alt=""
+        class="creation-diamond"
+        aria-hidden="true">
+    </div>
+
+    <div class="creation-vault-copy">
+      <span class="category-tag">PROJECT VAULT</span>
+      <h3>MORE CREATIONS ARE LOADING</h3>
+      <p>
+        This space is reserved for Zynox apps, tools, websites and future projects.
+        New creations can be added later without rebuilding the whole homepage.
+      </p>
+
+      <div class="creation-slots">
+        <span>APP SLOT</span>
+        <span>WEB SLOT</span>
+        <span>PROJECT SLOT</span>
+      </div>
+
+      <span class="coming-soon">COMING SOON</span>
+    </div>
+  </div>
+
+</section>
+
+<section class="minecraft-divider">
+  <span>◆</span>
+</section>
+
+<section class="mc-section mc-minigames-section" id="minigames">
+  <div class="minecraft-section-title">
+    <div class="title-line"></div>
+    <div>
+      <span class="section-kicker">ZYNOX ARCADE</span>
+      <h2>MINIGAMES</h2>
+    </div>
+    <div class="title-line"></div>
+  </div>
+  <p class="section-description">Challenge your timing, chase your high score and prove your clutch skills.</p>
+  <div class="minigame-feature-card">
+    <div class="minigame-banner-wrap">
+      <img src="/assets/minigames/mlg-water-bucket-banner.png" alt="Zynox MLG Water Bucket">
+      <div class="minigame-banner-overlay"></div>
+      <div class="minigame-banner-label">COMING SOON</div>
+    </div>
+    <div class="minigame-card-content">
+      <div>
+        <span class="minigame-kicker">🪣 ZYNOX ARCADE</span>
+        <h3>MLG WATER BUCKET</h3>
+        <p>Fall. Time the bucket. Survive. A precision clutch game built for Zynox.</p>
+      </div>
+      <button class="minigame-play-button" type="button" disabled>PLAY SOON →</button>
+    </div>
+  </div>
+</section>
+
+<section class="minecraft-divider">
+  <span>◆</span>
+</section>
+
+<section class="mc-section mc-community-section" id="community">
+
+  <div class="minecraft-section-title">
+    <div class="title-line"></div>
+    <div>
+      <span class="section-kicker">JOIN THE COMMUNITY</span>
+      <h2>ZYNOX SOCIAL</h2>
+    </div>
+    <div class="title-line"></div>
+  </div>
+
+  <p class="section-description">
+    Follow the builds, join the community and stay close to the next Zynox adventure.
+  </p>
+
+  <div class="social-grid">
+
+    <a class="social-card social-youtube"
+       href="https://youtube.com/@zynox-7777"
+       target="_blank"
+       rel="noopener noreferrer">
+      <div class="social-icon-frame">
+        <img src="/assets/social/youtube.svg" alt="YouTube">
+      </div>
+      <div class="social-copy">
+        <span class="social-kicker">WATCH ZYNOX</span>
+        <h3>YOUTUBE</h3>
+        <p>Videos, gameplay and Zynox moments.</p>
+      </div>
+      <strong class="social-arrow">OPEN →</strong>
+    </a>
+
+    <a class="social-card social-discord"
+       href="https://discord.gg/mDzZqxhnJ"
+       target="_blank"
+       rel="noopener noreferrer">
+      <div class="social-icon-frame">
+        <img src="/assets/social/discord.svg" alt="Discord">
+      </div>
+      <div class="social-copy">
+        <span class="social-kicker">JOIN ZYNOX</span>
+        <h3>DISCORD</h3>
+        <p>Community chat, server updates and Zynox news.</p>
+      </div>
+      <strong class="social-arrow">JOIN →</strong>
+    </a>
+
+    <a class="social-card social-instagram"
+       href="https://www.instagram.com/sajankumarvishwas"
+       target="_blank"
+       rel="noopener noreferrer">
+      <div class="social-icon-frame">
+        <img src="/assets/social/instagram.svg" alt="Instagram">
+      </div>
+      <div class="social-copy">
+        <span class="social-kicker">FOLLOW ZYNOX</span>
+        <h3>INSTAGRAM</h3>
+        <p>Photos, updates and behind-the-scenes moments.</p>
+      </div>
+      <strong class="social-arrow">VIEW →</strong>
+    </a>
+
+  </div>
+
+</section>
+
+<section class="minecraft-divider">
+  <span>◆</span>
+</section>
+
+<section class="minecraft-feature-strip">
+
+  <div class="mc-feature">
+    <div class="feature-slot">⚡</div>
+    <div>
+      <strong>BUILT FOR GAMERS</strong>
+      <span>Minecraft worlds and gaming projects</span>
+    </div>
+  </div>
+
+  <div class="mc-feature">
+    <div class="feature-slot">🛡</div>
+    <div>
+      <strong>REAL PROJECTS</strong>
+      <span>Things actually built under Zynox</span>
+    </div>
+  </div>
+
+  <div class="mc-feature">
+    <div class="feature-slot">◆</div>
+    <div>
+      <strong>MORE TO COME</strong>
+      <span>New worlds, builds and ideas ahead</span>
+    </div>
+  </div>
+
+</section>
+
+<section class="minecraft-footer-cta">
+
+  <div class="footer-cta-inner">
+
+    <span class="section-kicker">THE ZYNOX JOURNEY CONTINUES</span>
+
+    <h2>
+      BUILD.
+      <span>EXPLORE.</span>
+      CONQUER.
+    </h2>
+
+    <p>
+      Worlds to explore, creations to discover and new ideas waiting to be built.
+      This is where the next chapter of Zynox begins.
+    </p>
+
+    <a
+      href="#creations"
+      class="mc-button mc-button-primary">
+      EXPLORE CREATIONS
+    </a>
+
+  </div>
+
+</section>
+
+</main>
+
+<footer class="mc-footer">
+
+  <div class="footer-logo">
+
+    <span class="mc-brand-block">⚡</span>
+
+    <div>
+      <strong>ZYNOX<span>SMP</span></strong>
+      <small>OFFICIAL ZYNOX GAMING HUB</small>
+    </div>
+
+  </div>
+
+  <div class="footer-links">
+    <a href="#">TERMS</a>
+    <a href="#">PRIVACY</a>
+    <a href="#ranks">MORE</a>
+  </div>
+
+  <div class="footer-copy">
+    © 2026 ZYNOXSMP
+  </div>
+
+</footer>
+
+<script src="/app.js"></script>
+
+</body>
+</html>

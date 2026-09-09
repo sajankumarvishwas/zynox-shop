@@ -1,0 +1,148 @@
+/* =========================================================
+   UI — all DOM interaction lives here.
+========================================================= */
+
+import { GAME_CONFIG } from "./config.js";
+const $ = (id) => document.getElementById(id);
+
+export class UI {
+  constructor(callbacks) {
+    this.cb = callbacks;
+    this.input = { left: false, right: false };
+    this._waterConsumedThisRound = true;
+    this._lastWaterPressAt = 0;
+    this._toastQueue = [];
+    this._toastBusy = false;
+    this._cacheDom();
+    this._wireMenus();
+    this._wireSettings();
+    this._wireInput();
+    this._buildModeGrid();
+  }
+
+  _cacheDom() {
+    this.el = {
+      hud: $("hud"), hudScore: $("hud-score"), hudBest: $("hud-best"), hudRound: $("hud-round"), hudHeight: $("hud-height"), hudCombo: $("hud-combo"), hudComboChip: $("hud-combo-chip"), hudHeatFill: $("hud-heat-fill"), hudTimer: $("hud-timer"),
+      countdownOverlay: $("countdown-overlay"), countdownNumber: $("countdown-number"), gradePopup: $("grade-popup"), gradeMainText: $("grade-main-text"), gradeSubText: $("grade-sub-text"), comboPopup: $("combo-popup"), modifierBanner: $("modifier-banner"), achievementToast: $("achievement-toast"), practicePanel: $("practice-panel"), practiceDiff: $("practice-diff"), touchControls: $("touch-controls"), touchLeft: $("touch-left"), touchRight: $("touch-right"), touchWater: $("touch-water"),
+      screens: { menu: $("screen-menu"), modeSelect: $("screen-mode-select"), riskSelect: $("screen-risk-select"), pause: $("screen-pause"), result: $("screen-result"), settings: $("screen-settings"), stats: $("screen-stats"), achievements: $("screen-achievements"), cosmetics: $("screen-cosmetics") },
+      menuBestScore: $("menu-best-score"), menuBestCombo: $("menu-best-combo"), menuLevel: $("menu-level"), modeGrid: $("mode-grid"), riskSelectLabel: $("risk-select-mode-label"), resultKicker: $("result-kicker"), resultTitle: $("result-title"), resultNewRecord: $("result-new-record"), resultScore: $("result-score"), resultBest: $("result-best"), resultRound: $("result-round"), resultCombo: $("result-combo"), resultHeight: $("result-height"), resultSuccessRate: $("result-success-rate"), resultXp: $("result-xp"), settingSound: $("setting-sound"), settingReducedMotion: $("setting-reduced-motion"), settingVolume: $("setting-volume"), statsGrid: $("stats-grid"), achievementList: $("achievement-list"), cosmeticGrid: $("cosmetic-grid"), titleGrid: $("title-grid")
+    };
+  }
+
+  showScreen(name) { Object.entries(this.el.screens).forEach(([key, node]) => { if (node) node.hidden = key !== name; }); }
+  hideAllScreens() { Object.values(this.el.screens).forEach(node => { if (node) node.hidden = true; }); }
+  setHudVisible(visible) { this.el.hud.hidden = !visible; this.el.touchControls.hidden = !visible || !this._isTouchDevice(); }
+  _isTouchDevice() { return "ontouchstart" in window || navigator.maxTouchPoints > 0; }
+
+  updateHud({ score, best, round, height, combo, heatPercent, overdrive, timeLeft }) {
+    this.el.hudScore.textContent = Math.round(score); this.el.hudBest.textContent = Math.round(best); this.el.hudRound.textContent = round; this.el.hudHeight.textContent = `${Math.round(height)}m`; this.el.hudCombo.textContent = `x${combo}`; this.el.hudComboChip.classList.toggle("hud-heating", combo >= 5); this.el.hudHeatFill.style.width = `${Math.min(100, heatPercent)}%`; this.el.hudHeatFill.classList.toggle("overdrive", overdrive);
+    if (typeof timeLeft === "number") { this.el.hudTimer.hidden = false; this.el.hudTimer.textContent = Math.max(0, Math.ceil(timeLeft)); } else this.el.hudTimer.hidden = true;
+  }
+
+  showCountdown(value) { this.el.countdownOverlay.hidden = false; this.el.countdownNumber.textContent = value; this.el.countdownNumber.style.animation = "none"; void this.el.countdownNumber.offsetWidth; this.el.countdownNumber.style.animation = ""; }
+  hideCountdown() { this.el.countdownOverlay.hidden = true; }
+  onRoundStart() { this._waterConsumedThisRound = false; }
+  onRoundEnd() { this._waterConsumedThisRound = true; }
+
+  showGrade(result) {
+    this.el.gradeMainText.textContent = result.label;
+    this.el.gradeMainText.style.color = result.survived ? (result.label === "PERFECT MLG" ? "var(--mc-yellow)" : "var(--mc-green)") : "var(--mc-red)";
+    this.el.gradeSubText.textContent = `${result.timingGrade.replace("_", " ")} timing · ${result.placementGrade} placement`;
+    this.el.gradePopup.hidden = false; this.el.gradePopup.style.animation = "none"; void this.el.gradePopup.offsetWidth; this.el.gradePopup.style.animation = "";
+    clearTimeout(this._gradeTimeout); this._gradeTimeout = setTimeout(() => { this.el.gradePopup.hidden = true; }, 1100);
+  }
+
+  showCombo(combo) { if (combo < 2) return; this.el.comboPopup.hidden = false; this.el.comboPopup.textContent = `COMBO x${combo}`; this.el.comboPopup.style.animation = "none"; void this.el.comboPopup.offsetWidth; this.el.comboPopup.style.animation = ""; clearTimeout(this._comboTimeout); this._comboTimeout = setTimeout(() => { this.el.comboPopup.hidden = true; }, 650); }
+  showModifier(modifierKey) { if (!modifierKey) { this.el.modifierBanner.hidden = true; return; } const mod = GAME_CONFIG.modifiers[modifierKey]; this.el.modifierBanner.hidden = false; this.el.modifierBanner.textContent = `${mod.label} — ${mod.description}`; }
+  queueAchievementToast(achievement) { this._toastQueue.push(achievement); this._drainToastQueue(); }
+  _drainToastQueue() { if (this._toastBusy || !this._toastQueue.length) return; this._toastBusy = true; const a = this._toastQueue.shift(); this.el.achievementToast.hidden = false; this.el.achievementToast.textContent = `🏆 ${a.label}`; setTimeout(() => { this.el.achievementToast.hidden = true; this._toastBusy = false; this._drainToastQueue(); }, 1800); }
+  updatePracticePanel(visible, diffMs) { this.el.practicePanel.hidden = !visible; if (visible) this.el.practiceDiff.textContent = diffMs === null ? "— ms" : `${diffMs > 0 ? "+" : ""}${Math.round(diffMs)} ms`; }
+  refreshMenuStats({ bestScore, bestCombo, level }) { this.el.menuBestScore.textContent = bestScore; this.el.menuBestCombo.textContent = bestCombo; this.el.menuLevel.textContent = level; }
+
+  _buildModeGrid() {
+    const descriptions = { CLASSIC: "Endless rounds, 3 lives", TIME_ATTACK: "60 second sprint", ONE_LIFE: "One mistake ends it", PERFECT_RUN: "Only MLG or better survives", PRACTICE: "Unlimited attempts" };
+    this.el.modeGrid.innerHTML = "";
+    Object.entries(GAME_CONFIG.modes).forEach(([key, mode]) => {
+      if (key === "DAILY_CLUTCH") return;
+      const card = document.createElement("button"); card.type = "button"; card.className = "mlg-mode-card"; card.innerHTML = `${mode.label}<small>${descriptions[key] || ""}</small>`; card.addEventListener("click", () => this.cb.onModeChosen(key)); this.el.modeGrid.appendChild(card);
+    });
+  }
+  showRiskSelect(modeLabel) { this.el.riskSelectLabel.textContent = modeLabel; this.showScreen("riskSelect"); }
+
+  showResult({ survived, summary, isNewRecord }) {
+    this.el.resultKicker.textContent = summary.modeLabel; this.el.resultTitle.textContent = survived ? "CLUTCH SUCCESS" : "YOU MISSED"; this.el.resultTitle.style.color = survived ? "var(--mc-green)" : "var(--mc-red)"; this.el.resultNewRecord.hidden = !isNewRecord; this.el.resultScore.textContent = summary.score; this.el.resultBest.textContent = summary.best; this.el.resultRound.textContent = summary.round; this.el.resultCombo.textContent = summary.bestCombo; this.el.resultHeight.textContent = `${Math.round(summary.maxHeight)}m`; this.el.resultSuccessRate.textContent = `${Math.round(summary.successRate * 100)}%`; this.el.resultXp.textContent = summary.xpEarned; this.showScreen("result");
+  }
+
+  renderStats(stats) {
+    const rows = [["TOTAL DROPS", stats.totalDrops], ["SUCCESSFUL", stats.successfulDrops], ["FAILED", stats.failedDrops], ["PERFECT", stats.perfectDrops], ["BEST SCORE", stats.bestScore], ["BEST COMBO", stats.bestCombo], ["BEST HEIGHT", `${stats.bestHeight}m`], ["SUCCESS RATE", stats.totalDrops ? `${Math.round((stats.successfulDrops / stats.totalDrops) * 100)}%` : "0%"]];
+    this.el.statsGrid.innerHTML = rows.map(([label, value]) => `<div><span>${label}</span><strong>${value}</strong></div>`).join("");
+  }
+
+  renderAchievements(unlockedMap) {
+    this.el.achievementList.innerHTML = "";
+    Object.entries(GAME_CONFIG.achievements).forEach(([key, a]) => { const unlocked = !!unlockedMap[key]; const item = document.createElement("div"); item.className = `mlg-achievement-item ${unlocked ? "" : "locked"}`; item.innerHTML = `<div><strong>${a.label}</strong><span>${a.desc}</span></div><div class="mlg-achievement-badge">${unlocked ? "🏆" : "🔒"}</div>`; this.el.achievementList.appendChild(item); });
+  }
+
+  renderCosmetics({ unlockedCosmetics, selectedCosmetic, unlockedTitles, selectedTitle }) {
+    this.el.cosmeticGrid.innerHTML = "";
+    Object.entries(GAME_CONFIG.cosmetics).forEach(([key, c]) => { const unlocked = unlockedCosmetics.includes(key); const item = document.createElement("button"); item.type = "button"; item.className = `mlg-cosmetic-item ${unlocked ? "" : "locked"} ${selectedCosmetic === key ? "selected" : ""}`; item.textContent = unlocked ? c.label : `🔒 LV ${c.unlockLevel}`; if (unlocked) item.addEventListener("click", () => { this.cb.onSelectCosmetic(key); this.renderCosmetics(this.cb.getProgressionSnapshot()); }); this.el.cosmeticGrid.appendChild(item); });
+    this.el.titleGrid.innerHTML = "";
+    Object.entries(GAME_CONFIG.titles).forEach(([key, t]) => { const unlocked = unlockedTitles.includes(key); const item = document.createElement("button"); item.type = "button"; item.className = `mlg-title-item ${unlocked ? "" : "locked"} ${selectedTitle === key ? "selected" : ""}`; item.textContent = unlocked ? t.label : `🔒 LV ${t.unlockLevel}`; if (unlocked) item.addEventListener("click", () => { this.cb.onSelectTitle(key); this.renderCosmetics(this.cb.getProgressionSnapshot()); }); this.el.titleGrid.appendChild(item); });
+  }
+
+  _wireSettings() {
+    $("btn-open-settings").addEventListener("click", () => { this.cb.onButtonClick(); this.showScreen("settings"); });
+    $("btn-close-settings").addEventListener("click", () => { this.cb.onButtonClick(); this.hideAllScreens(); });
+    this.el.settingSound.addEventListener("change", (e) => this.cb.onSettingChange("soundOn", e.target.checked));
+    this.el.settingReducedMotion.addEventListener("change", (e) => { this.cb.onSettingChange("reducedMotion", e.target.checked); document.body.classList.toggle("mlg-reduced-motion", e.target.checked); });
+    this.el.settingVolume.addEventListener("input", (e) => this.cb.onSettingChange("sfxVolume", parseFloat(e.target.value)));
+  }
+
+  applySettingsToInputs(settings) { this.el.settingSound.checked = !!settings.soundOn; this.el.settingReducedMotion.checked = !!settings.reducedMotion; this.el.settingVolume.value = settings.sfxVolume; document.body.classList.toggle("mlg-reduced-motion", !!settings.reducedMotion); }
+
+  _wireMenus() {
+    $("btn-start-game").addEventListener("click", () => { this.cb.onButtonClick(); this.cb.onStartGameClicked(); });
+    $("btn-practice").addEventListener("click", () => { this.cb.onButtonClick(); this.cb.onModeChosen("PRACTICE"); });
+    $("btn-mode-select").addEventListener("click", () => { this.cb.onButtonClick(); this.showScreen("modeSelect"); });
+    $("btn-daily").addEventListener("click", () => { this.cb.onButtonClick(); this.cb.onDailyChosen(); });
+    $("btn-mode-back").addEventListener("click", () => { this.cb.onButtonClick(); this.showScreen("menu"); });
+    $("btn-risk-back").addEventListener("click", () => { this.cb.onButtonClick(); this.showScreen(this._riskBackTarget || "menu"); });
+    document.querySelectorAll(".mlg-risk-card").forEach(card => card.addEventListener("click", () => { this.cb.onButtonClick(); this.cb.onRiskChosen(card.dataset.risk); }));
+    $("btn-resume").addEventListener("click", () => { this.cb.onButtonClick(); this.cb.onResume(); });
+    $("btn-restart-pause").addEventListener("click", () => { this.cb.onButtonClick(); this.cb.onRestart(); });
+    $("btn-exit-pause").addEventListener("click", () => { this.cb.onButtonClick(); this.cb.onExitToMenu(); });
+    $("btn-play-again").addEventListener("click", () => { this.cb.onButtonClick(); this.cb.onPlayAgain(); });
+    $("btn-back-to-minigames").addEventListener("click", () => { this.cb.onButtonClick(); window.location.href = "/#minigames"; });
+    $("btn-stats").addEventListener("click", () => { this.cb.onButtonClick(); this.renderStats(this.cb.getStatsSnapshot()); this.showScreen("stats"); });
+    $("btn-close-stats").addEventListener("click", () => { this.cb.onButtonClick(); this.showScreen("menu"); });
+    $("btn-achievements").addEventListener("click", () => { this.cb.onButtonClick(); this.renderAchievements(this.cb.getAchievementsSnapshot()); this.showScreen("achievements"); });
+    $("btn-close-achievements").addEventListener("click", () => { this.cb.onButtonClick(); this.showScreen("menu"); });
+    $("btn-cosmetics").addEventListener("click", () => { this.cb.onButtonClick(); this.renderCosmetics(this.cb.getProgressionSnapshot()); this.showScreen("cosmetics"); });
+    $("btn-close-cosmetics").addEventListener("click", () => { this.cb.onButtonClick(); this.showScreen("menu"); });
+  }
+
+  setRiskBackTarget(screenName) { this._riskBackTarget = screenName; }
+
+  _wireInput() {
+    window.addEventListener("keydown", (e) => {
+      if (e.repeat) return;
+      if (e.code === "KeyA" || e.code === "ArrowLeft") this.input.left = true;
+      if (e.code === "KeyD" || e.code === "ArrowRight") this.input.right = true;
+      if (e.code === "Space") { e.preventDefault(); this._requestWaterPlace(); }
+      if (e.code === "Escape") this.cb.onEscapePressed();
+    });
+    window.addEventListener("keyup", (e) => { if (e.code === "KeyA" || e.code === "ArrowLeft") this.input.left = false; if (e.code === "KeyD" || e.code === "ArrowRight") this.input.right = false; });
+    const bindHold = (el, key) => { const start = (e) => { e.preventDefault(); this.input[key] = true; }; const end = (e) => { e.preventDefault(); this.input[key] = false; }; el.addEventListener("pointerdown", start); el.addEventListener("pointerup", end); el.addEventListener("pointerleave", end); el.addEventListener("pointercancel", end); };
+    bindHold(this.el.touchLeft, "left"); bindHold(this.el.touchRight, "right");
+    this.el.touchWater.addEventListener("pointerdown", (e) => { e.preventDefault(); this._requestWaterPlace(); });
+  }
+
+  _requestWaterPlace() {
+    const now = performance.now();
+    if (this._waterConsumedThisRound) return;
+    if (now - this._lastWaterPressAt < 120) return;
+    this._lastWaterPressAt = now; this._waterConsumedThisRound = true; this.cb.onWaterPlaceRequested();
+  }
+
+  resetInput() { this.input.left = false; this.input.right = false; }
+}

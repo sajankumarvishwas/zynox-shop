@@ -1,0 +1,399 @@
+/* ============================================================
+   BRO, YOU'RE NOT 18+  —  namespaced under #bro18-root
+   All selectors are scoped so this never leaks onto the rest
+   of the Zynox site.
+   ============================================================ */
+
+#bro18-root {
+  --bro18-bg: #05060a;
+  --bro18-neon: #7dffb3;
+  --bro18-neon2: #ff3b6e;
+  --bro18-neon3: #3bd0ff;
+  --bro18-warn: #ffcc33;
+  --bro18-text: #eafff0;
+  --bro18-muted: #8a94a6;
+  --bro18-panel: rgba(10, 14, 22, 0.85);
+
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  background: var(--bro18-bg);
+  color: var(--bro18-text);
+  font-family: "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+  overflow: hidden;
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+#bro18-root * {
+  box-sizing: border-box;
+}
+
+#bro18-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  background: linear-gradient(180deg, #0a0e18 0%, #05060a 60%, #030308 100%);
+  image-rendering: -webkit-optimize-contrast;
+}
+
+.bro18-hidden {
+  display: none !important;
+}
+
+/* ---------- Overlays (start / results) ---------- */
+.bro18-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 24px;
+  text-align: center;
+  background: radial-gradient(ellipse at 50% 30%, rgba(125,255,179,0.08), transparent 60%),
+              rgba(3, 4, 8, 0.92);
+  backdrop-filter: blur(2px);
+}
+
+.bro18-title {
+  font-size: clamp(28px, 7vw, 56px);
+  font-weight: 900;
+  letter-spacing: 1px;
+  margin: 0;
+  text-shadow: 0 0 18px rgba(125,255,179,0.55);
+}
+.bro18-accent {
+  color: var(--bro18-neon2);
+  text-shadow: 0 0 20px rgba(255,59,110,0.65);
+}
+.bro18-sub {
+  color: var(--bro18-muted);
+  margin: 0 0 8px 0;
+  font-size: clamp(13px, 3vw, 16px);
+}
+
+.bro18-controls-hint {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+  justify-content: center;
+  font-size: 13px;
+  color: var(--bro18-muted);
+  border: 1px solid rgba(125,255,179,0.25);
+  border-radius: 10px;
+  padding: 10px 16px;
+  background: rgba(125,255,179,0.04);
+}
+.bro18-controls-hint strong {
+  color: var(--bro18-neon);
+  margin-right: 4px;
+}
+
+.bro18-btn {
+  font-family: inherit;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  font-size: 16px;
+  padding: 14px 28px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.08s ease, box-shadow 0.15s ease;
+  touch-action: manipulation;
+}
+.bro18-btn:active {
+  transform: scale(0.96);
+}
+.bro18-btn-primary {
+  background: var(--bro18-neon);
+  color: #04120a;
+  box-shadow: 0 0 24px rgba(125,255,179,0.45);
+}
+.bro18-btn-ghost {
+  background: transparent;
+  color: var(--bro18-text);
+  border: 1.5px solid rgba(234,255,240,0.35);
+}
+.bro18-link-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.bro18-sound-row {
+  margin-top: 4px;
+}
+
+.bro18-stats-preview {
+  margin-top: 10px;
+  font-size: 12px;
+  color: var(--bro18-muted);
+  min-height: 16px;
+}
+
+/* ---------- HUD ---------- */
+#bro18-hud {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 20;
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  pointer-events: none;
+}
+.bro18-hud-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.bro18-hud-item {
+  background: var(--bro18-panel);
+  border: 1px solid rgba(125,255,179,0.25);
+  border-radius: 8px;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+.bro18-rage-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bro18-panel);
+  border: 1px solid rgba(255,59,110,0.3);
+  border-radius: 8px;
+  padding: 4px 10px;
+  max-width: 260px;
+}
+.bro18-rage-label {
+  font-size: 11px;
+  font-weight: 900;
+  color: var(--bro18-neon2);
+}
+.bro18-rage-bar {
+  flex: 1;
+  height: 10px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.bro18-rage-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--bro18-warn), var(--bro18-neon2));
+  transition: width 0.2s ease;
+}
+.bro18-rage-pct {
+  font-size: 11px;
+  color: var(--bro18-muted);
+  min-width: 30px;
+  text-align: right;
+}
+
+/* ---------- Toasts ---------- */
+.bro18-toast {
+  position: absolute;
+  left: 50%;
+  top: 34%;
+  transform: translate(-50%, -50%);
+  z-index: 30;
+  background: rgba(5,6,10,0.88);
+  border: 1px solid rgba(255,59,110,0.4);
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-weight: 800;
+  font-size: clamp(14px, 3.6vw, 20px);
+  text-align: center;
+  max-width: 88vw;
+  pointer-events: none;
+  box-shadow: 0 0 30px rgba(255,59,110,0.25);
+}
+
+.bro18-signtext {
+  position: absolute;
+  left: 50%;
+  top: 42%;
+  transform: translate(-50%, -50%);
+  z-index: 30;
+  font-weight: 900;
+  font-size: clamp(20px, 6vw, 40px);
+  color: var(--bro18-neon3);
+  text-shadow: 0 0 20px rgba(59,208,255,0.6);
+  text-align: center;
+  pointer-events: none;
+  max-width: 90vw;
+}
+
+.bro18-achievement-toast {
+  position: absolute;
+  right: 12px;
+  top: 12px;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--bro18-panel);
+  border: 1px solid rgba(255,204,51,0.5);
+  border-radius: 10px;
+  padding: 10px 14px;
+  max-width: 260px;
+  box-shadow: 0 0 20px rgba(255,204,51,0.2);
+}
+.bro18-ach-icon { font-size: 22px; }
+.bro18-ach-title {
+  font-size: 11px;
+  font-weight: 900;
+  color: var(--bro18-warn);
+  letter-spacing: 0.5px;
+}
+.bro18-ach-desc {
+  font-size: 12px;
+  color: var(--bro18-text);
+}
+
+/* ---------- Mobile controls ---------- */
+#bro18-mobile-controls {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 25;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 18px;
+  pointer-events: none;
+}
+.bro18-mobile-move {
+  display: flex;
+  gap: 12px;
+  pointer-events: auto;
+}
+.bro18-mobile-btn {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(125,255,179,0.4);
+  background: rgba(10,14,22,0.75);
+  color: var(--bro18-text);
+  font-size: 22px;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: manipulation;
+  pointer-events: auto;
+}
+.bro18-mobile-btn:active {
+  background: rgba(125,255,179,0.25);
+}
+.bro18-mobile-jump {
+  width: 84px;
+  height: 84px;
+  font-size: 14px;
+  border-color: rgba(255,59,110,0.5);
+}
+
+/* ---------- Results screen ---------- */
+.bro18-results-title {
+  font-size: clamp(26px, 7vw, 46px);
+  margin: 0;
+  color: var(--bro18-neon);
+  text-shadow: 0 0 20px rgba(125,255,179,0.5);
+}
+.bro18-results-sub {
+  margin: 0 0 6px 0;
+  color: var(--bro18-muted);
+  font-weight: 700;
+}
+.bro18-results-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(120px, 1fr));
+  gap: 8px;
+  max-width: 420px;
+  width: 100%;
+}
+.bro18-result-stat {
+  background: var(--bro18-panel);
+  border: 1px solid rgba(234,255,240,0.15);
+  border-radius: 8px;
+  padding: 8px;
+  font-size: 12px;
+}
+.bro18-result-stat b {
+  display: block;
+  font-size: 16px;
+  color: var(--bro18-neon3);
+}
+.bro18-rank {
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--bro18-warn);
+  text-shadow: 0 0 18px rgba(255,204,51,0.5);
+}
+.bro18-achievements-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+  max-width: 480px;
+}
+.bro18-achievements-list span {
+  font-size: 11px;
+  background: rgba(255,204,51,0.1);
+  border: 1px solid rgba(255,204,51,0.3);
+  border-radius: 6px;
+  padding: 3px 8px;
+}
+.bro18-results-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 6px;
+}
+
+/* ---------- Debug overlay ---------- */
+.bro18-debug {
+  position: absolute;
+  left: 8px;
+  bottom: 8px;
+  z-index: 60;
+  background: rgba(0,0,0,0.7);
+  color: #7dffb3;
+  font-family: monospace;
+  font-size: 11px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  line-height: 1.5;
+  pointer-events: none;
+  white-space: pre;
+}
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .bro18-btn, .bro18-rage-fill { transition: none; }
+}
+
+/* ---------- Small screens ---------- */
+@media (max-width: 480px) {
+  .bro18-mobile-btn { width: 56px; height: 56px; font-size: 18px; }
+  .bro18-mobile-jump { width: 72px; height: 72px; font-size: 12px; }
+  .bro18-hud-item { font-size: 11px; padding: 3px 8px; }
+}
+
+@media (orientation: portrait) and (max-width: 600px) {
+  #bro18-mobile-controls { padding: 10px 14px; }
+}

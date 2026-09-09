@@ -1,0 +1,2 @@
+import React from 'react';
+export const Subscriptions = (props) => React.createElement('svg', Object.assign({viewBox: '0 0 24 24', width: '24', height: '24', fill: 'currentColor', xmlns: 'http://www.w3.org/2000/svg'}, props), React.createElement('path', {d: "M4 10h16v2H4zm0 10h16v2H4zm-2-8h2v8H2zm18 0h2v8h-2zM6 6h12v2H6zm2-4h8v2H8zM6 16h2v2H6zm4 0h2v2h-2zm4 0h2v2h-2z"}));

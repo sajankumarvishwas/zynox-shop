@@ -1,0 +1,2 @@
+import React from 'react';
+export const ArrowsVertical = (props) => React.createElement('svg', Object.assign({viewBox: '0 0 24 24', width: '24', height: '24', fill: 'currentColor', xmlns: 'http://www.w3.org/2000/svg'}, props), React.createElement('path', {d: "M13 11h-2V1h2zm2-6h-2V3h2zm2 2h-2V5h2zm-6-2H9V3h2z"}), React.createElement('path', {d: "M15 7H7V5h8zm-2 6h-2v10h2zm2 6h-2v2h2zm2-2h-2v2h2zm-6 2H9v2h2z"}), React.createElement('path', {d: "M15 17H7v2h8z"}));

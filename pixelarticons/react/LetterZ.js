@@ -1,0 +1,2 @@
+import React from 'react';
+export const LetterZ = (props) => React.createElement('svg', Object.assign({viewBox: '0 0 24 24', width: '24', height: '24', fill: 'currentColor', xmlns: 'http://www.w3.org/2000/svg'}, props), React.createElement('path', {d: "M17 21H7V15H9V19H17V21ZM11 15H9V13H11V15ZM13 13H11V11H13V13ZM15 11H13V9H15V11ZM17 9H15V5H7V3H17V9Z"}));

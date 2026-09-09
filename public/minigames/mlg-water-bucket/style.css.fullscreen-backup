@@ -1,0 +1,163 @@
+/* =========================================================
+   ZYNOX MLG WATER BUCKET — isolated game styles.
+========================================================= */
+
+.mlg-body { overflow: hidden; height: 100dvh; overscroll-behavior: none; touch-action: none; }
+.mlg-app { position: fixed; inset: 0; display: flex; flex-direction: column; background: var(--mc-bg); padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom); }
+.mlg-topbar { flex: 0 0 auto; display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border-bottom: 2px solid var(--mc-border); background: var(--mc-panel); }
+.mlg-back-link { color: var(--mc-muted); text-decoration: none; font-family: "Press Start 2P", monospace; font-size: 8px; letter-spacing: .5px; }
+.mlg-title-mini { color: var(--mc-text); font-family: "Press Start 2P", monospace; font-size: 8px; letter-spacing: .5px; }
+.mlg-icon-btn { width: 32px; height: 32px; border: 2px solid var(--mc-border); background: var(--mc-panel-2); color: var(--mc-text); cursor: pointer; font-size: 14px; box-shadow: 3px 3px 0 #0a0b08; }
+.mlg-stage { position: relative; flex: 1 1 auto; min-height: 0; display: flex; align-items: center; justify-content: center; background: #0b0c08; overflow: hidden; }
+#game-canvas { display: block; image-rendering: pixelated; max-width: 100%; max-height: 100%; touch-action: none; }
+.mlg-hud { position: absolute; inset: 0; pointer-events: none; padding: 10px 10px 0; display: flex; flex-direction: column; justify-content: space-between; }
+.hud-row { display: flex; gap: 6px; flex-wrap: wrap; }
+.hud-top { justify-content: flex-start; }
+.hud-bottom { padding-bottom: 10px; align-items: center; justify-content: flex-start; }
+.hud-chip { display: flex; flex-direction: column; padding: 5px 9px; background: rgba(15,16,11,.72); border: 2px solid var(--mc-border); min-width: 52px; }
+.hud-label { font-family: "Press Start 2P", monospace; font-size: 6px; color: var(--mc-muted); letter-spacing: .4px; }
+.hud-value { font-family: "Press Start 2P", monospace; font-size: 11px; color: var(--mc-text); }
+.hud-combo .hud-value { color: var(--mc-yellow); }
+.hud-combo.hud-heating .hud-value { color: var(--mc-red); }
+.hud-heat { display: flex; flex-direction: column; gap: 3px; min-width: 84px; }
+.hud-heat-bar { width: 100%; height: 8px; background: rgba(15,16,11,.72); border: 2px solid var(--mc-border); }
+.hud-heat-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--mc-purple-dark), var(--mc-purple)); transition: width .15s ease; }
+.hud-heat-fill.overdrive { background: linear-gradient(90deg, var(--mc-red), var(--mc-yellow)); }
+.hud-timer { align-self: center; font-family: "Press Start 2P", monospace; font-size: 20px; color: var(--mc-yellow); background: rgba(15,16,11,.72); border: 2px solid var(--mc-border); padding: 4px 12px; margin-top: 6px; }
+.mlg-countdown { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; pointer-events: none; }
+.mlg-countdown span { font-family: "Press Start 2P", monospace; font-size: 54px; color: var(--mc-yellow); text-shadow: 4px 4px 0 #0b0c08; animation: mlgCountdownPulse .5s ease; }
+@keyframes mlgCountdownPulse { 0% { transform: scale(1.6); opacity: 0; } 60% { transform: scale(1); opacity: 1; } 100% { transform: scale(1); opacity: 1; } }
+.mlg-grade-popup { position: absolute; top: 30%; left: 50%; transform: translate(-50%, -50%); text-align: center; pointer-events: none; animation: mlgGradePop .55s ease; }
+@keyframes mlgGradePop { 0% { transform: translate(-50%, -30%) scale(.6); opacity: 0; } 30% { transform: translate(-50%, -50%) scale(1.15); opacity: 1; } 100% { transform: translate(-50%, -50%) scale(1); opacity: 1; } }
+.grade-main { display: block; font-family: "Press Start 2P", monospace; font-size: 20px; color: var(--mc-yellow); text-shadow: 3px 3px 0 #0b0c08; }
+.grade-sub { display: block; margin-top: 6px; font-family: "Press Start 2P", monospace; font-size: 8px; color: var(--mc-muted); }
+.mlg-combo-popup { position: absolute; top: 18%; left: 50%; transform: translateX(-50%); font-family: "Press Start 2P", monospace; font-size: 14px; color: var(--mc-purple); pointer-events: none; animation: mlgComboFloat .6s ease forwards; }
+@keyframes mlgComboFloat { 0% { opacity: 0; transform: translate(-50%, 10px) scale(.8); } 30% { opacity: 1; transform: translate(-50%, -6px) scale(1.1); } 100% { opacity: 0; transform: translate(-50%, -22px) scale(1); } }
+.mlg-modifier-banner { position: absolute; top: 8px; left: 50%; transform: translateX(-50%); padding: 6px 12px; background: rgba(15,16,11,.85); border: 2px solid var(--mc-red); color: var(--mc-red); font-family: "Press Start 2P", monospace; font-size: 8px; pointer-events: none; white-space: nowrap; }
+.mlg-achievement-toast { position: absolute; bottom: 100px; left: 50%; transform: translateX(-50%); padding: 10px 16px; background: var(--mc-panel); border: 2px solid var(--mc-yellow); box-shadow: 4px 4px 0 #0a0b08; font-family: "Press Start 2P", monospace; font-size: 8px; color: var(--mc-yellow); text-align: center; pointer-events: none; animation: mlgToastIn .4s ease; }
+@keyframes mlgToastIn { 0% { opacity: 0; transform: translate(-50%, 12px); } 100% { opacity: 1; transform: translate(-50%, 0); } }
+.mlg-practice-panel { position: absolute; top: 10px; right: 10px; padding: 6px 10px; background: rgba(15,16,11,.75); border: 2px solid var(--mc-blue); color: var(--mc-blue); font-family: "Press Start 2P", monospace; font-size: 7px; text-align: right; pointer-events: none; }
+.mlg-touch-controls { position: absolute; left: 0; right: 0; bottom: 14px; display: flex; align-items: center; justify-content: space-between; padding: 0 16px; pointer-events: none; }
+.touch-move { display: flex; gap: 10px; pointer-events: auto; }
+.touch-btn { width: 58px; height: 58px; border: 2px solid var(--mc-border); background: rgba(24,24,20,.85); color: var(--mc-text); font-size: 20px; box-shadow: 4px 4px 0 #0a0b08; user-select: none; }
+.touch-water-btn { pointer-events: auto; padding: 16px 22px; border: 2px solid var(--mc-green-dark); background: var(--mc-panel-2); color: var(--mc-green); font-family: "Press Start 2P", monospace; font-size: 11px; box-shadow: 5px 5px 0 #0a0b08; user-select: none; }
+.touch-water-btn:active, .touch-btn:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0 #0a0b08; }
+.mlg-screen { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 16px; overflow-y: auto; }
+.mlg-screen-overlay { background: rgba(8,9,6,.82); }
+.mlg-menu-panel { width: min(420px, 100%); background: var(--mc-panel); border: 2px solid var(--mc-border); box-shadow: 8px 8px 0 #0a0b08; padding: 22px 20px; display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center; }
+.mlg-kicker { font-family: "Press Start 2P", monospace; font-size: 8px; color: var(--mc-purple); letter-spacing: .6px; }
+.mlg-logo { font-family: "Press Start 2P", monospace; font-size: clamp(18px, 6vw, 26px); color: #fff; text-shadow: 3px 3px 0 #0b0c08; line-height: 1.4; }
+.mlg-screen-title { font-family: "Press Start 2P", monospace; font-size: 15px; color: var(--mc-text); }
+.mlg-tagline { font-family: "Press Start 2P", monospace; font-size: 8px; color: var(--mc-muted); letter-spacing: .5px; }
+.mlg-menu-stats { display: flex; gap: 10px; width: 100%; justify-content: center; }
+.mlg-menu-stats div { flex: 1; padding: 8px 4px; background: var(--mc-panel-2); border: 2px solid var(--mc-border); }
+.mlg-menu-stats span { display: block; font-family: "Press Start 2P", monospace; font-size: 6px; color: var(--mc-muted); margin-bottom: 4px; }
+.mlg-menu-stats strong { font-family: "Press Start 2P", monospace; font-size: 11px; color: var(--mc-yellow); }
+.mlg-menu-buttons { display: flex; flex-direction: column; gap: 8px; width: 100%; }
+.mlg-menu-buttons-row { display: flex; gap: 8px; }
+.mlg-btn { padding: 12px 14px; border: 2px solid var(--mc-border); background: var(--mc-panel-2); color: var(--mc-text); font-family: "Press Start 2P", monospace; font-size: 9px; letter-spacing: .4px; box-shadow: 4px 4px 0 #0a0b08; cursor: pointer; flex: 1; }
+.mlg-btn:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0 #0a0b08; }
+.mlg-btn-primary { background: var(--mc-green-dark); border-color: var(--mc-green); color: #fff; }
+.mlg-btn-ghost { background: transparent; }
+.mlg-btn-small { font-size: 7px; padding: 10px 6px; }
+.mlg-controls-hint { font-size: 10px; color: var(--mc-muted); line-height: 1.6; }
+.mlg-controls-hint strong { color: var(--mc-text); }
+.mlg-mode-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; }
+.mlg-mode-card { padding: 12px 8px; background: var(--mc-panel-2); border: 2px solid var(--mc-border); color: var(--mc-text); font-family: "Press Start 2P", monospace; font-size: 8px; cursor: pointer; box-shadow: 3px 3px 0 #0a0b08; text-align: center; }
+.mlg-mode-card:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 #0a0b08; }
+.mlg-mode-card small { display: block; margin-top: 6px; font-family: Inter, sans-serif; font-size: 9px; color: var(--mc-muted); }
+.mlg-risk-grid { display: flex; flex-direction: column; gap: 8px; width: 100%; }
+.mlg-risk-card { padding: 14px; background: var(--mc-panel-2); border: 2px solid var(--mc-border); color: var(--mc-text); cursor: pointer; box-shadow: 3px 3px 0 #0a0b08; text-align: left; }
+.mlg-risk-card strong { display: block; font-family: "Press Start 2P", monospace; font-size: 11px; margin-bottom: 4px; }
+.mlg-risk-card span { font-size: 11px; color: var(--mc-muted); }
+.mlg-risk-card[data-risk="safe"] strong { color: var(--mc-green); }
+.mlg-risk-card[data-risk="risky"] strong { color: var(--mc-yellow); }
+.mlg-risk-card[data-risk="insane"] strong { color: var(--mc-red); }
+.mlg-new-record { font-family: "Press Start 2P", monospace; font-size: 9px; color: var(--mc-yellow); animation: mlgRecordGlow 1s ease-in-out infinite alternate; }
+@keyframes mlgRecordGlow { from { text-shadow: 0 0 4px rgba(255,216,74,.4); } to { text-shadow: 0 0 14px rgba(255,216,74,.9); } }
+.mlg-result-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; }
+.mlg-result-stats div { padding: 8px; background: var(--mc-panel-2); border: 2px solid var(--mc-border); text-align: left; }
+.mlg-result-stats span { display: block; font-family: "Press Start 2P", monospace; font-size: 6px; color: var(--mc-muted); margin-bottom: 4px; }
+.mlg-result-stats strong { font-family: "Press Start 2P", monospace; font-size: 12px; color: var(--mc-text); }
+.mlg-settings-list { display: flex; flex-direction: column; gap: 12px; width: 100%; }
+.mlg-toggle-row { display: flex; align-items: center; justify-content: space-between; font-size: 12px; color: var(--mc-text); }
+.mlg-toggle-row input[type="checkbox"] { width: 20px; height: 20px; }
+.mlg-toggle-row input[type="range"] { width: 140px; }
+.mlg-achievement-list { display: flex; flex-direction: column; gap: 8px; width: 100%; max-height: 50vh; overflow-y: auto; }
+.mlg-achievement-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; background: var(--mc-panel-2); border: 2px solid var(--mc-border); text-align: left; }
+.mlg-achievement-item.locked { opacity: .45; }
+.mlg-achievement-item strong { display: block; font-family: "Press Start 2P", monospace; font-size: 9px; margin-bottom: 4px; }
+.mlg-achievement-item span { font-size: 11px; color: var(--mc-muted); }
+.mlg-achievement-badge { font-size: 18px; }
+.mlg-cosmetic-grid, .mlg-title-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; }
+.mlg-cosmetic-item, .mlg-title-item { padding: 10px; background: var(--mc-panel-2); border: 2px solid var(--mc-border); color: var(--mc-text); font-family: "Press Start 2P", monospace; font-size: 8px; cursor: pointer; text-align: center; }
+.mlg-cosmetic-item.selected, .mlg-title-item.selected { border-color: var(--mc-yellow); color: var(--mc-yellow); }
+.mlg-cosmetic-item.locked, .mlg-title-item.locked { opacity: .4; cursor: not-allowed; }
+.mlg-reduced-motion * { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+@media (max-width: 480px) { .mlg-menu-panel { padding: 18px 14px; gap: 10px; } .mlg-menu-buttons-row { flex-direction: column; } .mlg-modifier-banner { max-width: calc(100% - 32px); overflow: hidden; text-overflow: ellipsis; } }
+
+
+/* Fix native hidden attribute for game overlays */
+.mlg-app [hidden]{display:none !important;}
+
+
+/* ZYNOX TOUCH UI V2 */
+.mlg-touch-controls .touch-water-btn {
+  display: none !important;
+}
+
+@media (max-width: 700px) {
+  .mlg-touch-controls {
+    bottom: 14px;
+    left: 0;
+    right: 0;
+    padding: 0 18px;
+    justify-content: space-between;
+    pointer-events: none;
+  }
+
+  .touch-move {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    pointer-events: none;
+  }
+
+  .touch-btn {
+    pointer-events: auto;
+    width: 58px;
+    height: 58px;
+    min-width: 58px;
+    padding: 0;
+    margin: 0;
+    border: 2px solid rgba(190,200,160,.52);
+    background: rgba(12,14,10,.52);
+    color: rgba(245,241,223,.82);
+    box-shadow: 4px 4px 0 rgba(0,0,0,.55);
+    font-size: 20px;
+    line-height: 1;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    border-radius: 0;
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .touch-btn:active {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0 rgba(0,0,0,.55);
+    background: rgba(28,33,22,.78);
+  }
+
+  /* Remove browser/native visual junk underneath the controls. */
+  .touch-btn::after {
+    content: none !important;
+  }
+
+  .hud-bottom {
+    bottom: 100px;
+  }
+}

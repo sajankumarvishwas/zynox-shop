@@ -25,16 +25,34 @@
 
   <nav class="mc-nav">
     <a class="active" href="#servers">Servers</a>
-    <a href="#ranks">More</a>
+    <a href="/more.html">More</a>
     <a href="#creations">Creations</a>
     <a href="#community">Community</a>
+    <a href="/minigames.html">Minigames</a>
   </nav>
 
   <a href="#creations" class="mc-inventory-btn mc-store-button">
     PROJECTS
   </a>
 
+  <button class="zy-menu-toggle" type="button" aria-label="Open Zynox menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="zy-menu-panel" aria-hidden="true">
+    <div class="zy-menu-title">ZYNOX MENU</div>
+    <a href="#servers">SERVERS</a>
+    <a href="/minigames.html">MINIGAMES</a>
+    <a href="#creations">CREATIONS</a>
+    <a href="#community">COMMUNITY</a>
+    <a href="/about-admin.html">ABOUT ADMIN</a>
+    <a href="/more.html">MORE</a>
+  </div>
+
 </header>
+<script>
+document.querySelector(".zy-menu-toggle").addEventListener("click",function(){const p=document.querySelector(".zy-menu-panel"),o=this.getAttribute("aria-expanded")==="true";this.setAttribute("aria-expanded",String(!o));p.setAttribute("aria-hidden",String(o));p.classList.toggle("is-open",!o);});
+document.querySelectorAll(".zy-menu-panel a").forEach(a=>a.addEventListener("click",event=>{if(a.hasAttribute("data-about-admin")){event.preventDefault();document.querySelector(".zy-about-admin").classList.add("is-visible");document.querySelector(".zy-about-admin").setAttribute("aria-hidden","false");}document.querySelector(".zy-menu-toggle").setAttribute("aria-expanded","false");document.querySelector(".zy-menu-panel").setAttribute("aria-hidden","true");document.querySelector(".zy-menu-panel").classList.remove("is-open");}));
+</script>
 
 <main>
 
@@ -138,56 +156,6 @@
   <span>◆</span>
 </section>
 
-<section class="minecraft-announcement">
-
-  <div class="announcement-icon">!</div>
-
-  <div>
-    <strong>ZYNOX GAMING NETWORK</strong>
-    <span>
-      Discover Zynox worlds, creations and new gaming projects as they are built.
-    </span>
-  </div>
-
-  <div class="announcement-xp">
-    <div class="xp-label">XP</div>
-    <div class="xp-bar">
-      <div class="xp-fill"></div>
-    </div>
-  </div>
-
-</section>
-
-<section class="mc-section" id="ranks">
-
-  <div class="minecraft-section-title">
-
-    <div class="title-line"></div>
-
-    <div>
-      <span class="section-kicker">OPTIONAL SUPPORT</span>
-      <h2>KEEP ZYNOX GOING</h2>
-    </div>
-
-    <div class="title-line"></div>
-
-  </div>
-
-  <p class="section-description">
-    Want to chip in? This optional section is here for anyone who feels like supporting the Zynox project.
-  </p>
-
-  <div id="products" class="minecraft-rank-grid">
-
-    <div class="minecraft-loading">
-      <div class="loading-pixel"></div>
-      <span>LOADING INVENTORY...</span>
-    </div>
-
-  </div>
-
-</section>
-
 <section class="minecraft-divider">
   <span>◆</span>
 </section>
@@ -202,7 +170,46 @@
   <span>◆</span>
 </section>
 
+<section class="zy-hub-status">
+  <div class="zy-hub-status-head">
+    <span class="section-kicker">ZYNOX HUB STATUS</span>
+    <strong>THE WORLD IS STILL LOADING.</strong>
+  </div>
 
+  <div class="zy-hub-status-grid">
+    <div class="zy-hub-status-item">
+      <span class="zy-hub-status-icon">◈</span>
+      <div>
+        <strong>2 WORLDS</strong>
+        <small>Minecraft worlds</small>
+      </div>
+    </div>
+
+    <div class="zy-hub-status-item">
+      <span class="zy-hub-status-icon"><img src="/assets/ui/pixel/gamepad.svg" alt="" aria-hidden="true"></span>
+      <div>
+        <strong>3 GAMES</strong>
+        <small>Zynox Arcade</small>
+      </div>
+    </div>
+
+    <div class="zy-hub-status-item">
+      <span class="zy-hub-status-icon"><img src="/assets/ui/pixel/music.svg" alt="" aria-hidden="true"></span>
+      <div>
+        <strong>ZYNOXIFY</strong>
+        <small>Working on this</small>
+      </div>
+    </div>
+
+    <div class="zy-hub-status-item">
+      <span class="zy-hub-status-icon"><img src="/assets/ui/pixel/server.svg" alt="" aria-hidden="true"></span>
+      <div>
+        <strong>EARNOX</strong>
+        <small>Coming soon</small>
+      </div>
+    </div>
+  </div>
+</section>
 
 <section class="mc-section mc-creations-section" id="creations">
 
@@ -219,40 +226,94 @@
     Apps, websites and projects created under the Zynox banner will appear here.
   </p>
 
-  <div class="creation-vault">
-    <div class="creation-vault-art">
-      <div class="creation-orbit orbit-a"></div>
-      <div class="creation-orbit orbit-b"></div>
-      <img
-        src="/assets/characters/player/player_idle.png"
-        alt=""
-        class="creation-character"
-        aria-hidden="true">
-      <img
-        src="/assets/minecraft/items/ore_diamond.png"
-        alt=""
-        class="creation-diamond"
-        aria-hidden="true">
-    </div>
+  <div class="zy-creations-grid">
 
-    <div class="creation-vault-copy">
-      <span class="category-tag">PROJECT VAULT</span>
-      <h3>MORE CREATIONS ARE LOADING</h3>
-      <p>
-        This space is reserved for Zynox apps, tools, websites and future projects.
-        New creations can be added later without rebuilding the whole homepage.
-      </p>
-
-      <div class="creation-slots">
-        <span>APP SLOT</span>
-        <span>WEB SLOT</span>
-        <span>PROJECT SLOT</span>
+    <a href="/minigames.html" class="zy-project-card zy-project-card-playable">
+      <div class="zy-project-icon"><img src="/assets/ui/pixel/gamepad.svg" alt="" aria-hidden="true"></div>
+      <div class="zy-project-top">
+        <span class="category-tag">ZYNOX ARCADE</span>
+        <span class="zy-project-status">PLAYABLE</span>
       </div>
+      <h3>MINIGAMES</h3>
+      <p>Zynox-made mini games, built to play, compete and waste exactly the right amount of time.</p>
+      <span class="zy-project-action">OPEN ARCADE →</span>
+    </a>
 
-      <span class="coming-soon">COMING SOON</span>
-    </div>
+    <a href="/zynoxify.html" class="zy-project-card zy-project-card-playable">
+      <div class="zy-project-icon"><img src="/assets/zynoxify/dp.jpg" alt="Zynoxify" aria-hidden="true"></div>
+      <div class="zy-project-top">
+        <span class="category-tag">ZYNOX MUSIC</span>
+        <span class="zy-project-status">PLAYABLE</span>
+      </div>
+      <h3>ZYNOXIFY</h3>
+      <p>A Zynox music space for gaming playlists, listening sessions and the songs that belong in the Zynox world.</p>
+      <span class="zy-project-action">OPEN ZYNOXIFY →</span>
+    </a>
+
+    <button type="button" class="zy-project-card zy-project-card-soon zy-soon-card" data-soon="EARNOX">
+      <div class="zy-project-icon"><img src="/assets/ui/pixel/server.svg" alt="" aria-hidden="true"></div>
+      <div class="zy-project-top">
+        <span class="category-tag">ZYNOX PLATFORM</span>
+        <span class="zy-project-status">COMING SOON</span>
+      </div>
+      <h3>EARNOX</h3>
+      <p>A Zynox ads platform project focused on turning attention into something useful. Currently under development.</p>
+      <span class="zy-project-action zy-project-action-muted">PLATFORM · COMING SOON</span>
+    </button>
+
   </div>
 
+  <div class="zy-soon-toast" id="zy-soon-toast" aria-hidden="true">
+    <span class="zy-soon-toast-kicker">ZYNOX SYSTEM</span>
+    <strong>COMING SOON...</strong>
+    <span id="zy-soon-toast-project"></span>
+  </div>
+
+  </section>
+
+<section class="mc-section zy-featured-creation" id="featured-creation">
+  <div class="minecraft-section-title">
+    <div class="title-line"></div>
+    <div>
+      <span class="section-kicker">FEATURED BY ZYNOX</span>
+      <h2>ZYNOX ARCADE</h2>
+    </div>
+    <div class="title-line"></div>
+  </div>
+
+  <p class="section-description">
+    One creation gets the spotlight. More projects will take the stage as the Zynox world grows.
+  </p>
+
+  <a href="/minigames.html" class="zy-featured-creation-card">
+    <div class="zy-featured-art">
+      <img src="/assets/minigames/mlg-water-bucket-banner.png" alt="Zynox MLG Water Bucket">
+      <div class="zy-featured-scan"></div>
+      <span class="zy-featured-badge">PLAYABLE NOW</span>
+    </div>
+
+    <div class="zy-featured-copy">
+      <span class="category-tag">ZYNOX MINIGAMES</span>
+      <h3>ENTER THE ARCADE</h3>
+      <p>
+        Three Zynox-made games are currently waiting in the arcade.
+        Jump in, chase scores, survive the trolling and see what else is cooking.
+      </p>
+
+      <div class="zy-featured-meta">
+        <span>3 GAMES</span>
+        <span>PLAYABLE</span>
+        <span>MORE LOADING</span>
+      </div>
+
+      <span class="zy-featured-action">ENTER ZYNOX ARCADE →</span>
+    </div>
+  </a>
+</section>
+
+
+<section class="minecraft-divider">
+  <span>◆</span>
 </section>
 
 <section class="minecraft-divider">
@@ -413,5 +474,125 @@
 
 <script src="/app.js"></script>
 
+
+<script>
+(() => {
+  const toast = document.getElementById("zy-soon-toast");
+  const project = document.getElementById("zy-soon-toast-project");
+  let timer;
+
+  document.querySelectorAll(".zy-soon-card").forEach(card => {
+    card.addEventListener("click", () => {
+      project.textContent = card.dataset.soon + " IS STILL COOKING.";
+      toast.classList.remove("is-visible");
+      void toast.offsetWidth;
+      toast.classList.add("is-visible");
+      toast.setAttribute("aria-hidden", "false");
+
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        toast.classList.remove("is-visible");
+        toast.setAttribute("aria-hidden", "true");
+      }, 2400);
+    });
+  });
+})();
+</script>
+
+
+<div class="zy-update-overlay" id="zy-update-overlay" aria-hidden="true">
+  <div class="zy-update-card" role="dialog" aria-modal="true" aria-labelledby="zy-update-title">
+
+    <button type="button" class="zy-update-close" id="zy-update-close" aria-label="Close update">×</button>
+
+    <div class="zy-update-kicker">ZYNOX UPDATE</div>
+
+    <div class="zy-update-step" data-update-step="1">
+      <span class="zy-update-status">NEW CREATION</span>
+      <h2 id="zy-update-title">MINIGAMES ADDED</h2>
+
+      <p>
+        Zynox Arcade is now live with <strong>3 playable games</strong>:
+        MLG Water Bucket, Bro, You're NOT 18+, and The Troll Game.
+      </p>
+
+      <div class="zy-update-access"><strong>CLICK TO GO TO MINIGAMES →</strong></div>
+    </div>
+
+    <div class="zy-update-step" data-update-step="2" hidden>
+      <span class="zy-update-status">NOW LIVE</span>
+      <h2>ZYNOXIFY ADDED</h2>
+
+      <p>
+        Zynoxify is now live with the <strong>Gaming Playlist</strong>,
+        built around a proper gaming vibe and ready to listen.
+      </p>
+
+      <div class="zy-update-access"><strong>CLICK TO GO TO ZYNOXIFY →</strong></div>
+    </div>
+
+    <div class="zy-update-footer">
+      <span id="zy-update-counter">01 / 02</span>
+      <span>UPDATE LOG</span>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
+
+<script>
+(() => {
+  const overlay = document.getElementById("zy-update-overlay");
+  const closeBtn = document.getElementById("zy-update-close");
+  const steps = [...document.querySelectorAll("[data-update-step]")];
+  const counter = document.getElementById("zy-update-counter");
+
+  if (!overlay || !closeBtn || steps.length < 2) return;
+
+  let currentStep = 0;
+
+  function showStep(index) {
+    currentStep = index;
+
+    steps.forEach((step, i) => {
+      step.hidden = i !== index;
+    });
+
+    if (counter) {
+      counter.textContent = `${String(index + 1).padStart(2, "0")} / ${String(steps.length).padStart(2, "0")}`;
+    }
+
+    overlay.setAttribute("aria-hidden", "false");
+    document.body.classList.add("zy-update-locked");
+  }
+
+  function closeUpdates() {
+    overlay.setAttribute("aria-hidden", "true");
+    overlay.classList.add("zy-update-finished");
+    document.body.classList.remove("zy-update-locked");
+  }
+
+  closeBtn.addEventListener("click", () => {
+    if (currentStep < steps.length - 1) {
+      showStep(currentStep + 1);
+    } else {
+      closeUpdates();
+    }
+  });
+
+  steps.forEach((step, index) => {
+    step.addEventListener("click", (event) => {
+      if (event.target.closest(".zy-update-close")) return;
+
+      if (index === 0) {
+        window.location.href = "/minigames.html";
+      } else if (index === 1) {
+        window.location.href = "/zynoxify.html";
+      }
+    });
+  });
+
+  showStep(0);
+})();
+</script>

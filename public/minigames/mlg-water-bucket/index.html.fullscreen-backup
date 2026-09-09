@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#10100d">
+<title>ZYNOX ARCADE • MLG Water Bucket</title>
+<link rel="stylesheet" href="/style.css">
+<link rel="stylesheet" href="/minigames/mlg-water-bucket/style.css">
+</head>
+<body class="mlg-body">
+<div id="mlg-app" class="mlg-app">
+  <header class="mlg-topbar">
+    <a href="/#minigames" class="mlg-back-link" aria-label="Back to Zynox Minigames">← ARCADE</a>
+    <span class="mlg-title-mini">MLG WATER BUCKET</span>
+    <button type="button" class="mlg-icon-btn" id="btn-open-settings" aria-label="Settings">⚙</button>
+  </header>
+  <div class="mlg-stage" id="mlg-stage">
+    <canvas id="game-canvas" aria-label="MLG Water Bucket gameplay canvas"></canvas>
+    <div class="mlg-hud" id="hud" hidden>
+      <div class="hud-row hud-top"><div class="hud-chip"><span class="hud-label">SCORE</span><span class="hud-value" id="hud-score">0</span></div><div class="hud-chip"><span class="hud-label">BEST</span><span class="hud-value" id="hud-best">0</span></div><div class="hud-chip"><span class="hud-label">ROUND</span><span class="hud-value" id="hud-round">1</span></div></div>
+      <div class="hud-row hud-bottom"><div class="hud-chip"><span class="hud-label">HEIGHT</span><span class="hud-value" id="hud-height">0</span></div><div class="hud-chip hud-combo" id="hud-combo-chip"><span class="hud-label">COMBO</span><span class="hud-value" id="hud-combo">x0</span></div><div class="hud-heat"><span class="hud-label">HEAT</span><div class="hud-heat-bar"><div class="hud-heat-fill" id="hud-heat-fill"></div></div></div></div>
+      <div class="hud-timer" id="hud-timer" hidden>60</div>
+    </div>
+    <div class="mlg-countdown" id="countdown-overlay" hidden><span id="countdown-number">3</span></div>
+    <div class="mlg-grade-popup" id="grade-popup" hidden><span class="grade-main" id="grade-main-text">GOOD</span><span class="grade-sub" id="grade-sub-text">timing + placement</span></div>
+    <div class="mlg-combo-popup" id="combo-popup" hidden></div>
+    <div class="mlg-modifier-banner" id="modifier-banner" hidden></div>
+    <div class="mlg-achievement-toast" id="achievement-toast" hidden></div>
+    <div class="mlg-practice-panel" id="practice-panel" hidden><div>IDEAL WINDOW</div><div id="practice-diff">— ms</div></div>
+    <div class="mlg-touch-controls" id="touch-controls" hidden><div class="touch-move"><button type="button" class="touch-btn" id="touch-left" aria-label="Move left">◀</button><button type="button" class="touch-btn" id="touch-right" aria-label="Move right">▶</button></div><button type="button" class="touch-water-btn" id="touch-water" aria-label="Place water">🪣 WATER</button></div>
+
+    <section class="mlg-screen mlg-screen-menu" id="screen-menu"><div class="mlg-menu-panel"><span class="mlg-kicker">ZYNOX ARCADE</span><h1 class="mlg-logo">MLG WATER<br>BUCKET</h1><p class="mlg-tagline">FALL. TIME THE BUCKET. SURVIVE.</p><div class="mlg-menu-stats"><div><span>BEST SCORE</span><strong id="menu-best-score">0</strong></div><div><span>BEST COMBO</span><strong id="menu-best-combo">0</strong></div><div><span>LEVEL</span><strong id="menu-level">1</strong></div></div><div class="mlg-menu-buttons"><button type="button" class="mlg-btn mlg-btn-primary" id="btn-start-game">START GAME</button><button type="button" class="mlg-btn" id="btn-practice">PRACTICE</button><button type="button" class="mlg-btn" id="btn-mode-select">MODE SELECT</button><button type="button" class="mlg-btn" id="btn-daily">TODAY'S CLUTCH</button><div class="mlg-menu-buttons-row"><button type="button" class="mlg-btn mlg-btn-small" id="btn-stats">STATS</button><button type="button" class="mlg-btn mlg-btn-small" id="btn-achievements">ACHIEVEMENTS</button><button type="button" class="mlg-btn mlg-btn-small" id="btn-cosmetics">COSMETICS</button></div></div><div class="mlg-controls-hint"><div><strong>PC</strong> — SPACE = place water · A/D = move</div><div><strong>MOBILE</strong> — tap WATER · use ◀ ▶</div></div></div></section>
+    <section class="mlg-screen" id="screen-mode-select" hidden><div class="mlg-menu-panel"><span class="mlg-kicker">CHOOSE YOUR RUN</span><h2 class="mlg-screen-title">MODE SELECT</h2><div class="mlg-mode-grid" id="mode-grid"></div><button type="button" class="mlg-btn mlg-btn-ghost" id="btn-mode-back">BACK</button></div></section>
+    <section class="mlg-screen" id="screen-risk-select" hidden><div class="mlg-menu-panel"><span class="mlg-kicker" id="risk-select-mode-label">CLASSIC</span><h2 class="mlg-screen-title">CHOOSE YOUR DROP</h2><div class="mlg-risk-grid"><button type="button" class="mlg-risk-card" data-risk="safe"><strong>SAFE</strong><span>Low height · easy timing</span></button><button type="button" class="mlg-risk-card" data-risk="risky"><strong>RISKY</strong><span>Medium height · stronger reward</span></button><button type="button" class="mlg-risk-card" data-risk="insane"><strong>INSANE</strong><span>High height · tight timing</span></button></div><button type="button" class="mlg-btn mlg-btn-ghost" id="btn-risk-back">BACK</button></div></section>
+    <section class="mlg-screen mlg-screen-overlay" id="screen-pause" hidden><div class="mlg-menu-panel"><h2 class="mlg-screen-title">GAME PAUSED</h2><div class="mlg-menu-buttons"><button type="button" class="mlg-btn mlg-btn-primary" id="btn-resume">RESUME</button><button type="button" class="mlg-btn" id="btn-restart-pause">RESTART</button><button type="button" class="mlg-btn" id="btn-exit-pause">EXIT</button></div></div></section>
+    <section class="mlg-screen mlg-screen-overlay" id="screen-result" hidden><div class="mlg-menu-panel"><span class="mlg-kicker" id="result-kicker">RUN OVER</span><h2 class="mlg-screen-title" id="result-title">CLUTCH SUCCESS</h2><span class="mlg-new-record" id="result-new-record" hidden>NEW PERSONAL RECORD</span><div class="mlg-result-stats"><div><span>SCORE</span><strong id="result-score">0</strong></div><div><span>BEST</span><strong id="result-best">0</strong></div><div><span>ROUND</span><strong id="result-round">0</strong></div><div><span>BEST COMBO</span><strong id="result-combo">0</strong></div><div><span>MAX HEIGHT</span><strong id="result-height">0</strong></div><div><span>SUCCESS RATE</span><strong id="result-success-rate">0%</strong></div><div><span>XP EARNED</span><strong id="result-xp">0</strong></div></div><div class="mlg-menu-buttons"><button type="button" class="mlg-btn mlg-btn-primary" id="btn-play-again">PLAY AGAIN</button><button type="button" class="mlg-btn" id="btn-back-to-minigames">BACK TO MINIGAMES</button></div></div></section>
+    <section class="mlg-screen mlg-screen-overlay" id="screen-settings" hidden><div class="mlg-menu-panel"><h2 class="mlg-screen-title">SETTINGS</h2><div class="mlg-settings-list"><label class="mlg-toggle-row"><span>SOUND</span><input type="checkbox" id="setting-sound"></label><label class="mlg-toggle-row"><span>REDUCED MOTION</span><input type="checkbox" id="setting-reduced-motion"></label><label class="mlg-toggle-row"><span>SFX VOLUME</span><input type="range" id="setting-volume" min="0" max="1" step="0.05"></label></div><button type="button" class="mlg-btn mlg-btn-primary" id="btn-close-settings">DONE</button></div></section>
+    <section class="mlg-screen mlg-screen-overlay" id="screen-stats" hidden><div class="mlg-menu-panel"><h2 class="mlg-screen-title">YOUR STATS</h2><div class="mlg-result-stats" id="stats-grid"></div><button type="button" class="mlg-btn mlg-btn-primary" id="btn-close-stats">DONE</button></div></section>
+    <section class="mlg-screen mlg-screen-overlay" id="screen-achievements" hidden><div class="mlg-menu-panel"><h2 class="mlg-screen-title">ACHIEVEMENTS</h2><div class="mlg-achievement-list" id="achievement-list"></div><button type="button" class="mlg-btn mlg-btn-primary" id="btn-close-achievements">DONE</button></div></section>
+    <section class="mlg-screen mlg-screen-overlay" id="screen-cosmetics" hidden><div class="mlg-menu-panel"><h2 class="mlg-screen-title">BUCKETS &amp; TITLE</h2><div class="mlg-cosmetic-grid" id="cosmetic-grid"></div><div class="mlg-title-grid" id="title-grid"></div><button type="button" class="mlg-btn mlg-btn-primary" id="btn-close-cosmetics">DONE</button></div></section>
+  </div>
+</div>
+<script type="module" src="/minigames/mlg-water-bucket/js/main.js"></script>
+</body>
+</html>

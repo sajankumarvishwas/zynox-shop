@@ -1,0 +1,2 @@
+import React from 'react';
+export const DenoSolid = (props) => React.createElement('svg', Object.assign({viewBox: '0 0 24 24', width: '24', height: '24', fill: 'currentColor', xmlns: 'http://www.w3.org/2000/svg'}, props), React.createElement('path', {d: "M18 4h2v2h2v12h-2v-2h-2v2h2v2h-2v2h-4v-5h-2v5H6v-2H4v-2H2V6h2V4h2V2h12v2ZM8 17h4v-2H8v2Zm0-7H6v5h2v-5h8v6h2v-6h-2V8H8v2Zm3 3h2v-2h-2v2Z"}));

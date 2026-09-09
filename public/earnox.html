@@ -1,0 +1,1361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#05070d">
+  <meta name="color-scheme" content="dark">
+  <title>EARN0X • Sign In</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #05070d;
+      --text: #f7f8ff;
+      --muted: #98a0b5;
+      --line: rgba(255,255,255,.12);
+      --glass: rgba(255,255,255,.075);
+      --glass-strong: rgba(255,255,255,.11);
+      --blue: #69d9ff;
+      --violet: #9577ff;
+      --cyan: #7af2ff;
+    }
+
+    html,
+    body {
+      min-height: 100%;
+      margin: 0;
+    }
+
+    body {
+      color: var(--text);
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "SF Pro Display",
+        "SF Pro Text", "Segoe UI", sans-serif;
+      background:
+        linear-gradient(rgba(5, 10, 18, .10), rgba(5, 10, 18, .10)),
+        url("/assets/earnox/liquid-bg.jpg") center center / cover fixed no-repeat;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: -20%;
+      pointer-events: none;
+      background:
+        radial-gradient(circle, rgba(117, 221, 255, .07) 0 1px, transparent 2px);
+      background-size: 38px 38px;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,.65), transparent 85%);
+      animation: drift 20s linear infinite;
+    }
+
+    @keyframes drift {
+      from { transform: translate3d(0,0,0); }
+      to   { transform: translate3d(38px,38px,0); }
+    }
+
+    .ambient {
+      position: fixed;
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      filter: blur(70px);
+      opacity: .24;
+      pointer-events: none;
+      animation: float 9s ease-in-out infinite;
+    }
+
+    .ambient.one {
+      top: 7%;
+      left: -90px;
+      background: #2ac9ff;
+    }
+
+    .ambient.two {
+      right: -100px;
+      bottom: 8%;
+      background: #754cff;
+      animation-delay: -4s;
+    }
+
+    @keyframes float {
+      0%,100% { transform: translateY(0) translateX(0); }
+      50% { transform: translateY(-24px) translateX(16px); }
+    }
+
+    .page {
+      min-height: 100svh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      position: relative;
+      isolation: isolate;
+    }
+
+    .glass-shell {
+      width: min(100%, 430px);
+      position: relative;
+    }
+
+    .glass-shell::before {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      border-radius: 34px;
+      background: linear-gradient(
+        135deg,
+        rgba(255,255,255,.28),
+        rgba(255,255,255,.06) 35%,
+        rgba(113,207,255,.14) 62%,
+        rgba(159,110,255,.20)
+      );
+      z-index: -1;
+      filter: blur(.2px);
+    }
+
+    .card {
+      padding: 28px;
+      border-radius: 34px;
+      border: 1px solid var(--line);
+      background:
+        linear-gradient(145deg, rgba(255,255,255,.20), rgba(255,255,255,.11)),
+        rgba(255,255,255,.105);
+      backdrop-filter: blur(28px) saturate(155%);
+      -webkit-backdrop-filter: blur(28px) saturate(155%);
+      box-shadow:
+        0 28px 80px rgba(0,0,0,.45),
+        inset 0 1px 0 rgba(255,255,255,.10),
+        inset 0 -1px 0 rgba(255,255,255,.035);
+    }
+
+    .brand {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 22px;
+    }
+
+    .brand-mark {
+      width: 76px;
+      height: 76px;
+      display: grid;
+      place-items: center;
+      border-radius: 24px;
+      border: 1px solid rgba(255,255,255,.12);
+      background:
+        linear-gradient(145deg, rgba(107,226,255,.13), rgba(142,88,255,.12)),
+        rgba(255,255,255,.055);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.14),
+        0 18px 42px rgba(55, 170, 255, .12);
+      overflow: hidden;
+    }
+
+    .brand-mark span {
+      font-size: 24px;
+      font-weight: 900;
+      letter-spacing: -.06em;
+      background: linear-gradient(135deg, #9af2ff, #74cfff 42%, #a883ff 80%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      filter: drop-shadow(0 4px 18px rgba(103,213,255,.22));
+    }
+
+    .eyebrow {
+      text-align: center;
+      color: #bfc7dc;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    h1 {
+      margin: 0;
+      text-align: center;
+      font-size: clamp(30px, 7vw, 40px);
+      letter-spacing: -.045em;
+      line-height: 1.05;
+    }
+
+    .subtitle {
+      max-width: 310px;
+      margin: 11px auto 26px;
+      text-align: center;
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: 14px;
+    }
+
+    .tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      padding: 5px;
+      gap: 5px;
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(0,0,0,.16);
+      border-radius: 16px;
+      margin-bottom: 22px;
+    }
+
+    .tab {
+      appearance: none;
+      border: 0;
+      border-radius: 12px;
+      padding: 11px 10px;
+      font: inherit;
+      font-size: 13px;
+      font-weight: 750;
+      color: #929ab0;
+      background: transparent;
+      cursor: pointer;
+      transition: .22s ease;
+    }
+
+    .tab.active {
+      color: #fff;
+      background: rgba(255,255,255,.10);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.09),
+        0 4px 20px rgba(0,0,0,.12);
+    }
+
+    .view {
+      display: none;
+    }
+
+    .view.active {
+      display: block;
+      animation: reveal .24s ease;
+    }
+
+    @keyframes reveal {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .field {
+      margin-bottom: 14px;
+    }
+
+    .field label {
+      display: block;
+      margin: 0 0 8px 3px;
+      color: #c6ccda;
+      font-size: 12px;
+      font-weight: 650;
+    }
+
+    .input-wrap {
+      position: relative;
+    }
+
+    .input-wrap input {
+      width: 100%;
+      border: 1px solid rgba(255,255,255,.10);
+      outline: none;
+      border-radius: 16px;
+      padding: 14px 15px;
+      font: inherit;
+      font-size: 15px;
+      color: #fff;
+      background: rgba(255,255,255,.055);
+      transition: .2s ease;
+    }
+
+    .input-wrap input::placeholder {
+      color: #747d92;
+    }
+
+    .input-wrap input:focus {
+      border-color: rgba(111,215,255,.45);
+      background: rgba(255,255,255,.075);
+      box-shadow: 0 0 0 4px rgba(90,195,255,.08);
+    }
+
+    .phone-row {
+      display: grid;
+      grid-template-columns: 74px 1fr;
+      gap: 8px;
+    }
+
+    .country-code {
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: 16px;
+      background: rgba(255,255,255,.055);
+      color: #eef1f8;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .primary-btn {
+      width: 100%;
+      border: 0;
+      border-radius: 16px;
+      padding: 15px 16px;
+      margin-top: 8px;
+      font: inherit;
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: .01em;
+      color: #051019;
+      cursor: pointer;
+      background: linear-gradient(100deg, #83e8ff, #74c9ff 45%, #a68aff);
+      box-shadow:
+        0 12px 30px rgba(87,187,255,.18),
+        inset 0 1px 0 rgba(255,255,255,.58);
+      transition: transform .18s ease, filter .18s ease;
+    }
+
+    .primary-btn:hover {
+      filter: brightness(1.06);
+      transform: translateY(-1px);
+    }
+
+    .helper {
+      margin-top: 14px;
+      text-align: center;
+      color: #777f92;
+      font-size: 11px;
+      line-height: 1.6;
+    }
+
+    .terms {
+      margin-top: 20px;
+      padding-top: 17px;
+      border-top: 1px solid rgba(255,255,255,.07);
+      text-align: center;
+      color: #6f778a;
+      font-size: 10.5px;
+      line-height: 1.6;
+    }
+
+    .terms span {
+      color: #aeb8cf;
+    }
+
+      margin-top: 18px;
+      text-align: center;
+      color: #5e6679;
+      font-size: 10px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    @media (max-width: 500px) {
+      .page {
+        padding: 16px;
+      }
+
+      .card {
+        padding: 22px 18px;
+        border-radius: 28px;
+      }
+
+      .glass-shell::before {
+        border-radius: 28px;
+      }
+
+      .brand-mark {
+        width: 68px;
+        height: 68px;
+        border-radius: 21px;
+      }
+    }
+  </style>
+<style id="earnox-approved-header">
+.brand,.eyebrow,.card > h1,.card > .subtitle{display:none!important}
+.earnox-brand-block{display:flex;flex-direction:column;align-items:center;text-align:center;margin:0 auto 16px}
+.earnox-symbol{width:76px;height:76px;object-fit:contain;margin:0 0 -10px;background:transparent}
+.earnox-wordmark{width:min(100%,285px);height:auto;object-fit:contain;margin:0 0 2px;transform:translateY(-8px);background:transparent}
+.earnox-welcome{max-width:300px;margin:-10px auto 0;color:rgba(255,255,255,.72);font-size:13px;line-height:1.45;text-align:center}
+@media(max-width:500px){.earnox-symbol{width:74px;height:74px}.earnox-wordmark{width:min(100%,280px)}.earnox-welcome{max-width:292px;font-size:12.8px}}
+</style>
+
+<style id="earnox-reference-match">
+.page{
+  padding:20px 16px!important;
+}
+
+.glass-shell{
+  width:min(100%,430px)!important;
+}
+
+.card{
+  border-radius:34px!important;
+  background:
+    linear-gradient(145deg,rgba(255,255,255,.13),rgba(255,255,255,.055)),
+    rgba(255,255,255,.045)!important;
+  backdrop-filter:blur(34px) saturate(168%) brightness(1.045)!important;
+  -webkit-backdrop-filter:blur(34px) saturate(168%) brightness(1.045)!important;
+  border-color:rgba(255,255,255,.205)!important;
+  box-shadow:
+    0 34px 92px rgba(0,0,0,.34),
+    0 8px 28px rgba(0,0,0,.10),
+    inset 0 1px 0 rgba(255,255,255,.34),
+    inset 0 -1px 0 rgba(255,255,255,.045)!important;
+}
+
+.card::before{
+  opacity:.62!important;
+}
+
+.card::after{
+  opacity:.20!important;
+  filter:blur(28px)!important;
+}
+
+.earnox-brand-block{
+  margin-bottom:4px!important;
+}
+
+.earnox-symbol{
+  width:76px!important;
+  height:76px!important;
+  margin-bottom:-14px!important;
+}
+
+.earnox-wordmark{
+  width:min(100%,285px)!important;
+  margin-top:-5px!important;
+  margin-bottom:-5px!important;
+  transform:translateY(-8px)!important;
+}
+
+.earnox-welcome{
+  max-width:300px!important;
+  margin-top:-10px!important;
+  line-height:1.42!important;
+}
+
+.tabs{
+  margin-top:10px!important;
+  margin-bottom:12px!important;
+}
+
+.tab{
+  min-height:46px!important;
+  color:rgba(255,255,255,.78)!important;
+}
+
+.tab.active{
+  color:rgba(255,255,255,.98)!important;
+  background:rgba(255,255,255,.095)!important;
+}
+
+.field{
+  margin-bottom:10px!important;
+}
+
+.primary-btn{
+  min-height:54px!important;
+  margin-top:3px!important;
+  border:1px solid rgba(255,255,255,.22)!important;
+  color:#071015!important;
+  background:
+    linear-gradient(
+      105deg,
+      rgba(220,245,233,.96),
+      rgba(195,237,217,.96) 38%,
+      rgba(255,216,199,.97) 74%,
+      rgba(255,203,184,.96)
+    )!important;
+  box-shadow:
+    0 14px 34px rgba(0,0,0,.10),
+    0 7px 20px rgba(222,170,147,.10),
+    inset 0 1px 0 rgba(255,255,255,.74)!important;
+}
+
+.helper{
+  margin-top:8px!important;
+  color:rgba(255,255,255,.66)!important;
+}
+
+.auth-divider{
+  display:flex!important;
+  align-items:center;
+  gap:10px;
+  margin-top:8px!important;
+  color:rgba(255,255,255,.52)!important;
+  font-size:9px!important;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
+
+.auth-divider::before,
+.auth-divider::after{
+  content:"";
+  flex:1;
+  height:1px;
+  background:rgba(255,255,255,.13)!important;
+}
+
+.google-login{
+  position:relative;
+  width:100%!important;
+  min-height:52px!important;
+  margin-top:8px!important;
+  padding:0 16px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:10px!important;
+  border:1px solid rgba(255,255,255,.16)!important;
+  border-radius:17px!important;
+  color:rgba(255,255,255,.92)!important;
+  background:rgba(255,255,255,.028)!important;
+  backdrop-filter:blur(18px) saturate(145%)!important;
+  -webkit-backdrop-filter:blur(18px) saturate(145%)!important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.14),
+    0 8px 22px rgba(0,0,0,.06)!important;
+  font-size:13.5px!important;
+  font-weight:700!important;
+}
+
+.google-icon{
+  width:20px!important;
+  height:20px!important;
+  flex:0 0 20px!important;
+  display:block!important;
+  object-fit:contain!important;
+  background:transparent!important;
+  border-radius:0!important;
+}
+
+.terms{
+  margin-top:13px!important;
+  padding-top:12px!important;
+}
+
+@media(max-width:500px){
+  .page{
+    padding:16px!important;
+  }
+
+  .earnox-symbol{
+    width:76px!important;
+    height:76px!important;
+    margin-bottom:-15px!important;
+  }
+
+  .earnox-wordmark{
+    width:min(100%,280px)!important;
+    margin-top:-6px!important;
+    margin-bottom:-6px!important;
+  }
+
+  .earnox-welcome{
+    max-width:292px!important;
+    margin-top:-11px!important;
+  }
+
+  .tabs{
+    margin-top:9px!important;
+    margin-bottom:11px!important;
+  }
+
+  .primary-btn{
+    min-height:54px!important;
+  }
+}
+</style>
+
+
+<style id="earnox-final-polish">
+.card{
+  position:relative!important;
+  overflow:hidden!important;
+  background:
+    linear-gradient(145deg,rgba(255,255,255,.14),rgba(255,255,255,.055)),
+    rgba(255,255,255,.045)!important;
+  box-shadow:
+    0 30px 80px rgba(0,0,0,.28),
+    0 8px 28px rgba(255,255,255,.025),
+    inset 0 1px 0 rgba(255,255,255,.38),
+    inset 0 -1px 0 rgba(255,255,255,.07)!important;
+}
+
+.card::after{
+  content:""!important;
+  position:absolute!important;
+  inset:-35%!important;
+  pointer-events:none!important;
+  background:
+    radial-gradient(circle at 25% 20%,rgba(255,255,255,.10),transparent 28%),
+    radial-gradient(circle at 80% 78%,rgba(255,180,220,.08),transparent 30%)!important;
+  filter:blur(34px)!important;
+  opacity:.72!important;
+  z-index:0!important;
+}
+
+.card > *{
+  position:relative!important;
+  z-index:1!important;
+}
+
+.tabs{
+  background:rgba(255,255,255,.024)!important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.10),
+    inset 0 -1px 0 rgba(0,0,0,.025)!important;
+}
+
+.tab.active{
+  background:rgba(255,255,255,.115)!important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.24),
+    0 5px 18px rgba(0,0,0,.055)!important;
+}
+
+.input-wrap input,
+.country-code,
+.select-input{
+  background:
+    linear-gradient(145deg,rgba(255,255,255,.048),rgba(255,255,255,.018))!important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.16),
+    inset 0 -1px 0 rgba(0,0,0,.025)!important;
+}
+
+.input-wrap input:focus,
+.select-input:focus{
+  border-color:rgba(255,255,255,.25)!important;
+  box-shadow:
+    0 0 0 4px rgba(255,255,255,.035),
+    inset 0 1px 0 rgba(255,255,255,.20)!important;
+}
+
+.primary-btn{
+  background:
+    linear-gradient(
+      105deg,
+      rgba(220,248,236,.98),
+      rgba(190,238,218,.98) 38%,
+      rgba(255,220,205,.98) 74%,
+      rgba(255,204,188,.98)
+    )!important;
+  box-shadow:
+    0 16px 34px rgba(224,170,145,.14),
+    inset 0 1px 0 rgba(255,255,255,.88),
+    inset 0 -1px 0 rgba(255,255,255,.30)!important;
+}
+
+.google-login{
+  background:
+    linear-gradient(145deg,rgba(255,255,255,.045),rgba(255,255,255,.018))!important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.16),
+    inset 0 -1px 0 rgba(0,0,0,.025)!important;
+}
+
+.earnox-symbol,
+.earnox-wordmark{
+  filter:
+    drop-shadow(0 5px 12px rgba(0,0,0,.11))
+    drop-shadow(0 0 14px rgba(255,255,255,.055))!important;
+}
+</style>
+
+
+<style id="earnox-text-contrast">
+.earnox-welcome{
+  color:rgba(255,255,255,.94)!important;
+  text-shadow:0 1px 8px rgba(0,0,0,.22)!important;
+}
+
+.tab,
+.tab.active{
+  color:rgba(255,255,255,.96)!important;
+  text-shadow:0 1px 6px rgba(0,0,0,.18)!important;
+}
+
+.field label{
+  color:rgba(255,255,255,.98)!important;
+  text-shadow:0 1px 6px rgba(0,0,0,.20)!important;
+}
+
+.input-wrap input,
+.input-wrap input::placeholder,
+.country-code,
+.select-input{
+  color:rgba(255,255,255,.96)!important;
+  text-shadow:0 1px 6px rgba(0,0,0,.18)!important;
+}
+
+.input-wrap input::placeholder{
+  color:rgba(255,255,255,.82)!important;
+  opacity:1!important;
+}
+
+.helper{
+  color:rgba(255,255,255,.82)!important;
+  text-shadow:0 1px 6px rgba(0,0,0,.20)!important;
+}
+
+.auth-divider{
+  color:rgba(255,255,255,.72)!important;
+  text-shadow:0 1px 5px rgba(0,0,0,.18)!important;
+}
+
+.google-login{
+  color:rgba(255,255,255,.98)!important;
+  text-shadow:0 1px 6px rgba(0,0,0,.18)!important;
+}
+
+.terms{
+  color:rgba(255,255,255,.72)!important;
+  text-shadow:0 1px 5px rgba(0,0,0,.18)!important;
+}
+
+.terms span{
+  color:rgba(255,255,255,.90)!important;
+}
+
+.optional-label{
+  color:rgba(255,255,255,.68)!important;
+}
+</style>
+
+
+<style id="earnox-google-fix">
+.auth-divider{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin:8px 0 0;
+  color:rgba(255,255,255,.52);
+  font-size:9px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
+
+.auth-divider::before,
+.auth-divider::after{
+  content:"";
+  flex:1;
+  height:1px;
+  background:rgba(255,255,255,.13);
+}
+
+.google-login{
+  position:relative;
+  width:100%;
+  min-height:52px;
+  margin-top:8px;
+  padding:0 16px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  border:1px solid rgba(255,255,255,.16);
+  border-radius:17px;
+  color:rgba(255,255,255,.92);
+  background:rgba(255,255,255,.028);
+  backdrop-filter:blur(18px) saturate(145%);
+  -webkit-backdrop-filter:blur(18px) saturate(145%);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.14),
+    0 8px 22px rgba(0,0,0,.06);
+  font:inherit;
+  font-size:13.5px;
+  font-weight:700;
+  cursor:pointer;
+  transition:transform .18s ease, background .18s ease, border-color .18s ease;
+}
+
+.google-login:hover{
+  background:rgba(255,255,255,.052);
+  border-color:rgba(255,255,255,.22);
+  transform:translateY(-1px);
+}
+
+.google-login:active{
+  transform:scale(.99);
+}
+
+.google-icon{
+  width:20px!important;
+  height:20px!important;
+  display:block!important;
+  flex:0 0 20px;
+  object-fit:contain!important;
+  background:transparent!important;
+  border-radius:0!important;
+}
+
+.google-login span:last-child{
+  opacity:.92;
+}
+</style>
+<style id="earnox-text-visibility">
+.tab{
+  color:rgba(255,255,255,.78)!important;
+  font-weight:740!important;
+}
+
+.tab.active{
+  color:rgba(255,255,255,.98)!important;
+}
+
+.field label{
+  color:rgba(255,255,255,.90)!important;
+  font-weight:700!important;
+}
+
+.input-wrap input::placeholder{
+  color:rgba(255,255,255,.70)!important;
+  opacity:1!important;
+}
+
+.helper{
+  color:rgba(255,255,255,.66)!important;
+}
+
+.auth-divider{
+  color:rgba(255,255,255,.52)!important;
+}
+
+.auth-divider::before,
+.auth-divider::after{
+  background:rgba(255,255,255,.13)!important;
+}
+
+.terms{
+  color:rgba(255,255,255,.50)!important;
+}
+
+.terms span{
+  color:rgba(255,255,255,.70)!important;
+}
+
+.google-login{
+  color:rgba(255,255,255,.92)!important;
+}
+
+.country-code{
+  color:rgba(255,255,255,.96)!important;
+}
+</style>
+<style id="earnox-compressed-spacing">
+
+.earnox-brand-block{
+  margin-bottom:4px!important;
+  gap:0!important;
+}
+
+.earnox-symbol{
+  width:76px!important;
+  height:76px!important;
+  margin-bottom:-14px!important;
+}
+
+.earnox-wordmark{
+  width:min(100%,285px)!important;
+  margin-top:-5px!important;
+  margin-bottom:-5px!important;
+  transform:translateY(-8px)!important;
+}
+
+.earnox-welcome{
+  max-width:300px!important;
+  margin-top:-10px!important;
+  margin-bottom:0!important;
+  line-height:1.42!important;
+}
+
+.tabs{
+  margin-top:10px!important;
+  margin-bottom:12px!important;
+}
+
+.field{
+  margin-bottom:10px!important;
+}
+
+.primary-btn{
+  margin-top:3px!important;
+}
+
+.helper{
+  margin-top:8px!important;
+  margin-bottom:0!important;
+}
+
+.auth-divider{
+  margin-top:8px!important;
+}
+
+.google-login{
+  margin-top:9px!important;
+}
+
+.terms{
+  margin-top:13px!important;
+  padding-top:12px!important;
+}
+
+@media(max-width:500px){
+
+  .earnox-brand-block{
+    margin-bottom:2px!important;
+  }
+
+  .earnox-symbol{
+    width:74px!important;
+    height:74px!important;
+    margin-bottom:-15px!important;
+  }
+
+  .earnox-wordmark{
+    width:min(100%,280px)!important;
+    margin-top:-6px!important;
+    margin-bottom:-6px!important;
+    transform:translateY(-8px)!important;
+  }
+
+  .earnox-welcome{
+    max-width:292px!important;
+    margin-top:-11px!important;
+    line-height:1.42!important;
+  }
+
+  .tabs{
+    margin-top:9px!important;
+    margin-bottom:11px!important;
+  }
+
+  .field{
+    margin-bottom:9px!important;
+  }
+
+  .helper{
+    margin-top:7px!important;
+  }
+
+  .auth-divider{
+    margin-top:7px!important;
+  }
+
+  .google-login{
+    margin-top:8px!important;
+  }
+
+  .terms{
+    margin-top:11px!important;
+    padding-top:11px!important;
+  }
+}
+
+</style>
+<style id="earnox-success-screen-css">
+#earnox-success-screen{
+  position:fixed;
+  inset:0;
+  z-index:9999;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+  background:rgba(5,8,14,.24);
+  backdrop-filter:blur(22px) saturate(145%);
+  -webkit-backdrop-filter:blur(22px) saturate(145%);
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+  transition:opacity .3s ease,visibility .3s ease;
+}
+#earnox-success-screen.show{
+  opacity:1;
+  visibility:visible;
+  pointer-events:auto;
+}
+.earnox-success-card{
+  width:min(100%,360px);
+  padding:30px 24px 26px;
+  text-align:center;
+  border:1px solid rgba(255,255,255,.22);
+  border-radius:30px;
+  background:
+    linear-gradient(145deg,rgba(255,255,255,.18),rgba(255,255,255,.06)),
+    rgba(255,255,255,.07);
+  backdrop-filter:blur(30px) saturate(160%);
+  -webkit-backdrop-filter:blur(30px) saturate(160%);
+  box-shadow:
+    0 30px 80px rgba(0,0,0,.28),
+    inset 0 1px 0 rgba(255,255,255,.30);
+}
+.earnox-success-icon{
+  width:58px;
+  height:58px;
+  margin:0 auto 16px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:28px;
+  font-weight:800;
+  color:#fff;
+  background:rgba(255,255,255,.12);
+  border:1px solid rgba(255,255,255,.24);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.32),0 10px 28px rgba(0,0,0,.12);
+}
+.earnox-success-title{
+  margin:0;
+  color:#fff;
+  font-size:23px;
+  font-weight:800;
+  letter-spacing:-.03em;
+}
+.earnox-success-text{
+  margin:9px 0 0;
+  color:rgba(255,255,255,.78);
+  font-size:12px;
+  line-height:1.5;
+}
+.earnox-success-loader{
+  width:34px;
+  height:3px;
+  margin:18px auto 0;
+  overflow:hidden;
+  border-radius:99px;
+  background:rgba(255,255,255,.14);
+}
+.earnox-success-loader::after{
+  content:"";
+  display:block;
+  width:45%;
+  height:100%;
+  border-radius:99px;
+  background:rgba(255,255,255,.82);
+  animation:earnoxSuccessLoad 1.2s ease-in-out infinite;
+}
+@keyframes earnoxSuccessLoad{
+  0%{transform:translateX(-120%)}
+  100%{transform:translateX(280%)}
+}
+</style></head>
+
+<body>
+  <div class="ambient one"></div>
+  <div class="ambient two"></div>
+
+  <main class="page">
+    <div class="glass-shell">
+      <section class="card">
+
+        <div class="earnox-brand-block">
+  <img class="earnox-symbol" src="/assets/earnox/earnox-symbol.png" alt="EARN0X symbol">
+  <img class="earnox-wordmark" src="/assets/earnox/earnox-panel.png" alt="EARN0X">
+  <p class="earnox-welcome">Sign in securely or create your EARN0X account.<br>Use your email to get started.</p>
+</div>
+
+<div class="tabs" role="tablist">
+          <button class="tab active" type="button" data-tab="login">Sign In</button>
+          <button class="tab" type="button" data-tab="signup">Create Account</button>
+        </div>
+
+        <div class="view active" id="login">
+          <form onsubmit="return false;">
+            <div class="field">
+              <label for="login-email">Email address</label>
+              <div class="input-wrap">
+                <input id="login-email" type="email" autocomplete="email" placeholder="Enter your email">
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="login-password">Password</label>
+              <div class="input-wrap">
+                <input id="login-password" type="password" autocomplete="current-password" placeholder="Enter your password">
+              </div>
+            </div>
+
+            <button class="primary-btn" id="login-email-btn" type="button">Sign in</button>
+
+            <div class="helper">Use the email and password linked to your EARN0X account.</div>
+
+            <div class="auth-divider">or continue with</div>
+
+            <button class="google-login" id="google-login" type="button">
+              <img class="google-icon" src="/assets/earnox/google-g.png" alt="Google">
+              <span>Continue with Google</span>
+            </button>
+          </form>
+        </div>
+
+        <div class="view" id="signup">
+          <form onsubmit="return false;">
+            <div class="field">
+              <label for="signup-name">Full name</label>
+              <div class="input-wrap">
+                <input id="signup-name" type="text" autocomplete="name" placeholder="Enter your name">
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="signup-email">Email address</label>
+              <div class="input-wrap">
+                <input id="signup-email" type="email" autocomplete="email" placeholder="Enter your email">
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="signup-password">Password</label>
+              <div class="input-wrap">
+                <input id="signup-password" type="password" autocomplete="new-password" placeholder="Create a password">
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="signup-gender">Gender <span class="optional-label">Optional</span></label>
+              <div class="input-wrap">
+                <select id="signup-gender" class="select-input">
+                  <option value="" selected>Select gender</option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                  <option value="other">Other</option>
+                  <option value="prefer-not-to-say">Prefer not to say</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="signup-dob">Date of birth <span class="optional-label">Optional</span></label>
+              <div class="input-wrap">
+                <input id="signup-dob" type="date" autocomplete="bday">
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="signup-referral">Referral code <span class="optional-label">Optional</span></label>
+              <div class="input-wrap">
+                <input id="signup-referral" type="text" autocomplete="off" placeholder="Enter referral code">
+              </div>
+            </div>
+
+            <button class="primary-btn" id="signup-email-btn" type="button">Create account</button>
+
+            <div class="helper">Your email and password will be used to sign in securely.</div>
+
+            <div class="auth-divider">or continue with</div>
+
+            <button class="google-login" id="google-signup" type="button">
+              <img class="google-icon" src="/assets/earnox/google-g.png" alt="Google">
+              <span>Sign up with Google</span>
+            </button>
+          </form>
+        </div>
+
+        <div class="terms">
+          By continuing, you agree to the <span>Terms</span> and <span>Privacy Policy</span>.
+        </div>
+
+      </section>
+
+    </div>
+  </main>
+
+  <script>
+    const tabs = document.querySelectorAll(".tab");
+    const views = document.querySelectorAll(".view");
+
+    tabs.forEach(tab => {
+      tab.addEventListener("click", () => {
+        const target = tab.dataset.tab;
+
+        tabs.forEach(item => item.classList.remove("active"));
+        views.forEach(view => view.classList.remove("active"));
+
+        tab.classList.add("active");
+        document.getElementById(target).classList.add("active");
+      });
+    });
+  </script>
+
+<!-- EARN0X FIREBASE -->
+<div id="recaptcha-container"></div>
+
+<script id="earnox-firebase-sdk" src="https://www.gstatic.com/firebasejs/12.18.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/12.18.0/firebase-auth-compat.js"></script>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyAGhUL4kHdBxgML1-De-YHtdmFt74ah6kM",
+  authDomain: "earnox-98a82.firebaseapp.com",
+  projectId: "earnox-98a82",
+  storageBucket: "earnox-98a82.firebasestorage.app",
+  messagingSenderId: "273122772147",
+  appId: "1:273122772147:web:f0611b20053dbc78b2dcc6",
+  measurementId: "G-RXR7X2JHGT"
+};
+
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
+
+window.earnoxAuth = firebase.auth();
+window.earnoxGoogleProvider = new firebase.auth.GoogleAuthProvider();
+
+console.log("[EARN0X] Firebase initialized");
+</script>
+
+
+<script id="earnox-real-auth">
+(() => {
+  const auth = window.earnoxAuth;
+  const googleProvider = window.earnoxGoogleProvider;
+
+  if (!auth) {
+    console.error("[EARN0X] Firebase Auth is unavailable");
+    return;
+  }
+
+  const dashboard = "/earnox-dashboard.html";
+
+  function goDashboard(extra = {}) {
+    try {
+      const current = auth.currentUser;
+      if (current) {
+        localStorage.setItem("earnox_user", JSON.stringify({
+          uid: current.uid || "",
+          name: extra.name ?? current.displayName ?? "",
+          email: current.email || "",
+          phone: current.phoneNumber || "",
+          gender: extra.gender ?? "",
+          dob: extra.dob ?? "",
+          referral: extra.referral ?? "",
+          photo: current.photoURL || ""
+        }));
+      }
+    } catch (e) {
+      console.error("[EARN0X] Profile save error:", e);
+    }
+
+    const successScreen = document.getElementById("earnox-success-screen");
+    if (successScreen) {
+      successScreen.classList.add("show");
+      successScreen.setAttribute("aria-hidden", "false");
+      setTimeout(() => {
+        window.location.href = dashboard;
+      }, 1700);
+    } else {
+      window.location.href = dashboard;
+    }
+  }
+
+  async function startGoogleLogin() {
+    if (!googleProvider) {
+      alert("Google sign-in is not configured yet.");
+      return;
+    }
+
+    try {
+      await auth.signInWithRedirect(googleProvider);
+    } catch (error) {
+      console.error("[EARN0X] Google sign-in error:", error);
+      alert(error.message || "Google sign-in failed.");
+    }
+  }
+
+  auth.getRedirectResult()
+    .then((result) => {
+      if (result && result.user) {
+        goDashboard({ name: result.user.displayName || "" });
+      }
+    })
+    .catch((error) => {
+      console.error("[EARN0X] Google redirect error:", error);
+      alert(error.message || "Google sign-in failed.");
+    });
+
+  document.getElementById("google-login")?.addEventListener("click", startGoogleLogin);
+  document.getElementById("google-signup")?.addEventListener("click", startGoogleLogin);
+
+  document.getElementById("login-email-btn")?.addEventListener("click", async () => {
+    const email = (document.getElementById("login-email")?.value || "").trim();
+    const password = document.getElementById("login-password")?.value || "";
+
+    if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
+      alert("Please enter a valid email address.");
+      document.getElementById("login-email")?.focus();
+      return;
+    }
+
+    if (!password) {
+      alert("Please enter your password.");
+      document.getElementById("login-password")?.focus();
+      return;
+    }
+
+    try {
+      await auth.signInWithEmailAndPassword(email, password);
+      goDashboard();
+    } catch (error) {
+      console.error("[EARN0X] Email sign-in error:", error);
+      alert(error.message || "Sign in failed.");
+    }
+  });
+
+  document.getElementById("signup-email-btn")?.addEventListener("click", async () => {
+    const name = (document.getElementById("signup-name")?.value || "").trim();
+    const email = (document.getElementById("signup-email")?.value || "").trim();
+    const password = document.getElementById("signup-password")?.value || "";
+    const gender = document.getElementById("signup-gender")?.value || "";
+    const dob = document.getElementById("signup-dob")?.value || "";
+    const referral = (document.getElementById("signup-referral")?.value || "").trim();
+
+    if (!name) {
+      alert("Please enter your full name.");
+      document.getElementById("signup-name")?.focus();
+      return;
+    }
+
+    if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
+      alert("Please enter a valid email address.");
+      document.getElementById("signup-email")?.focus();
+      return;
+    }
+
+    if (password.length < 6) {
+      alert("Password must be at least 6 characters.");
+      document.getElementById("signup-password")?.focus();
+      return;
+    }
+
+    try {
+      const result = await auth.createUserWithEmailAndPassword(email, password);
+
+      try {
+        await result.user.updateProfile({ displayName: name });
+      } catch (profileError) {
+        console.error("[EARN0X] Profile update error:", profileError);
+      }
+
+      goDashboard({ name, gender, dob, referral });
+    } catch (error) {
+      console.error("[EARN0X] Account creation error:", error);
+      alert(error.message || "Account creation failed.");
+    }
+  });
+
+  console.log("[EARN0X] Email + Google authentication ready");
+})();
+</script>
+<div id="earnox-success-screen" aria-hidden="true">
+  <div class="earnox-success-card">
+    <div class="earnox-success-icon">✓</div>
+    <h2 class="earnox-success-title">Login successful</h2>
+    <p class="earnox-success-text">Your EARN0X account is ready. Taking you to your dashboard...</p>
+    <div class="earnox-success-loader"></div>
+  </div>
+</div>
+</body>
+</html>

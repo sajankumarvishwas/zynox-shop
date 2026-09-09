@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>BRO, YOU'RE NOT 18+</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="bro18-root">
+
+  <!-- START SCREEN -->
+  <div id="bro18-start" class="bro18-overlay">
+    <h1 class="bro18-title">BRO, YOU'RE <span class="bro18-accent">NOT 18+</span></h1>
+    <p class="bro18-sub">a rage platformer. it's not that hard. (it is)</p>
+    <div class="bro18-controls-hint">
+      <div><strong>MOVE</strong> A / D or ◀ ▶</div>
+      <div><strong>JUMP</strong> SPACE / W / ▲</div>
+      <div><strong>RESTART</strong> R</div>
+    </div>
+    <button id="bro18-start-btn" class="bro18-btn bro18-btn-primary">START</button>
+    <div class="bro18-sound-row">
+      <button id="bro18-sound-toggle" class="bro18-btn bro18-btn-ghost">🔊 SOUND ON</button>
+    </div>
+    <div class="bro18-stats-preview" id="bro18-stats-preview"></div>
+  </div>
+
+  <!-- GAME CANVAS -->
+  <canvas id="bro18-canvas"></canvas>
+
+  <!-- HUD -->
+  <div id="bro18-hud" class="bro18-hidden">
+    <div class="bro18-hud-row">
+      <div class="bro18-hud-item" id="bro18-hud-deaths">DEATHS: 0</div>
+      <div class="bro18-hud-item" id="bro18-hud-checkpoint">START</div>
+      <div class="bro18-hud-item" id="bro18-hud-time">0:00</div>
+    </div>
+    <div class="bro18-rage-wrap">
+      <div class="bro18-rage-label">RAGE</div>
+      <div class="bro18-rage-bar"><div id="bro18-rage-fill" class="bro18-rage-fill"></div></div>
+      <div class="bro18-rage-pct" id="bro18-rage-pct">0%</div>
+    </div>
+  </div>
+
+  <!-- DEATH MESSAGE TOAST -->
+  <div id="bro18-death-msg" class="bro18-toast bro18-hidden"></div>
+
+  <!-- BIG SIGN TEXT (checkpoints, final jump warnings, fake finish) -->
+  <div id="bro18-signtext" class="bro18-signtext bro18-hidden"></div>
+
+  <!-- ACHIEVEMENT TOAST -->
+  <div id="bro18-achievement" class="bro18-achievement-toast bro18-hidden">
+    <div class="bro18-ach-icon">🏆</div>
+    <div>
+      <div class="bro18-ach-title" id="bro18-ach-title">ACHIEVEMENT</div>
+      <div class="bro18-ach-desc" id="bro18-ach-desc"></div>
+    </div>
+  </div>
+
+  <!-- MOBILE CONTROLS -->
+  <div id="bro18-mobile-controls" class="bro18-hidden">
+    <div class="bro18-mobile-move">
+      <button id="bro18-btn-left" class="bro18-mobile-btn" aria-label="Move left">◀</button>
+      <button id="bro18-btn-right" class="bro18-mobile-btn" aria-label="Move right">▶</button>
+    </div>
+    <button id="bro18-btn-jump" class="bro18-mobile-btn bro18-mobile-jump" aria-label="Jump">JUMP</button>
+  </div>
+
+  <!-- RESULTS / VICTORY SCREEN -->
+  <div id="bro18-results" class="bro18-overlay bro18-hidden">
+    <h2 class="bro18-results-title" id="bro18-results-title">HOLY FUCK.</h2>
+    <p class="bro18-results-sub" id="bro18-results-sub">YOU ACTUALLY DID IT.</p>
+    <div class="bro18-results-grid" id="bro18-results-grid"></div>
+    <div class="bro18-rank" id="bro18-rank">RANK: A</div>
+    <div id="bro18-achievements-list" class="bro18-achievements-list"></div>
+    <div class="bro18-results-actions">
+      <button id="bro18-play-again" class="bro18-btn bro18-btn-primary">PLAY AGAIN</button>
+      <button id="bro18-share" class="bro18-btn bro18-btn-ghost">SHARE MY WIN</button>
+      <a href="../../index.html" class="bro18-btn bro18-btn-ghost bro18-link-btn">BACK TO ZYNOX</a>
+    </div>
+  </div>
+
+  <!-- DEBUG OVERLAY -->
+  <div id="bro18-debug" class="bro18-debug bro18-hidden"></div>
+
+</div>
+<script src="script.js"></script>
+</body>
+</html>

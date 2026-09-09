@@ -1,0 +1,1300 @@
+<!DOCTYPE html>  <html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0E0D12">
+<title>EARNOX — Dashboard</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap');  :root{
+--ink:#0E0D12;
+--ink-2:#151319;
+--surface:#19171F;
+--surface-raised:#221F28;
+--line:rgba(255,255,255,.08);
+--line-strong:rgba(255,255,255,.16);
+--gold:#CBA458;
+--gold-soft:rgba(203,164,88,.16);
+--gold-dim:#8C7541;
+--sage:#6FAE8C;
+--coral:#C97361;
+--text-1:#F4F1EA;
+--text-2:#A69FAE;
+--text-3:#6B6577;
+--r-sm:12px;
+--r-md:16px;
+--r-lg:20px;
+--r-xl:26px;
+--ease:cubic-bezier(.22,.9,.28,1);
+--font-display:'Space Grotesk',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+--font-body:'Manrope',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+}
+
+,::before,*::after{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+html{-webkit-text-size-adjust:100%;}
+body{
+min-height:100vh;
+font-family:var(--font-body);
+color:var(--text-1);
+background:
+radial-gradient(720px 420px at 88% -6%, rgba(203,164,88,.14), transparent 60%),
+radial-gradient(600px 500px at -10% 18%, rgba(111,174,140,.06), transparent 55%),
+var(--ink);
+background-attachment:fixed;
+overflow-x:hidden;
+-webkit-tap-highlight-color:transparent;
+}
+body::before{
+content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+background-image:repeating-linear-gradient(115deg, rgba(255,255,255,.014) 0px, rgba(255,255,255,.014) 1px, transparent 1px, transparent 5px);
+opacity:.5;
+}
+
+h1,h2,h3,p{margin:0;}
+button{font:inherit;color:inherit;background:none;border:none;-webkit-appearance:none;appearance:none;padding:0;margin:0;cursor:pointer;}
+img{display:block;max-width:100%;}
+ul{list-style:none;margin:0;padding:0;}
+a{color:inherit;}
+
+.icon{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;display:block;flex-shrink:0;}
+
+.app{position:relative;z-index:1;max-width:460px;margin:0 auto;padding:0 18px calc(104px + env(safe-area-inset-bottom)) 18px;}
+
+::selection{background:var(--gold-soft);color:var(--text-1);}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:4px;}
+
+@media (prefers-reduced-motion:no-preference){
+.reveal{opacity:0;transform:translateY(10px);transition:opacity .5s var(--ease),transform .5s var(--ease);transition-delay:calc(var(--d,0) * 60ms);}
+body.loaded .reveal{opacity:1;transform:translateY(0);}
+}
+
+#earn,#rewards,#refer,#activity,#profile{scroll-margin-top:76px;}
+
+/* ---------- header ---------- */
+header.bar{
+position:sticky;top:0;z-index:40;
+display:flex;align-items:center;justify-content:space-between;
+padding:14px 18px;margin:0 -18px 6px;
+background:linear-gradient(180deg, rgba(14,13,18,.92), rgba(14,13,18,.78));
+-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+border-bottom:1px solid var(--line);
+}
+.brand{display:flex;align-items:center;gap:9px;}
+.brand img.symbol{width:26px;height:26px;}
+.brand .wordmark{font-family:var(--font-display);font-weight:700;font-size:1.05rem;letter-spacing:-.01em;}
+.bar-actions{display:flex;align-items:center;gap:6px;}
+.icon-btn{
+position:relative;width:38px;height:38px;border-radius:50%;
+display:flex;align-items:center;justify-content:center;color:var(--text-2);
+transition:transform .16s var(--ease),background .16s var(--ease),color .16s var(--ease);
+}
+.icon-btn:active{transform:scale(.9);background:var(--surface-raised);color:var(--text-1);}
+.avatar-btn,.avatar-lg{
+background:linear-gradient(150deg, var(--gold), var(--gold-dim));
+display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:700;color:#1B1508;
+overflow:hidden;
+}
+.avatar-btn{width:36px;height:36px;border-radius:50%;font-size:.72rem;transition:transform .16s var(--ease);}
+.avatar-btn:active{transform:scale(.9);}
+
+/* ---------- hero ---------- */
+.hero{padding:26px 2px 6px;}
+.hero .greeting{font-family:var(--font-display);font-size:1.5rem;font-weight:600;letter-spacing:-.015em;}
+.hero .sub{margin-top:7px;font-size:.92rem;color:var(--text-2);line-height:1.5;max-width:34ch;}
+
+.cta-strip{
+position:relative;margin-top:20px;padding:18px 18px;border-radius:var(--r-lg);
+background:linear-gradient(120deg, rgba(203,164,88,.16), rgba(203,164,88,.05) 60%);
+border:1px solid rgba(203,164,88,.3);
+display:flex;align-items:center;gap:14px;width:100%;text-align:left;
+box-shadow:0 18px 34px -22px rgba(203,164,88,.35);
+transition:transform .16s var(--ease);
+}
+.cta-strip:active{transform:scale(.985);}
+.cta-strip .cta-icon{
+width:42px;height:42px;border-radius:13px;flex-shrink:0;
+background:rgba(203,164,88,.2);color:var(--gold);
+display:flex;align-items:center;justify-content:center;
+}
+.cta-strip .cta-text{flex:1;min-width:0;}
+.cta-strip .cta-text .t{font-weight:700;font-size:.95rem;}
+.cta-strip .cta-text .s{margin-top:2px;font-size:.79rem;color:var(--text-2);}
+.cta-strip .chev{color:var(--gold);}
+
+
+
+/* ---------- wallet + simple how-it-works UX ---------- */
+
+
+.wallet-rate-note{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin:0 0 14px;
+  padding:10px 12px;
+  border-radius:12px;
+  background:rgba(255,255,255,.018);
+  border:1px solid rgba(255,255,255,.06);
+  font-size:11px;
+  color:rgba(255,255,255,.48);
+}
+.wallet-rate-note strong{
+  color:rgba(255,255,255,.78);
+  font-size:11px;
+}
+
+
+.wallet-btn-disabled{
+  opacity:.52!important;
+  cursor:not-allowed!important;
+  filter:saturate(.7);
+}
+.withdraw-status-note{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+  margin:0 0 12px;
+  padding:12px 13px;
+  border-radius:13px;
+  border:1px solid rgba(255,255,255,.07);
+  background:rgba(255,255,255,.02);
+  color:rgba(255,255,255,.48);
+}
+.withdraw-status-note strong{
+  color:rgba(255,255,255,.82);
+  font-size:12px;
+}
+.withdraw-status-note span{
+  font-size:11px;
+  line-height:1.5;
+}
+.withdraw-status-note.show{
+  border-color:rgba(255,255,255,.14);
+  background:rgba(255,255,255,.04);
+}
+
+
+.earning-cards{
+  display:grid;
+  gap:10px;
+  margin-top:12px;
+}
+.earning-card{
+  display:grid;
+  grid-template-columns:42px 1fr auto;
+  align-items:center;
+  gap:12px;
+  padding:13px;
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:16px;
+  background:rgba(255,255,255,.022);
+}
+.earning-icon{
+  width:42px;
+  height:42px;
+  display:grid;
+  place-items:center;
+  border-radius:13px;
+  background:rgba(255,255,255,.055);
+  font-size:16px;
+}
+.earning-copy{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+  min-width:0;
+}
+.earning-copy strong{
+  font-size:13px;
+  color:rgba(255,255,255,.9);
+}
+.earning-copy span{
+  font-size:10.5px;
+  line-height:1.45;
+  color:rgba(255,255,255,.45);
+}
+.earning-btn{
+  min-height:34px;
+  padding:0 10px;
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:10px;
+  background:rgba(255,255,255,.025);
+  color:rgba(255,255,255,.4);
+  font:inherit;
+  font-size:10px;
+  font-weight:700;
+}
+@media (max-width:560px){
+  .earning-card{
+    grid-template-columns:38px 1fr;
+  }
+  .earning-icon{
+    width:38px;
+    height:38px;
+  }
+  .earning-btn{
+    grid-column:2;
+    width:max-content;
+  }
+}
+
+
+.history-panel{
+  margin-top:14px;
+}
+.coin-history-list{
+  display:grid;
+  gap:8px;
+  margin-top:12px;
+}
+.history-row{
+  display:grid;
+  grid-template-columns:38px 1fr auto;
+  align-items:center;
+  gap:10px;
+  padding:11px 12px;
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:14px;
+  background:rgba(255,255,255,.022);
+}
+.history-icon{
+  width:38px;
+  height:38px;
+  display:grid;
+  place-items:center;
+  border-radius:12px;
+  background:rgba(255,255,255,.055);
+  font-size:15px;
+}
+.history-copy{
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  gap:3px;
+}
+.history-copy strong{
+  font-size:12px;
+  color:rgba(255,255,255,.88);
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.history-copy span{
+  font-size:9.5px;
+  color:rgba(255,255,255,.38);
+}
+.history-amount{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-end;
+  gap:2px;
+}
+.history-amount strong{
+  font-size:12px;
+  color:rgba(255,255,255,.9);
+}
+.history-amount span{
+  font-size:9.5px;
+  color:rgba(255,255,255,.42);
+}
+.history-empty{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:5px;
+  min-height:90px;
+  text-align:center;
+  border:1px dashed rgba(255,255,255,.08);
+  border-radius:14px;
+  color:rgba(255,255,255,.42);
+}
+.history-empty strong{
+  font-size:12px;
+  color:rgba(255,255,255,.68);
+}
+.history-empty span{
+  font-size:10px;
+}
+
+
+.referral-coin-note{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+  margin:10px 0;
+  padding:11px 12px;
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:13px;
+  background:rgba(255,255,255,.02);
+}
+.referral-coin-note strong{
+  font-size:11px;
+  color:rgba(255,255,255,.82);
+}
+.referral-coin-note span{
+  font-size:10px;
+  line-height:1.45;
+  color:rgba(255,255,255,.42);
+}
+
+
+.withdrawal-history-panel{
+  margin-top:14px;
+}
+.withdrawal-list{
+  display:grid;
+  gap:8px;
+  margin-top:12px;
+}
+.withdrawal-row{
+  display:grid;
+  grid-template-columns:38px 1fr auto;
+  align-items:center;
+  gap:10px;
+  padding:11px 12px;
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:14px;
+  background:rgba(255,255,255,.022);
+}
+.withdrawal-icon{
+  width:38px;
+  height:38px;
+  display:grid;
+  place-items:center;
+  border-radius:12px;
+  background:rgba(255,255,255,.055);
+  color:rgba(255,255,255,.86);
+  font-size:14px;
+  font-weight:800;
+}
+.withdrawal-copy{
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  gap:3px;
+}
+.withdrawal-copy strong{
+  font-size:12px;
+  color:rgba(255,255,255,.88);
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.withdrawal-copy span{
+  font-size:9.5px;
+  color:rgba(255,255,255,.38);
+}
+.withdrawal-meta{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-end;
+  gap:3px;
+}
+.withdrawal-meta strong{
+  font-size:12px;
+  color:rgba(255,255,255,.9);
+}
+.withdrawal-status{
+  font-size:9px;
+  color:rgba(255,255,255,.46);
+}
+.withdrawal-empty{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:5px;
+  min-height:90px;
+  padding:12px;
+  text-align:center;
+  border:1px dashed rgba(255,255,255,.08);
+  border-radius:14px;
+}
+.withdrawal-empty strong{
+  font-size:12px;
+  color:rgba(255,255,255,.68);
+}
+.withdrawal-empty span{
+  font-size:10px;
+  line-height:1.45;
+  color:rgba(255,255,255,.42);
+}
+
+
+.wallet-main-label{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:10px;
+  margin:0 0 9px;
+}
+.wallet-main-label span{
+  font-size:9px;
+  letter-spacing:.12em;
+  color:rgba(255,255,255,.38);
+  font-weight:700;
+}
+.wallet-main-label strong{
+  font-size:11px;
+  color:rgba(255,255,255,.72);
+}
+.wallet-rate-pill{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin:0 0 9px;
+  padding:9px 11px;
+  border-radius:11px;
+  border:1px solid rgba(255,255,255,.065);
+  background:rgba(255,255,255,.018);
+  font-size:10px;
+}
+.wallet-rate-pill span{
+  color:rgba(255,255,255,.5);
+}
+.wallet-rate-pill strong{
+  color:rgba(255,255,255,.82);
+}
+
+
+.wallet-zero-note{
+  margin:0 0 12px;
+  padding:9px 11px;
+  border-radius:11px;
+  background:rgba(255,255,255,.018);
+  border:1px solid rgba(255,255,255,.055);
+  color:rgba(255,255,255,.4);
+  font-size:10px;
+  line-height:1.45;
+}
+
+
+.wallet-btn[data-ready="true"]{
+  opacity:.92;
+}
+
+
+.withdraw-modal{
+  position:fixed;
+  inset:0;
+  z-index:9999;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+.withdraw-modal.open{
+  display:flex;
+}
+.withdraw-modal-backdrop{
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,.62);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+}
+.withdraw-dialog{
+  position:relative;
+  width:min(430px,100%);
+  padding:24px;
+  border-radius:22px;
+  border:1px solid rgba(255,255,255,.11);
+  background:#151515;
+  box-shadow:0 28px 80px rgba(0,0,0,.45);
+}
+.withdraw-close{
+  position:absolute;
+  top:12px;
+  right:12px;
+  width:32px;
+  height:32px;
+  border:0;
+  border-radius:50%;
+  background:rgba(255,255,255,.06);
+  color:rgba(255,255,255,.72);
+  font-size:20px;
+  line-height:1;
+}
+.withdraw-dialog h3{
+  margin:8px 0 7px;
+  font-size:21px;
+  color:rgba(255,255,255,.94);
+}
+.withdraw-dialog-copy{
+  margin:0 0 16px;
+  font-size:12px;
+  line-height:1.5;
+  color:rgba(255,255,255,.48);
+}
+.withdraw-check-card{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  padding:13px;
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:15px;
+  background:rgba(255,255,255,.025);
+}
+.withdraw-check-card div,
+.withdraw-requirement{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+.withdraw-check-card span,
+.withdraw-requirement span{
+  font-size:10px;
+  color:rgba(255,255,255,.4);
+}
+.withdraw-check-card strong,
+.withdraw-requirement strong{
+  font-size:14px;
+  color:rgba(255,255,255,.9);
+}
+.withdraw-requirement{
+  margin-top:10px;
+  padding:12px 13px;
+  border-radius:14px;
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.07);
+}
+.withdraw-result{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+  margin-top:12px;
+  padding:12px 13px;
+  border-radius:14px;
+  background:rgba(255,255,255,.025);
+}
+.withdraw-result strong{
+  font-size:11px;
+  color:rgba(255,255,255,.82);
+}
+.withdraw-result span{
+  font-size:10px;
+  line-height:1.45;
+  color:rgba(255,255,255,.42);
+}
+.withdraw-modal-btn{
+  width:100%;
+  min-height:46px;
+  margin-top:14px;
+  border:0;
+  border-radius:13px;
+  background:#fff;
+  color:#111;
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+}
+.withdraw-modal-btn:disabled{
+  opacity:.38;
+  cursor:not-allowed;
+}
+body.withdraw-modal-open{
+  overflow:hidden;
+}
+
+.wallet-conversion{
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  align-items:center;
+  gap:12px;
+  margin:0 0 14px;
+  padding:14px;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:16px;
+  background:rgba(255,255,255,.025);
+}
+.wallet-value{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+.wallet-value-label{
+  font-size:11px;
+  color:rgba(255,255,255,.48);
+  letter-spacing:.04em;
+}
+.wallet-value strong{
+  font-size:18px;
+  color:rgba(255,255,255,.94);
+}
+.wallet-equals{
+  color:rgba(255,255,255,.38);
+  font-weight:700;
+}
+
+.wallet-panel{
+  margin-top:26px;
+  padding:20px;
+  border-radius:var(--r-xl);
+  background:linear-gradient(145deg,#211f27,#17161c);
+  border:1px solid var(--line-strong);
+  box-shadow:0 18px 36px -24px rgba(0,0,0,.55);
+}
+.wallet-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;}
+.wallet-label{font-size:.78rem;color:var(--text-3);text-transform:uppercase;letter-spacing:.08em;font-weight:700;}
+.wallet-title{margin-top:3px;font-family:var(--font-display);font-size:1.18rem;font-weight:700;}
+.wallet-icon{width:42px;height:42px;border-radius:13px;display:flex;align-items:center;justify-content:center;color:var(--gold);background:var(--gold-soft);border:1px solid rgba(203,164,88,.28);}
+.wallet-balance{margin-top:18px;padding:15px;border-radius:var(--r-md);background:var(--ink-2);border:1px solid var(--line);}
+.wallet-balance .amount{font-family:var(--font-display);font-size:1.35rem;font-weight:700;}
+.wallet-balance .note{margin-top:4px;font-size:.79rem;color:var(--text-3);line-height:1.45;}
+.wallet-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px;}
+.wallet-btn{display:flex;align-items:center;justify-content:center;gap:7px;padding:12px 10px;border-radius:var(--r-md);font-size:.84rem;font-weight:700;border:1px solid var(--line-strong);background:var(--surface-raised);}
+.wallet-btn.primary{color:#171207;background:var(--gold);border-color:rgba(255,255,255,.25);}
+.wallet-btn:active{transform:scale(.98);}
+.wallet-status{margin-top:12px;display:flex;align-items:center;gap:8px;font-size:.77rem;color:var(--text-3);}
+.wallet-status .status-dot{width:7px;height:7px;border-radius:50%;background:var(--gold-dim);flex-shrink:0;}
+
+.how-panel{margin-top:28px;padding:20px;border-radius:var(--r-lg);border:1px solid var(--line);background:var(--surface);}
+.how-panel .how-copy{margin-top:5px;font-size:.84rem;color:var(--text-2);line-height:1.55;}
+.how-steps{display:grid;gap:10px;margin-top:16px;}
+.how-step{display:flex;align-items:center;gap:11px;padding:11px 12px;border-radius:var(--r-md);background:var(--surface-raised);border:1px solid var(--line);}
+.how-step .step-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:var(--gold-soft);color:var(--gold);font-family:var(--font-display);font-size:.75rem;font-weight:700;}
+.how-step .step-text{font-size:.84rem;font-weight:600;}
+.how-step .step-text span{display:block;margin-top:2px;font-size:.74rem;font-weight:500;color:var(--text-3);}
+
+/* ---------- section headings ---------- */
+.section{margin-top:34px;}
+.section-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:14px;gap:10px;}
+.section-head h2{font-family:var(--font-display);font-size:1.12rem;font-weight:600;letter-spacing:-.01em;}
+.section-head .hint{font-size:.79rem;color:var(--text-3);}
+
+/* ---------- ways to earn: list rows ---------- */
+.earn-list{display:flex;flex-direction:column;border-radius:var(--r-lg);border:1px solid var(--line);overflow:hidden;background:var(--surface);}
+.earn-row{
+display:flex;align-items:center;gap:13px;padding:14px 15px;
+border-bottom:1px solid var(--line);background:transparent;width:100%;text-align:left;
+transition:background .15s var(--ease);
+}
+.earn-row:last-child{border-bottom:none;}
+.earn-row:active{background:var(--surface-raised);}
+.earn-row .row-icon{
+width:38px;height:38px;border-radius:11px;flex-shrink:0;
+background:var(--surface-raised);color:var(--text-2);
+display:flex;align-items:center;justify-content:center;
+}
+.earn-row .row-text{flex:1;min-width:0;}
+.earn-row .row-text .t{font-size:.9rem;font-weight:600;}
+.earn-row .row-text .s{margin-top:2px;font-size:.78rem;color:var(--text-3);}
+.status-pill{
+font-size:.72rem;font-weight:600;color:var(--text-2);
+background:var(--surface-raised);border:1px solid var(--line-strong);
+padding:4px 10px;border-radius:999px;white-space:nowrap;flex-shrink:0;
+}
+
+/* ---------- rewards: locked tiles ---------- */
+.rewards-note{font-size:.86rem;color:var(--text-2);line-height:1.5;margin-bottom:14px;max-width:38ch;}
+.rewards-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.reward-tile{
+position:relative;padding:16px 14px 14px;border-radius:var(--r-md);
+background:var(--surface);border:1px solid var(--line);text-align:left;
+display:flex;flex-direction:column;gap:20px;overflow:hidden;
+transition:transform .16s var(--ease),border-color .16s var(--ease);
+}
+.reward-tile:active{transform:scale(.97);border-color:var(--line-strong);}
+.reward-tile .r-icon{width:34px;height:34px;border-radius:10px;background:var(--surface-raised);color:var(--text-3);display:flex;align-items:center;justify-content:center;}
+.reward-tile .r-text .t{font-size:.86rem;font-weight:600;color:var(--text-2);}
+.reward-tile .r-text .s{margin-top:2px;font-size:.74rem;color:var(--text-3);}
+.reward-tile .lock-chip{
+position:absolute;top:12px;right:12px;width:24px;height:24px;border-radius:50%;
+background:var(--ink-2);border:1px solid var(--line-strong);color:var(--text-3);
+display:flex;align-items:center;justify-content:center;
+}
+.reward-tile .lock-chip .icon{width:12px;height:12px;}
+
+/* ---------- refer & earn ---------- */
+.refer-panel{padding:20px;border-radius:var(--r-lg);border:1px solid var(--line);background:var(--surface);}
+.refer-panel .copy-line{font-size:.86rem;color:var(--text-2);line-height:1.5;max-width:38ch;margin-bottom:16px;}
+.code-row{
+display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;
+padding:13px 8px 13px 16px;border-radius:var(--r-md);
+background:var(--ink-2);border:1px dashed var(--line-strong);margin-bottom:18px;
+}
+.code-row .code{font-family:var(--font-display);font-size:1rem;font-weight:700;letter-spacing:.05em;}
+.code-row .code.empty{font-family:var(--font-body);font-size:.83rem;font-weight:600;letter-spacing:normal;color:var(--text-3);}
+.code-actions{display:flex;gap:8px;flex-shrink:0;}
+.chip-btn{
+display:flex;align-items:center;gap:6px;padding:9px 13px;border-radius:999px;
+background:var(--surface-raised);border:1px solid var(--line-strong);font-size:.79rem;font-weight:600;
+transition:transform .16s var(--ease),background .16s var(--ease),opacity .16s var(--ease);
+}
+.chip-btn .icon{width:14px;height:14px;}
+.chip-btn:active{transform:scale(.93);background:var(--line-strong);}
+.chip-btn[disabled]{opacity:.4;pointer-events:none;}
+.chip-btn.primary{background:var(--gold-soft);border-color:rgba(203,164,88,.4);color:var(--gold);}
+
+.steps{display:flex;flex-direction:column;gap:12px;}
+.step{display:flex;align-items:flex-start;gap:12px;}
+.step .num{
+width:22px;height:22px;border-radius:50%;flex-shrink:0;margin-top:1px;
+background:var(--surface-raised);border:1px solid var(--line-strong);color:var(--text-2);
+display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;
+}
+.step p{font-size:.84rem;color:var(--text-2);line-height:1.5;}
+
+/* ---------- activity empty state ---------- */
+.empty-state{
+display:flex;flex-direction:column;align-items:center;text-align:center;
+padding:38px 20px;border-radius:var(--r-lg);border:1px solid var(--line);background:var(--surface);
+}
+.empty-state .e-icon{
+width:52px;height:52px;border-radius:50%;background:var(--surface-raised);color:var(--text-3);
+display:flex;align-items:center;justify-content:center;margin-bottom:16px;
+}
+.empty-state h3{font-size:.92rem;font-weight:700;}
+.empty-state p{margin-top:6px;font-size:.82rem;color:var(--text-3);max-width:30ch;line-height:1.5;}
+
+/* ---------- profile ---------- */
+.profile-head{display:flex;align-items:center;gap:14px;margin-bottom:20px;}
+.avatar-lg{width:56px;height:56px;border-radius:50%;flex-shrink:0;font-size:1.1rem;}
+.profile-head .name{font-family:var(--font-display);font-size:1.05rem;font-weight:700;}
+.profile-head .email{margin-top:2px;font-size:.82rem;color:var(--text-2);}
+
+.info-list{border-radius:var(--r-lg);border:1px solid var(--line);background:var(--surface);overflow:hidden;margin-bottom:14px;}
+.info-row{display:flex;align-items:center;gap:12px;padding:13px 15px;border-bottom:1px solid var(--line);}
+.info-row:last-child{border-bottom:none;}
+.info-row .i-icon{width:32px;height:32px;border-radius:9px;background:var(--surface-raised);color:var(--text-3);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.info-row .i-text{flex:1;min-width:0;}
+.info-row .i-text .label{font-size:.73rem;color:var(--text-3);}
+.info-row .i-text .value{margin-top:2px;font-size:.87rem;font-weight:600;}
+.info-row .i-text .value.muted{color:var(--text-3);font-weight:500;}
+
+.action-row{display:flex;flex-direction:column;gap:10px;}
+.btn-outline,.btn-danger{
+display:flex;align-items:center;justify-content:center;gap:8px;
+padding:13px;border-radius:var(--r-md);font-size:.86rem;font-weight:700;
+border:1px solid var(--line-strong);background:var(--surface);width:100%;
+transition:transform .16s var(--ease),background .16s var(--ease);
+}
+.btn-outline:active,.btn-danger:active{transform:scale(.98);background:var(--surface-raised);}
+.btn-danger{color:var(--coral);border-color:rgba(201,115,97,.35);}
+
+/* ---------- bottom nav ---------- */
+nav.bottom-nav{
+position:fixed;left:50%;bottom:0;transform:translateX(-50%);
+width:100%;max-width:460px;
+display:flex;justify-content:space-around;align-items:center;
+padding:10px 10px calc(10px + env(safe-area-inset-bottom));
+background:linear-gradient(180deg, rgba(14,13,18,.85), rgba(14,13,18,.98));
+-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
+border-top:1px solid var(--line);z-index:50;
+}
+.nav-item{
+position:relative;display:flex;flex-direction:column;align-items:center;gap:4px;
+padding:6px 16px;color:var(--text-3);
+transition:color .2s var(--ease),transform .16s var(--ease);
+}
+.nav-item:active{transform:scale(.9);}
+.nav-item span{font-size:.65rem;font-weight:600;}
+.nav-item.active{color:var(--gold);}
+.nav-item.active::after{content:"";position:absolute;top:-2px;width:4px;height:4px;border-radius:50%;background:var(--gold);}
+
+/* ---------- toast ---------- */
+.toast{
+position:fixed;left:50%;bottom:88px;transform:translateX(-50%) translateY(10px);
+padding:11px 18px;border-radius:999px;
+background:var(--surface-raised);border:1px solid var(--line-strong);
+font-size:.81rem;font-weight:600;color:var(--text-1);
+opacity:0;pointer-events:none;transition:opacity .25s var(--ease),transform .25s var(--ease);
+z-index:80;box-shadow:0 14px 30px -14px rgba(0,0,0,.6);white-space:nowrap;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* ---------- responsive ---------- */
+@media (min-width:600px){
+.app{max-width:560px;padding-top:4px;}
+.hero .greeting{font-size:1.7rem;}
+nav.bottom-nav{max-width:560px;border-radius:24px 24px 0 0;}
+}
+@media (min-width:1024px){
+.app{max-width:640px;}
+}
+</style>
+
+</head>
+<body>
+<svg style="display:none" aria-hidden="true">
+  <symbol id="i-bell" viewBox="0 0 24 24"><path d="M12 3a5 5 0 0 0-5 5v2.5c0 .8-.25 1.5-.7 2.15L5 15h14l-1.3-2.35c-.45-.65-.7-1.4-.7-2.15V8a5 5 0 0 0-5-5Z"/><path d="M9.3 18a2.7 2.7 0 0 0 5.4 0"/></symbol>
+  <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><path d="M12 3.5v2.3M12 18.2v2.3M20.5 12h-2.3M5.8 12H3.5M17.8 6.2l-1.6 1.6M7.8 16.2l-1.6 1.6M17.8 17.8l-1.6-1.6M7.8 7.8 6.2 6.2"/></symbol>
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M4 11.5 12 4l8 7.5"/><path d="M6 10.2V20h5v-5.5h2V20h5v-9.8"/></symbol>
+  <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2.5 4.5 14H10l-.8 7.5L19 10H13Z"/></symbol>
+  <symbol id="i-gift" viewBox="0 0 24 24"><rect x="4" y="9.5" width="16" height="10" rx="2"/><path d="M4 13.5h16M12 9.5V20"/><path d="M8.2 9.5c-1.7 0-3-1.1-3-2.6C5.2 5.5 6.4 4.3 8 4.3c2.2 0 3.8 2.3 4 5.2"/><path d="M15.8 9.5c1.7 0 3-1.1 3-2.6 0-1.4-1.2-2.6-2.8-2.6-2.2 0-3.8 2.3-4 5.2"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.3"/><path d="M10 8.7v6.6l5.5-3.3Z"/></symbol>
+  <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2.7 12S6 5.5 12 5.5 21.3 12 21.3 12 18 18.5 12 18.5 2.7 12 2.7 12Z"/><circle cx="12" cy="12" r="2.6"/></symbol>
+  <symbol id="i-clipboard" viewBox="0 0 24 24"><rect x="5.5" y="5" width="13" height="16" rx="2"/><path d="M9 5V4a1.5 1.5 0 0 1 1.5-1.5h3A1.5 1.5 0 0 1 15 4v1"/><path d="M8.5 11h7M8.5 14.5h7M8.5 18h4.5"/></symbol>
+  <symbol id="i-tag" viewBox="0 0 24 24"><path d="M12.6 3.5H6a2.5 2.5 0 0 0-2.5 2.5v6.6c0 .5.2 1 .55 1.35l8.4 8.4a2 2 0 0 0 2.8 0l6.6-6.6a2 2 0 0 0 0-2.8l-8.4-8.4a2 2 0 0 0-.85-.5Z"/><circle cx="8.8" cy="9.3" r="1.4"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5.5" y="10.5" width="13" height="9.5" rx="2.2"/><path d="M8.3 10.5V7.8a3.7 3.7 0 0 1 7.4 0v2.7"/></symbol>
+  <symbol id="i-chevron" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2.3"/><path d="M6 15H5.2A2.2 2.2 0 0 1 3 12.8V5.2A2.2 2.2 0 0 1 5.2 3h7.6A2.2 2.2 0 0 1 15 5.2V6"/></symbol>
+  <symbol id="i-share" viewBox="0 0 24 24"><circle cx="18" cy="5.2" r="2.2"/><circle cx="6" cy="12" r="2.2"/><circle cx="18" cy="18.8" r="2.2"/><path d="M7.9 10.8 16.1 6.4M7.9 13.2l8.2 4.4"/></symbol>
+  <symbol id="i-inbox" viewBox="0 0 24 24"><path d="M3.5 13 6 5.5h12L20.5 13"/><path d="M3.5 13v5.5A1.5 1.5 0 0 0 5 20h14a1.5 1.5 0 0 0 1.5-1.5V13h-5.2c0 1.4-1.4 2.5-3.3 2.5s-3.3-1.1-3.3-2.5H3.5Z"/></symbol>
+  <symbol id="i-card" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12.5" rx="2.5"/><path d="M3 10h18"/></symbol>
+  <symbol id="i-shirt" viewBox="0 0 24 24"><path d="M8.5 4 12 6.2 15.5 4 20 7l-2.6 2.8L15.5 8.5V20h-7V8.5L6.6 9.8 4 7Z"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 3.3l2.6 5.4 5.9.8-4.3 4.1 1 5.9L12 16.6 6.8 19.5l1-5.9-4.3-4.1 5.9-.8Z"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><path d="M7 3.5h3l1.3 4.3-2 1.7a12 12 0 0 0 5.2 5.2l1.7-2 4.3 1.3v3a2 2 0 0 1-2.2 2 17 17 0 0 1-14.8-14.8 2 2 0 0 1 2-2.2Z"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8.3" r="3.6"/><path d="M4.7 20c0-3.7 3.2-6.4 7.3-6.4S19.3 16.3 19.3 20"/></symbol>
+  <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="4" y="5.5" width="16" height="14.5" rx="2.3"/><path d="M4 10h16M8.3 3.5v3.5M15.7 3.5v3.5"/></symbol>
+  <symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 17.3 14.6 6.7l2.7 2.7L6.7 20H4v-2.7Z"/><path d="M12.9 8.4l2.7 2.7"/></symbol>
+  <symbol id="i-logout" viewBox="0 0 24 24"><path d="M9 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h3"/><path d="M14 8l4.5 4-4.5 4M18.3 12H9.5"/></symbol>
+</svg>  <div class="app">
+  <header class="bar">
+    <div class="brand">
+      <img class="symbol" src="/assets/earnox/earnox-symbol.png" alt="">
+      <span class="wordmark">EARNOX</span>
+    </div>
+    <div class="bar-actions">
+      <button type="button" class="icon-btn" id="btnBell" aria-label="Notifications"><svg class="icon"><use href="#i-bell"></use></svg></button>
+      <button type="button" class="icon-btn" id="btnGear" aria-label="Settings"><svg class="icon"><use href="#i-gear"></use></svg></button>
+      <button type="button" class="avatar-btn" id="btnAvatar" aria-label="Open profile"></button>
+    </div>
+  </header>    <main>
+    <section class="hero reveal" style="--d:0" id="top">
+      <h1 class="greeting" id="greetingName">Hi there</h1>
+      <p class="sub" id="greetingSub">Welcome to your EARNOX dashboard. This is where your earning activity, Zynox Coins, wallet and referrals will live.</p>  <button type="button" class="cta-strip" id="ctaStrip">
+    <span class="cta-icon"><svg class="icon"><use href="#i-bolt"></use></svg></span>
+    <span class="cta-text">
+      <span class="t">Explore ways to earn</span>
+      <span class="s">See what's opening up soon</span>
+    </span>
+    <svg class="icon chev"><use href="#i-chevron"></use></svg>
+  </button>
+</section>
+
+<section class="wallet-panel reveal" style="--d:1" id="wallet">
+  <div class="wallet-head">
+    <div>
+      <div class="wallet-label">Your wallet</div>
+      <h2 class="wallet-title">Points &amp; withdrawals</h2>
+    </div>
+    <span class="wallet-icon" aria-hidden="true">
+      <svg class="icon" style="width:21px;height:21px;stroke-width:1.8">
+        <rect x="3.5" y="6" width="17" height="12" rx="2.4"></rect>
+        <path d="M3.5 10h17"></path>
+        <path d="M16 14h2"></path>
+      </svg>
+    </span>
+  </div>
+  <div class="wallet-main-label">
+  <span>YOUR EARNING BALANCE</span>
+  <strong>Zynox Coins</strong>
+</div>
+<div class="wallet-conversion">
+      <div class="wallet-value">
+        <span class="wallet-value-label">Zynox Coins</span>
+        <strong id="walletCoinsValue">0</strong>
+      </div>
+      <div class="wallet-equals">=</div>
+      <div class="wallet-value">
+        <span class="wallet-value-label">Money value</span>
+        <strong id="walletMoneyValue">₹0.00</strong>
+      </div>
+    </div>
+
+<div class="wallet-rate-pill">
+  <span>🪙 2 Zynox Coins</span>
+  <strong>= ₹0.50</strong>
+</div>
+<div class="wallet-rate-note">
+  <span>Conversion rate</span>
+  <strong>2 Zynox Coins = ₹0.50</strong>
+</div>
+<div class="wallet-balance">
+    <div class="amount">Balance not available yet</div>
+    <div class="note">Your Zynox Coins balance will appear here when the earning system is connected.</div>
+  </div>
+  <div class="withdraw-status-note" id="withdrawStatusNote">
+  <strong>Minimum withdrawal ₹100</strong>
+  <span>You can request a withdrawal once your wallet reaches the minimum amount.</span>
+</div>
+<div class="wallet-zero-note" id="walletZeroNote">
+  Your wallet will show earnings here after you complete a verified activity.
+</div>
+<div class="wallet-actions">
+    <button type="button" class="wallet-btn primary" id="walletConvertBtn">Convert to ₹</button>
+    <button type="button" class="wallet-btn wallet-btn-disabled" id="walletWithdrawBtn" aria-disabled="true">Withdraw money</button>
+  </div>
+  <div class="wallet-status">
+    <span class="status-dot"></span>
+    <span>Minimum withdrawal ₹100 • Withdraw your money when withdrawals are available.</span>
+  </div>
+</section>
+
+<div class="withdraw-modal" id="withdrawModal" aria-hidden="true">
+  <div class="withdraw-modal-backdrop" data-withdraw-close></div>
+
+  <div class="withdraw-dialog" role="dialog" aria-modal="true" aria-labelledby="withdrawTitle">
+    <button type="button" class="withdraw-close" id="withdrawCloseBtn" aria-label="Close">×</button>
+
+    <span class="eyebrow">WITHDRAW MONEY</span>
+    <h3 id="withdrawTitle">Check your withdrawal</h3>
+    <p class="withdraw-dialog-copy">
+      The minimum withdrawal amount is <strong>₹100</strong>.
+    </p>
+
+    <div class="withdraw-check-card">
+      <div>
+        <span>Your balance</span>
+        <strong id="withdrawAvailableCoins">0 🪙</strong>
+      </div>
+      <div>
+        <span>Money value</span>
+        <strong id="withdrawAvailableMoney">₹0.00</strong>
+      </div>
+    </div>
+
+    <div class="withdraw-requirement">
+      <span>Minimum needed</span>
+      <strong id="withdrawRequiredCoins">400 🪙</strong>
+    </div>
+
+    <div class="withdraw-result" id="withdrawResult"></div>
+
+    <button type="button" class="withdraw-modal-btn" id="withdrawContinueBtn">
+      Continue
+    </button>
+  </div>
+</div>
+
+<section class="how-panel reveal" style="--d:2" id="how-it-works">
+  <div class="section-head" style="margin-bottom:0"><h2>How EARNOX works</h2></div>
+  <p class="how-copy">Simple process. Complete activities, earn Zynox Coins, then convert them into money.</p>
+  <div class="how-steps">
+    <div class="how-step"><span class="step-num">1</span><div class="step-text">Earn Zynox Coins<span>Complete tasks, games, offers or other activities to earn coins.</span></div></div>
+    <div class="how-step"><span class="step-num">2</span><div class="step-text">See your Zynox Coins<span>Your Zynox Coins will be stored in your EARNOX wallet.</span></div></div>
+    <div class="how-step"><span class="step-num">3</span><div class="step-text">Convert to ₹<span>Your coins can be converted to money when withdrawals go live.</span></div></div>
+  </div>
+</section>
+
+<section class="section reveal" style="--d:1" id="earn">
+  <div class="section-head">
+    <h2>Ways to earn Zynox Coins</h2>
+    <span class="hint">Opening soon</span>
+  </div>
+  <div class="earn-list">
+    <button type="button" class="earn-row" data-toast="Daily tasks are coming soon">
+      <span class="row-icon"><svg class="icon" style="width:18px;height:18px"><use href="#i-clipboard"></use></svg></span>
+      <span class="row-text"><span class="t">Daily tasks</span><span class="s">Quick actions • earn coins daily</span></span>
+      <span class="status-pill">Coming soon</span>
+    </button>
+    <button type="button" class="earn-row" data-toast="Watch &amp; earn is coming soon">
+      <span class="row-icon"><svg class="icon" style="width:18px;height:18px"><use href="#i-eye"></use></svg></span>
+      <span class="row-text"><span class="t">Watch &amp; earn</span><span class="s">Short videos • earn Zynox Coins</span></span>
+      <span class="status-pill">Coming soon</span>
+    </button>
+    <button type="button" class="earn-row" data-toast="Play &amp; earn is coming soon">
+      <span class="row-icon"><svg class="icon" style="width:18px;height:18px"><use href="#i-play"></use></svg></span>
+      <span class="row-text"><span class="t">Play &amp; earn</span><span class="s">Game challenges • earn coins from milestones</span></span>
+      <span class="status-pill">Coming soon</span>
+    </button>
+    <button type="button" class="earn-row" data-toast="Offers are coming soon">
+      <span class="row-icon"><svg class="icon" style="width:18px;height:18px"><use href="#i-tag"></use></svg></span>
+      <span class="row-text"><span class="t">Offers</span><span class="s">Partner offers • earn Zynox Coins</span></span>
+      <span class="status-pill">Coming soon</span>
+    </button>
+    <button type="button" class="earn-row" data-toast="Surveys are coming soon">
+      <span class="row-icon"><svg class="icon" style="width:18px;height:18px"><use href="#i-clipboard"></use></svg></span>
+      <span class="row-text"><span class="t">Surveys</span><span class="s">Share an opinion • earn Zynox Coins</span></span>
+      <span class="status-pill">Coming soon</span>
+    </button>
+  </div>
+</section>
+
+<section class="section reveal" style="--d:2" id="rewards">
+      <div class="section-head">
+        <h2>Withdraw your money</h2>
+        <span class="hint">Coming soon</span>
+      </div>
+      <div class="empty-state">
+        <span class="e-icon"><svg class="icon" style="width:24px;height:24px"><use href="#i-card"></use></svg></span>
+        <h3>Withdrawals are not open yet</h3>
+        <p>When earning is live, you can choose a withdrawal method, enter the amount and check your withdrawal status here.</p>
+      </div>
+    </section>
+
+    <section class="section reveal" style="--d:2" id="withdrawal-guide">
+      <div class="section-head">
+        <h2>How your money works</h2>
+      </div>
+      <div class="steps">
+        <div class="step"><span class="num">1</span><p>Earn money by completing available activities on EARNOX.</p></div>
+        <div class="step"><span class="num">2</span><p>Your Zynox Coins move into your wallet after they are confirmed.</p></div>
+        <div class="step"><span class="num">3</span><p>Convert your Zynox Coins into money, then withdraw when available.</p></div>
+      </div>
+    </section>
+
+    <section class="section reveal" style="--d:3" id="refer">
+  <div class="section-head">
+    <h2>Refer &amp; earn</h2>
+  </div>
+  <div class="refer-panel">
+    <p class="copy-line">Invite friends to EARNOX. Earn Zynox Coins when an eligible referral completes the required activity.</p>
+    <div class="code-row">
+      <span class="code" <div class="referral-coin-note">
+  <strong>Referral coins</strong>
+  <span>Coins are credited only after an eligible referral completes the required activity and it is verified.</span>
+</div>
+id="referralCode">No referral code yet</span>
+      <div class="code-actions">
+        <button type="button" class="chip-btn" id="copyBtn"><svg class="icon"><use href="#i-copy"></use></svg>Copy</button>
+        <button type="button" class="chip-btn primary" id="shareBtn"><svg class="icon"><use href="#i-share"></use></svg>Share</button>
+      </div>
+    </div>
+    <div class="steps">
+      <div class="step"><span class="num">1</span><p>Share your code with a friend</p></div>
+      <div class="step"><span class="num">2</span><p>They join EARNOX using it</p></div>
+      <div class="step"><span class="num">3</span><p>Referral earnings are credited after the required activity is verified.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section reveal" style="--d:4" id="activity">
+  <div class="section-head">
+    <h2>Activity</h2>
+  </div>
+  <div class="empty-state">
+    <span class="e-icon"><svg class="icon" style="width:24px;height:24px"><use href="#i-inbox"></use></svg></span>
+    <h3>No activity yet</h3>
+    <p>Your earning activity will appear here once you get started.</p>
+  </div>
+</section>
+
+<section class="section reveal" style="--d:5" id="profile">
+  <div class="section-head">
+    <h2>Profile</h2>
+  </div>
+  <div class="profile-head">
+    <div class="avatar-lg" id="avatarLg"></div>
+    <div>
+      <p class="name" id="profileName">Guest</p>
+      <p class="email" id="profileEmail">No email on file</p>
+    </div>
+  </div>
+  <div class="info-list" id="infoList"></div>
+  <div class="action-row">
+    <button type="button" class="btn-outline" id="editBtn"><svg class="icon" style="width:16px;height:16px"><use href="#i-edit"></use></svg>Edit profile</button>
+    <button type="button" class="btn-danger" id="logoutBtn"><svg class="icon" style="width:16px;height:16px"><use href="#i-logout"></use></svg>Log out</button>
+  </div>
+</section>
+
+  </main>
+</div>  <nav class="bottom-nav" aria-label="Primary navigation">
+  <button type="button" class="nav-item active" data-target="top" aria-current="page"><svg class="icon"><use href="#i-home"></use></svg><span>Home</span></button>
+  <button type="button" class="nav-item" data-target="earn"><svg class="icon"><use href="#i-bolt"></use></svg><span>Earn</span></button>
+  <button type="button" class="nav-item" data-target="wallet"><svg class="icon"><use href="#i-card"></use></svg><span>Wallet</span></button>
+  <button type="button" class="nav-item" data-target="profile"><svg class="icon"><use href="#i-user"></use></svg><span>Profile</span></button>
+</nav>  <div class="toast" id="toast" role="status" aria-live="polite"></div>  <script>
+(function(){
+  "use strict";
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var toastEl = document.getElementById('toast');
+  var toastTimer;
+  function showToast(msg){
+    if(!msg) return;
+    toastEl.textContent = msg;
+    toastEl.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ toastEl.classList.remove('show'); }, 2200);
+  }
+
+  /* ================= REAL USER DATA ONLY (localStorage.earnox_user) =================
+     Nothing here is invented. Missing fields fall back to neutral placeholders,
+     never to a hard-coded example person. There is no wallet balance, streak,
+     tier, or transaction history anywhere in this file because no backend for
+     those exists yet — see the empty/locked states in the markup instead. */
+
+  function readStoredUser(){
+    var raw = null;
+    try{ raw = localStorage.getItem('earnox_user'); }catch(e){ raw = null; }
+    if(!raw) return {};
+    try{
+      var parsed = JSON.parse(raw);
+      return (parsed && typeof parsed === 'object') ? parsed : {};
+    }catch(e){
+      return {};
+    }
+  }
+
+  function getInitials(name){
+    if(!name || !String(name).trim()) return 'G';
+    var parts = String(name).trim().split(/\s+/).filter(Boolean);
+    var initials = parts[0].charAt(0);
+    if(parts.length > 1) initials += parts[parts.length - 1].charAt(0);
+    return initials.toUpperCase();
+  }
+
+  function renderAvatar(container, photoUrl, name){
+    container.innerHTML = '';
+    if(photoUrl){
+      var img = document.createElement('img');
+      img.src = photoUrl;
+      img.alt = '';
+      img.style.width = '100%';
+      img.style.height = '100%';
+      img.style.objectFit = 'cover';
+      img.onerror = function(){
+        container.innerHTML = '';
+        container.textContent = getInitials(name);
+      };
+      container.appendChild(img);
+    } else {
+      container.textContent = getInitials(name);
+    }
+  }
+
+  function formatDob(dob){
+    if(!dob) return null;
+    var d = new Date(dob);
+    if(isNaN(d.getTime())) return String(dob);
+    return d.toLocaleDateString(undefined, { day:'numeric', month:'short', year:'numeric' });
+  }
+
+  function capitalize(s){
+    if(!s) return null;
+    var str = String(s).trim();
+    if(!str) return null;
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+
+  function buildInfoRow(iconId, label, value){
+    var row = document.createElement('div');
+    row.className = 'info-row';
+    var hasValue = !!value;
+    row.innerHTML =
+      '<span class="i-icon"><svg class="icon" style="width:16px;height:16px"><use href="#' + iconId + '"></use></svg></span>' +
+      '<span class="i-text"><span class="label">' + label + '</span>' +
+      '<span class="value' + (hasValue ? '' : ' muted') + '">' + (hasValue ? value : 'Not added') + '</span></span>';
+    return row;
+  }
+
+  var referralValue = '';
+
+  function applyUserData(){
+    var user = readStoredUser();
+
+    var name = (user.name && String(user.name).trim()) || '';
+    var email = (user.email && String(user.email).trim()) || '';
+    var photo = (user.photo && String(user.photo).trim()) || '';
+    referralValue = (user.referral && String(user.referral).trim()) || '';
+
+    var firstName = name ? (name.split(/\s+/)[0]) : '';
+
+    var greetingEl = document.getElementById('greetingName');
+    greetingEl.textContent = firstName ? ('Hi, ' + firstName) : 'Hi there';
+
+    document.getElementById('profileName').textContent = name || 'Guest';
+    document.getElementById('profileEmail').textContent = email || 'No email on file';
+
+    renderAvatar(document.getElementById('btnAvatar'), photo, name);
+    renderAvatar(document.getElementById('avatarLg'), photo, name);
+
+    var codeEl = document.getElementById('referralCode');
+    if(referralValue){
+      codeEl.textContent = referralValue;
+      codeEl.classList.remove('empty');
+    } else {
+      codeEl.textContent = 'No referral code yet';
+      codeEl.classList.add('empty');
+    }
+    document.getElementById('copyBtn').disabled = !referralValue;
+    document.getElementById('shareBtn').disabled = !referralValue;
+
+    var infoList = document.getElementById('infoList');
+    infoList.innerHTML = '';
+    infoList.appendChild(buildInfoRow('i-phone', 'Phone', user.phone ? String(user.phone).trim() : null));
+    infoList.appendChild(buildInfoRow('i-user', 'Gender', capitalize(user.gender)));
+    infoList.appendChild(buildInfoRow('i-calendar', 'Date of birth', formatDob(user.dob)));
+  }
+
+  applyUserData();
+  /* ===================================================================================== */
+
+  document.getElementById('copyBtn').addEventListener('click', function(){
+    if(!referralValue) return;
+    var done = function(){ showToast('Code copied'); };
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(referralValue).then(done).catch(function(){
+        var ta = document.createElement('textarea');
+        ta.value = referralValue; ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select();
+        try{ document.execCommand('copy'); }catch(e){}
+        document.body.removeChild(ta); done();
+      });
+    }
+  });
+
+  document.getElementById('shareBtn').addEventListener('click', function(){
+    if(!referralValue) return;
+    var text = 'Join me on EARNOX. Use my code ' + referralValue;
+    if(navigator.share){
+      navigator.share({ title: 'EARNOX', text: text }).catch(function(){});
+    } else if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(function(){ showToast('Invite link copied'); }).catch(function(){});
+    }
+  });
+
+  document.getElementById('btnBell').addEventListener('click', function(){ showToast('No notifications yet'); });
+  document.getElementById('btnGear').addEventListener('click', function(){ showToast('Settings coming soon'); });
+  document.getElementById('editBtn').addEventListener('click', function(){ showToast('Editing coming soon'); });
+  document.getElementById('logoutBtn').addEventListener('click', function(){
+    try{ localStorage.removeItem('earnox_user'); }catch(e){}
+    window.location.href = '/earnox.html';
+  });
+
+  document.querySelectorAll('.earn-row, .reward-tile').forEach(function(el){
+    el.addEventListener('click', function(){ showToast(el.getAttribute('data-toast') || ''); });
+  });
+
+  document.getElementById('ctaStrip').addEventListener('click', function(){ scrollToId('earn'); });
+
+  document.getElementById('btnAvatar').addEventListener('click', function(){
+    setActiveNav('profile');
+    scrollToId('profile');
+  });
+
+  var navItems = document.querySelectorAll('.nav-item');
+  function setActiveNav(id){
+    navItems.forEach(function(b){
+      var isActive = b.getAttribute('data-target') === id;
+      b.classList.toggle('active', isActive);
+      if(isActive){ b.setAttribute('aria-current','page'); } else { b.removeAttribute('aria-current'); }
+    });
+  }
+  function scrollToId(id){
+    if(id === 'top'){
+      window.scrollTo({ top:0, behavior: reduceMotion ? 'auto' : 'smooth' });
+      return;
+    }
+    var target = document.getElementById(id);
+    if(target){ target.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' }); }
+  }
+  navItems.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      setActiveNav(btn.getAttribute('data-target'));
+      scrollToId(btn.getAttribute('data-target'));
+    });
+  });
+
+  var sectionIds = ['top','earn','wallet','profile'];
+  var sections = sectionIds.map(function(id){ return document.getElementById(id); }).filter(Boolean);
+  if('IntersectionObserver' in window){
+    var observer = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){ setActiveNav(entry.target.id); }
+      });
+    }, { rootMargin: '-40% 0px -50% 0px', threshold: 0 });
+    sections.forEach(function(s){ observer.observe(s); });
+  }
+
+  window.addEventListener('load', function(){
+    requestAnimationFrame(function(){ document.body.classList.add('loaded'); });
+  });
+})();
+</script>  </body>
+</html>  
