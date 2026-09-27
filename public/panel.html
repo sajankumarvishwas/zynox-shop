@@ -26,7 +26,7 @@ body{
   min-height:100%; display:flex; flex-direction:column; align-items:center;
   padding:28px 16px 40px; position:relative; overflow-x:hidden;
 }
-.pixels{position:fixed; inset:0; pointer-events:none; opacity:0.5; z-index:0;
+.pixels{position:fixed; inset:0; pointer-events:none; opacity:0.6; z-index:0;
   background-image: radial-gradient(2px 2px at 20px 30px, rgba(255,255,255,0.25), transparent),
                      radial-gradient(2px 2px at 90px 80px, rgba(255,255,255,0.18), transparent),
                      radial-gradient(1px 1px at 150px 20px, rgba(255,255,255,0.2), transparent),
@@ -34,6 +34,17 @@ body{
   background-repeat:repeat; background-size:200px 200px; animation:drift 40s linear infinite;
 }
 @keyframes drift{ from{background-position:0 0} to{background-position:-200px 200px} }
+.firefly{position:fixed; width:4px; height:4px; background:#a8e88a; border-radius:1px; pointer-events:none; z-index:0;
+  box-shadow:0 0 6px 2px rgba(168,232,138,0.6); animation:fly 14s ease-in-out infinite}
+.firefly:nth-child(1){top:15%; left:10%; animation-delay:0s}
+.firefly:nth-child(2){top:60%; left:80%; animation-delay:-4s}
+.firefly:nth-child(3){top:35%; left:50%; animation-delay:-9s}
+@keyframes fly{
+  0%,100%{transform:translate(0,0); opacity:.2}
+  25%{transform:translate(30px,-20px); opacity:.9}
+  50%{transform:translate(-10px,-40px); opacity:.3}
+  75%{transform:translate(-30px,-10px); opacity:.8}
+}
 .wrap{width:100%; max-width:420px; position:relative; z-index:1}
 
 .logo{display:flex; align-items:center; gap:14px; margin-bottom:6px}
@@ -89,7 +100,11 @@ input:focus{border-color:var(--grass)}
 @keyframes pulse{0%,100%{opacity:1} 50%{opacity:0.4}}
 .serverline{font-family:'Press Start 2P',monospace; font-size:12px}
 .statustext{font-size:17px; color:var(--sub); margin-top:4px; margin-left:22px}
+.uptime{font-size:14px; color:var(--sub); margin-top:2px; margin-left:22px; opacity:0.8}
 .players{font-size:16px; color:var(--sub); margin-top:10px}
+.lastaction{font-size:14px; color:var(--sub); margin-top:8px; padding-top:10px; border-top:2px dashed var(--panel-dark)}
+.lastaction .who{color:var(--on); font-weight:bold}
+.icon{font-size:14px; margin-right:6px}
 .hidden{display:none !important}
 .err{color:var(--red); font-size:16px; margin-top:10px; border-left:3px solid var(--red); padding-left:8px}
 
@@ -107,6 +122,7 @@ input:focus{border-color:var(--grass)}
 </head>
 <body>
 <div class="pixels"></div>
+<div class="firefly"></div><div class="firefly"></div><div class="firefly"></div>
 <div class="wrap">
 
   <div id="loginView">
@@ -145,13 +161,15 @@ input:focus{border-color:var(--grass)}
         <span class="dot off" id="dot"></span><span class="serverline">ZYNOX NEW WORLD</span>
       </div>
       <div class="statustext" id="statusText">Checking…</div>
+      <div class="uptime hidden" id="uptimeText"></div>
       <div class="players" id="playersText"></div>
       <div class="row">
-        <button class="mcbtn btn-start" id="startBtn">Start</button>
-        <button class="mcbtn btn-stop" id="stopBtn">Stop</button>
-        <button class="mcbtn btn-restart" id="restartBtn">Restart</button>
+        <button class="mcbtn btn-start" id="startBtn"><span class="icon">▶</span>Start</button>
+        <button class="mcbtn btn-stop" id="stopBtn"><span class="icon">■</span>Stop</button>
+        <button class="mcbtn btn-restart" id="restartBtn"><span class="icon">⟳</span>Restart</button>
       </div>
       <div id="actionErr" class="err hidden"></div>
+      <div class="lastaction hidden" id="lastAction"></div>
     </div>
 
     <div class="panel">
@@ -233,6 +251,8 @@ els("logoutBtn").onclick = () => {
   els("loginView").classList.remove("hidden");
 };
 
+let serverStartedAt = null;
+
 function showDashboard(){
   els("loginView").classList.add("hidden");
   els("dashView").classList.remove("hidden");
@@ -241,6 +261,28 @@ function showDashboard(){
   refreshLogs();
   setInterval(refreshStatus, 8000);
   setInterval(refreshLogs, 15000);
+  setInterval(tickUptime, 1000);
+}
+
+function timeAgo(iso){
+  const diff = Math.max(0, Date.now() - new Date(iso).getTime());
+  const m = Math.floor(diff / 60000);
+  if (m < 1) return "just now";
+  if (m < 60) return m + "m ago";
+  const h = Math.floor(m / 60);
+  if (h < 24) return h + "h " + (m % 60) + "m ago";
+  return Math.floor(h / 24) + "d ago";
+}
+
+function tickUptime(){
+  const el = els("uptimeText");
+  if (!serverStartedAt) { el.classList.add("hidden"); return; }
+  const diff = Math.max(0, Date.now() - new Date(serverStartedAt).getTime());
+  const h = Math.floor(diff / 3600000);
+  const m = Math.floor((diff % 3600000) / 60000);
+  const s = Math.floor((diff % 60000) / 1000);
+  el.textContent = "Up for " + (h ? h + "h " : "") + m + "m " + s + "s";
+  el.classList.remove("hidden");
 }
 
 async function refreshStatus(){
@@ -252,6 +294,8 @@ async function refreshStatus(){
     const dot = els("dot");
     dot.className = "dot " + (s.status === "ONLINE" ? "on" : (s.status === "OFFLINE" ? "off" : "mid"));
     els("statusText").textContent = s.status;
+    serverStartedAt = s.status === "ONLINE" ? s.startedAt : null;
+    if (!serverStartedAt) els("uptimeText").classList.add("hidden");
     els("playersText").textContent = s.status === "ONLINE"
       ? (s.onlinePlayerCount + " player" + (s.onlinePlayerCount === 1 ? "" : "s") + " online" +
          (s.onlinePlayers.length ? ": " + s.onlinePlayers.join(", ") : ""))
@@ -268,6 +312,15 @@ async function refreshLogs(){
     });
     const data = await r.json();
     if (!data.success) return;
+
+    const lastEl = els("lastAction");
+    if (data.log.length) {
+      const last = data.log[0];
+      lastEl.innerHTML = '<span class="who">' + escapeHtml(last.username) + '</span> ' +
+        escapeHtml(last.action) + ' · ' + timeAgo(last.timestamp);
+      lastEl.classList.remove("hidden");
+    }
+
     const list = els("logList");
     if (!data.log.length) { list.innerHTML = '<div class="statustext">No activity yet.</div>'; return; }
     list.innerHTML = data.log.map(function(entry){
