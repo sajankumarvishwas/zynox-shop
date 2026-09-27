@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Zynox Control</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sky1:#1c2b1a; --sky2:#0b120a; --panel:#3a3226; --panel-light:#4d4232; --panel-dark:#242019;
+  --grass:#5a9c3f; --grass-dark:#3f7a2c; --dirt:#6b4a2f; --dirt-dark:#4a3220;
+  --stone:#8a8a86; --text:#f0ead8; --sub:#b9b09a;
+  --on:#6fe36f; --off:#8a8a86; --mid:#ffcc4d; --red:#ff6b5e;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box; image-rendering:pixelated}
+html,body{height:100%;margin:0}
+body{
+  font-family:'VT323', monospace; font-size:19px; color:var(--text);
+  background:
+    radial-gradient(ellipse at 50% -10%, #2a3d24 0%, transparent 60%),
+    linear-gradient(180deg,var(--sky1) 0%, var(--sky2) 100%);
+  min-height:100%; display:flex; flex-direction:column; align-items:center;
+  padding:28px 16px 40px; position:relative; overflow-x:hidden;
+}
+.pixels{position:fixed; inset:0; pointer-events:none; opacity:0.5; z-index:0;
+  background-image: radial-gradient(2px 2px at 20px 30px, rgba(255,255,255,0.25), transparent),
+                     radial-gradient(2px 2px at 90px 80px, rgba(255,255,255,0.18), transparent),
+                     radial-gradient(1px 1px at 150px 20px, rgba(255,255,255,0.2), transparent),
+                     radial-gradient(1px 1px at 60px 120px, rgba(255,255,255,0.15), transparent);
+  background-repeat:repeat; background-size:200px 200px; animation:drift 40s linear infinite;
+}
+@keyframes drift{ from{background-position:0 0} to{background-position:-200px 200px} }
+.wrap{width:100%; max-width:420px; position:relative; z-index:1}
+
+.logo{display:flex; align-items:center; gap:14px; margin-bottom:6px}
+.block{
+  width:36px; height:36px; flex-shrink:0; position:relative;
+}
+.block::before{
+  content:""; position:absolute; top:0; left:0;
+  width:9px; height:9px; background:#6fbf3f;
+  box-shadow:
+    9px 0 0 0 #5da233, 18px 0 0 0 #6fbf3f, 27px 0 0 0 #5da233,
+    0 9px 0 0 #5da233, 9px 9px 0 0 #6fbf3f, 18px 9px 0 0 #5da233, 27px 9px 0 0 #6fbf3f,
+    0 18px 0 0 #7a5230, 9px 18px 0 0 #5c3d24, 18px 18px 0 0 #7a5230, 27px 18px 0 0 #5c3d24,
+    0 27px 0 0 #5c3d24, 9px 27px 0 0 #7a5230, 18px 27px 0 0 #5c3d24, 27px 27px 0 0 #7a5230;
+}
+h1{font-family:'Press Start 2P',monospace; font-size:16px; margin:0; letter-spacing:1px; color:var(--text); text-shadow:2px 2px 0 #000}
+.sub{color:var(--sub); font-size:16px; margin:10px 0 22px; letter-spacing:0.3px}
+
+.panel{
+  background:var(--panel);
+  border:3px solid var(--panel-dark);
+  box-shadow: inset 3px 3px 0 var(--panel-light), inset -3px -3px 0 var(--panel-dark), 4px 4px 0 rgba(0,0,0,0.35);
+  padding:20px; margin-bottom:18px;
+}
+label{display:block; font-size:14px; color:var(--sub); letter-spacing:1px; margin:16px 0 6px; text-transform:uppercase}
+label:first-of-type{margin-top:0}
+input{
+  width:100%; padding:11px 12px; border:3px solid var(--panel-dark); background:#241f18; color:var(--text);
+  font-family:'VT323',monospace; font-size:18px; outline:none;
+  box-shadow: inset 2px 2px 0 rgba(0,0,0,0.4);
+}
+input:focus{border-color:var(--grass)}
+
+.mcbtn{
+  width:100%; padding:13px; border:3px solid var(--panel-dark); font-family:'VT323',monospace;
+  font-size:19px; letter-spacing:1px; cursor:pointer; color:var(--text);
+  background:linear-gradient(180deg, var(--panel-light) 0%, var(--panel) 55%, var(--panel-dark) 100%);
+  box-shadow: inset 2px 2px 0 rgba(255,255,255,0.15), inset -2px -2px 0 rgba(0,0,0,0.3);
+  margin-top:18px; text-transform:uppercase;
+}
+.mcbtn:active{ box-shadow:inset 2px 2px 0 rgba(0,0,0,0.4); transform:translateY(1px) }
+.row{display:flex; gap:10px; margin-top:18px}
+.row .mcbtn{margin-top:0}
+.btn-start{background:linear-gradient(180deg,#7fd15c,var(--grass) 55%,var(--grass-dark)); color:#12210c}
+.btn-stop{background:linear-gradient(180deg,#ff9a8f,var(--red) 55%,#b8382c); color:#2b0e0a}
+.btn-restart{background:linear-gradient(180deg,#ffe08a,var(--mid) 55%,#cc9a2e); color:#2b1e05}
+
+.status-line{display:flex; align-items:center; gap:10px; margin-bottom:4px}
+.dot{width:12px;height:12px; flex-shrink:0}
+.dot.on{background:var(--on); box-shadow:0 0 0 3px rgba(111,227,111,0.25); animation:pulse 1.6s ease-in-out infinite}
+.dot.off{background:var(--off)}
+.dot.mid{background:var(--mid); animation:pulse 0.8s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1} 50%{opacity:0.4}}
+.serverline{font-family:'Press Start 2P',monospace; font-size:12px}
+.statustext{font-size:17px; color:var(--sub); margin-top:4px; margin-left:22px}
+.players{font-size:16px; color:var(--sub); margin-top:10px}
+.hidden{display:none !important}
+.err{color:var(--red); font-size:16px; margin-top:10px; border-left:3px solid var(--red); padding-left:8px}
+
+.loglist{max-height:230px; overflow-y:auto; margin-top:6px}
+.logitem{font-size:16px; padding:9px 0; border-bottom:2px dashed var(--panel-dark)}
+.logitem:last-child{border-bottom:none}
+.logitem .who{color:var(--on); font-weight:bold}
+.logitem .when{color:var(--sub); font-size:13px; display:block; margin-top:2px}
+.topbar{display:flex; justify-content:space-between; align-items:center; margin-bottom:2px}
+.logout{color:var(--sub); font-family:'VT323',monospace; font-size:15px; background:none; border:none; cursor:pointer; padding:4px; text-decoration:underline}
+.adv{margin-top:12px; border-top:2px dashed var(--panel-dark); padding-top:10px}
+.adv summary{color:var(--sub); font-size:15px; cursor:pointer}
+@media (prefers-reduced-motion: reduce){ .pixels{animation:none} .dot.on,.dot.mid{animation:none} }
+</style>
+</head>
+<body>
+<div class="pixels"></div>
+<div class="wrap">
+
+  <div id="loginView">
+    <div class="logo">
+      <div class="block"></div>
+      <h1>ZYNOX CONTROL</h1>
+    </div>
+    <p class="sub">Sign in to manage the world</p>
+    <div class="panel">
+      <label>Username</label>
+      <input id="loginUser" autocomplete="username" placeholder="Username">
+      <label>Password</label>
+      <input id="loginPass" type="password" autocomplete="current-password" placeholder="Password">
+      <button class="mcbtn" id="loginBtn">Log In</button>
+      <div id="loginErr" class="err hidden"></div>
+      <details class="adv">
+        <summary>Server address</summary>
+        <label>API URL</label>
+        <input id="apiUrl" placeholder="https://your-tunnel.trycloudflare.com">
+      </details>
+    </div>
+  </div>
+
+  <div id="dashView" class="hidden">
+    <div class="topbar">
+      <div class="logo">
+        <div class="block"></div>
+        <h1>ZYNOX</h1>
+      </div>
+      <button class="logout" id="logoutBtn">Log out</button>
+    </div>
+    <p class="sub" id="whoami"></p>
+
+    <div class="panel">
+      <div class="status-line">
+        <span class="dot off" id="dot"></span><span class="serverline">ZYNOX NEW WORLD</span>
+      </div>
+      <div class="statustext" id="statusText">Checking…</div>
+      <div class="players" id="playersText"></div>
+      <div class="row">
+        <button class="mcbtn btn-start" id="startBtn">Start</button>
+        <button class="mcbtn btn-stop" id="stopBtn">Stop</button>
+        <button class="mcbtn btn-restart" id="restartBtn">Restart</button>
+      </div>
+      <div id="actionErr" class="err hidden"></div>
+    </div>
+
+    <div class="panel">
+      <div class="serverline" style="margin-bottom:12px">ACTIVITY LOG</div>
+      <div class="loglist" id="logList"><div class="statustext">Loading…</div></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const SERVER_ID = "zynoxnew";
+const els = id => document.getElementById(id);
+
+let actx;
+function beep(freq, dur, type){
+  try{
+    actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+    const o = actx.createOscillator(); const g = actx.createGain();
+    o.type = type || "square"; o.frequency.value = freq;
+    g.gain.setValueAtTime(0.06, actx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, actx.currentTime + dur);
+    o.connect(g); g.connect(actx.destination);
+    o.start(); o.stop(actx.currentTime + dur);
+  }catch(e){}
+}
+function sfxClick(){ beep(320, 0.08); if(navigator.vibrate) navigator.vibrate(15); }
+function sfxConfirm(){ beep(520, 0.12); beep(700, 0.1); if(navigator.vibrate) navigator.vibrate([20,30,20]); }
+function sfxError(){ beep(140, 0.2, "sawtooth"); if(navigator.vibrate) navigator.vibrate(80); }
+
+document.querySelectorAll(".mcbtn").forEach(b => b.addEventListener("click", sfxClick));
+
+function getApiUrl(){ return (localStorage.getItem("zynox_api_url") || "").replace(/\/$/,""); }
+function setApiUrl(v){ localStorage.setItem("zynox_api_url", v.replace(/\/$/,"")); }
+function getToken(){ return localStorage.getItem("zynox_token"); }
+function getUser(){ return localStorage.getItem("zynox_username"); }
+
+try {
+  els("apiUrl").value = getApiUrl();
+  if (getToken()) showDashboard();
+} catch(e){}
+
+els("loginBtn").onclick = async () => {
+  const user = els("loginUser").value.trim();
+  const pass = els("loginPass").value;
+  const api = els("apiUrl").value.trim();
+  els("loginErr").classList.add("hidden");
+  if (!api || !user || !pass) {
+    sfxError();
+    els("loginErr").textContent = "Fill in server address, username and password.";
+    els("loginErr").classList.remove("hidden");
+    return;
+  }
+  try {
+    setApiUrl(api);
+    const r = await fetch(api.replace(/\/$/,"") + "/api/login", {
+      method: "POST", headers: {"Content-Type":"application/json"},
+      body: JSON.stringify({username:user, password:pass})
+    });
+    const data = await r.json();
+    if (!data.success) throw new Error(data.message || "Login failed");
+    localStorage.setItem("zynox_token", data.token);
+    localStorage.setItem("zynox_username", data.username);
+    sfxConfirm();
+    showDashboard();
+  } catch(e) {
+    sfxError();
+    els("loginErr").textContent = "Couldn't log in — check server address and credentials.";
+    els("loginErr").classList.remove("hidden");
+  }
+};
+
+els("logoutBtn").onclick = () => {
+  try {
+    localStorage.removeItem("zynox_token");
+    localStorage.removeItem("zynox_username");
+  } catch(e){}
+  els("dashView").classList.add("hidden");
+  els("loginView").classList.remove("hidden");
+};
+
+function showDashboard(){
+  els("loginView").classList.add("hidden");
+  els("dashView").classList.remove("hidden");
+  els("whoami").textContent = "Logged in as " + (getUser() || "");
+  refreshStatus();
+  refreshLogs();
+  setInterval(refreshStatus, 8000);
+  setInterval(refreshLogs, 15000);
+}
+
+async function refreshStatus(){
+  try {
+    const r = await fetch(getApiUrl() + "/api/servers/" + SERVER_ID + "/status");
+    const data = await r.json();
+    if (!data.success) return;
+    const s = data.server;
+    const dot = els("dot");
+    dot.className = "dot " + (s.status === "ONLINE" ? "on" : (s.status === "OFFLINE" ? "off" : "mid"));
+    els("statusText").textContent = s.status;
+    els("playersText").textContent = s.status === "ONLINE"
+      ? (s.onlinePlayerCount + " player" + (s.onlinePlayerCount === 1 ? "" : "s") + " online" +
+         (s.onlinePlayers.length ? ": " + s.onlinePlayers.join(", ") : ""))
+      : "";
+  } catch(e){
+    els("statusText").textContent = "Can't reach server";
+  }
+}
+
+async function refreshLogs(){
+  try {
+    const r = await fetch(getApiUrl() + "/api/logs", {
+      headers: {"Authorization": "Bearer " + getToken()}
+    });
+    const data = await r.json();
+    if (!data.success) return;
+    const list = els("logList");
+    if (!data.log.length) { list.innerHTML = '<div class="statustext">No activity yet.</div>'; return; }
+    list.innerHTML = data.log.map(function(entry){
+      const when = new Date(entry.timestamp).toLocaleString();
+      return '<div class="logitem"><span class="who">' + escapeHtml(entry.username) + '</span> ' +
+             escapeHtml(entry.action) + '<span class="when">' + when + '</span></div>';
+    }).join("");
+  } catch(e){}
+}
+
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+
+async function doAction(action, btn){
+  els("actionErr").classList.add("hidden");
+  const original = btn.textContent;
+  btn.disabled = true; btn.textContent = "…";
+  try {
+    const r = await fetch(getApiUrl() + "/api/servers/" + SERVER_ID + "/" + action, {
+      method: "POST",
+      headers: {"Authorization": "Bearer " + getToken()}
+    });
+    const data = await r.json();
+    if (data.success) { sfxConfirm(); } else {
+      sfxError();
+      els("actionErr").textContent = data.message || "Action failed.";
+      els("actionErr").classList.remove("hidden");
+    }
+    refreshStatus();
+    refreshLogs();
+  } catch(e) {
+    sfxError();
+    els("actionErr").textContent = "Couldn't reach the server.";
+    els("actionErr").classList.remove("hidden");
+  } finally {
+    btn.disabled = false; btn.textContent = original;
+  }
+}
+
+els("startBtn").onclick = () => doAction("start", els("startBtn"));
+els("stopBtn").onclick = () => doAction("stop", els("stopBtn"));
+els("restartBtn").onclick = () => doAction("restart", els("restartBtn"));
+</script>
+</body>
+</html>
