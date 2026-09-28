@@ -235,7 +235,7 @@ const AM={start:["g","play","started the server"],stop:["r","stop","stopped the 
 const cl=l=>/Server started\./.test(l)?'<div class="ok">'+esc(l)+'</div><div class="ok">✓ Server started successfully</div>':'<div class="'+(/error|fail|crash/i.test(l)?"er":/warn/i.test(l)?"wn":"")+'">'+esc(l)+'</div>';
 
 function out(m){ls.d("zynox_token");ls.d("zynox_username");clearTimeout(pt);S={};$("dv").classList.add("hidden");$("lv").classList.remove("hidden");$("le").textContent=m||""}
-async function api(path,opt){opt=opt||{};const r=await fetch(API()+path,Object.assign({},opt,{headers:Object.assign({},opt.headers||{},{Authorization:"Bearer "+ls.g("zynox_token")})}));if(r.status===401){out("Your session has expired. Please sign in again.");throw new Error("401")}return r.json()}
+async function api(path,opt){opt=opt||{};const r=await fetch(API()+path,Object.assign({},opt,{headers:Object.assign({},opt.headers||{},{Authorization:"Bearer "+ls.g("zynox_token"),"ngrok-skip-browser-warning":"1"})}));if(r.status===401){out("Your session has expired. Please sign in again.");throw new Error("401")}return r.json()}
 
 $("lb").onclick=async()=>{
   const u=$("u").value.trim(),p=$("p").value,a=($("api").value.trim()||DEF).replace(/\/$/,""),b=$("lb");
