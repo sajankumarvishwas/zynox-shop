@@ -259,8 +259,8 @@ function showDashboard(){
   els("whoami").textContent = "Logged in as " + (getUser() || "");
   refreshStatus();
   refreshLogs();
-  setInterval(refreshStatus, 8000);
-  setInterval(refreshLogs, 15000);
+  setInterval(function(){ if(!document.hidden) refreshStatus(); }, 30000); document.addEventListener("visibilitychange", function(){ if(!document.hidden){ refreshStatus(); refreshLogs(); } });
+  setInterval(function(){ if(!document.hidden) refreshLogs(); }, 120000);
   setInterval(tickUptime, 1000);
 }
 
