@@ -2,368 +2,381 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#070b09">
 <title>Zynox Control</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{
-  --sky1:#1c2b1a; --sky2:#0b120a; --panel:#3a3226; --panel-light:#4d4232; --panel-dark:#242019;
-  --grass:#5a9c3f; --grass-dark:#3f7a2c; --dirt:#6b4a2f; --dirt-dark:#4a3220;
-  --stone:#8a8a86; --text:#f0ead8; --sub:#b9b09a;
-  --on:#6fe36f; --off:#8a8a86; --mid:#ffcc4d; --red:#ff6b5e;
-  box-sizing:border-box;
-  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
-}
-*{box-sizing:border-box; image-rendering:pixelated}
-html,body{height:100%;margin:0}
-body{
-  font-family:'VT323', monospace; font-size:19px; color:var(--text);
-  background:
-    radial-gradient(ellipse at 50% -10%, #2a3d24 0%, transparent 60%),
-    linear-gradient(180deg,var(--sky1) 0%, var(--sky2) 100%);
-  min-height:100%; display:flex; flex-direction:column; align-items:center;
-  padding:28px 16px 40px; position:relative; overflow-x:hidden;
-}
-.pixels{position:fixed; inset:0; pointer-events:none; opacity:0.6; z-index:0;
-  background-image: radial-gradient(2px 2px at 20px 30px, rgba(255,255,255,0.25), transparent),
-                     radial-gradient(2px 2px at 90px 80px, rgba(255,255,255,0.18), transparent),
-                     radial-gradient(1px 1px at 150px 20px, rgba(255,255,255,0.2), transparent),
-                     radial-gradient(1px 1px at 60px 120px, rgba(255,255,255,0.15), transparent);
-  background-repeat:repeat; background-size:200px 200px; animation:drift 40s linear infinite;
-}
-@keyframes drift{ from{background-position:0 0} to{background-position:-200px 200px} }
-.firefly{position:fixed; width:4px; height:4px; background:#a8e88a; border-radius:1px; pointer-events:none; z-index:0;
-  box-shadow:0 0 6px 2px rgba(168,232,138,0.6); animation:fly 14s ease-in-out infinite}
-.firefly:nth-child(1){top:15%; left:10%; animation-delay:0s}
-.firefly:nth-child(2){top:60%; left:80%; animation-delay:-4s}
-.firefly:nth-child(3){top:35%; left:50%; animation-delay:-9s}
-@keyframes fly{
-  0%,100%{transform:translate(0,0); opacity:.2}
-  25%{transform:translate(30px,-20px); opacity:.9}
-  50%{transform:translate(-10px,-40px); opacity:.3}
-  75%{transform:translate(-30px,-10px); opacity:.8}
-}
-.wrap{width:100%; max-width:420px; position:relative; z-index:1}
-
-.logo{display:flex; align-items:center; gap:14px; margin-bottom:6px}
-.block{
-  width:36px; height:36px; flex-shrink:0; position:relative;
-}
-.block::before{
-  content:""; position:absolute; top:0; left:0;
-  width:9px; height:9px; background:#6fbf3f;
-  box-shadow:
-    9px 0 0 0 #5da233, 18px 0 0 0 #6fbf3f, 27px 0 0 0 #5da233,
-    0 9px 0 0 #5da233, 9px 9px 0 0 #6fbf3f, 18px 9px 0 0 #5da233, 27px 9px 0 0 #6fbf3f,
-    0 18px 0 0 #7a5230, 9px 18px 0 0 #5c3d24, 18px 18px 0 0 #7a5230, 27px 18px 0 0 #5c3d24,
-    0 27px 0 0 #5c3d24, 9px 27px 0 0 #7a5230, 18px 27px 0 0 #5c3d24, 27px 27px 0 0 #7a5230;
-}
-h1{font-family:'Press Start 2P',monospace; font-size:16px; margin:0; letter-spacing:1px; color:var(--text); text-shadow:2px 2px 0 #000}
-.sub{color:var(--sub); font-size:16px; margin:10px 0 22px; letter-spacing:0.3px}
-
-.panel{
-  background:var(--panel);
-  border:3px solid var(--panel-dark);
-  box-shadow: inset 3px 3px 0 var(--panel-light), inset -3px -3px 0 var(--panel-dark), 4px 4px 0 rgba(0,0,0,0.35);
-  padding:20px; margin-bottom:18px;
-}
-label{display:block; font-size:14px; color:var(--sub); letter-spacing:1px; margin:16px 0 6px; text-transform:uppercase}
-label:first-of-type{margin-top:0}
-input{
-  width:100%; padding:11px 12px; border:3px solid var(--panel-dark); background:#241f18; color:var(--text);
-  font-family:'VT323',monospace; font-size:18px; outline:none;
-  box-shadow: inset 2px 2px 0 rgba(0,0,0,0.4);
-}
-input:focus{border-color:var(--grass)}
-
-.mcbtn{
-  width:100%; padding:13px; border:3px solid var(--panel-dark); font-family:'VT323',monospace;
-  font-size:19px; letter-spacing:1px; cursor:pointer; color:var(--text);
-  background:linear-gradient(180deg, var(--panel-light) 0%, var(--panel) 55%, var(--panel-dark) 100%);
-  box-shadow: inset 2px 2px 0 rgba(255,255,255,0.15), inset -2px -2px 0 rgba(0,0,0,0.3);
-  margin-top:18px; text-transform:uppercase;
-}
-.mcbtn:active{ box-shadow:inset 2px 2px 0 rgba(0,0,0,0.4); transform:translateY(1px) }
-.row{display:flex; gap:10px; margin-top:18px}
-.row .mcbtn{margin-top:0}
-.btn-start{background:linear-gradient(180deg,#7fd15c,var(--grass) 55%,var(--grass-dark)); color:#12210c}
-.btn-stop{background:linear-gradient(180deg,#ff9a8f,var(--red) 55%,#b8382c); color:#2b0e0a}
-.btn-restart{background:linear-gradient(180deg,#ffe08a,var(--mid) 55%,#cc9a2e); color:#2b1e05}
-
-.status-line{display:flex; align-items:center; gap:10px; margin-bottom:4px}
-.dot{width:12px;height:12px; flex-shrink:0}
-.dot.on{background:var(--on); box-shadow:0 0 0 3px rgba(111,227,111,0.25); animation:pulse 1.6s ease-in-out infinite}
-.dot.off{background:var(--off)}
-.dot.mid{background:var(--mid); animation:pulse 0.8s ease-in-out infinite}
-@keyframes pulse{0%,100%{opacity:1} 50%{opacity:0.4}}
-.serverline{font-family:'Press Start 2P',monospace; font-size:12px}
-.statustext{font-size:17px; color:var(--sub); margin-top:4px; margin-left:22px}
-.uptime{font-size:14px; color:var(--sub); margin-top:2px; margin-left:22px; opacity:0.8}
-.players{font-size:16px; color:var(--sub); margin-top:10px}
-.lastaction{font-size:14px; color:var(--sub); margin-top:8px; padding-top:10px; border-top:2px dashed var(--panel-dark)}
-.lastaction .who{color:var(--on); font-weight:bold}
-.icon{font-size:14px; margin-right:6px}
-.hidden{display:none !important}
-.err{color:var(--red); font-size:16px; margin-top:10px; border-left:3px solid var(--red); padding-left:8px}
-
-.loglist{max-height:230px; overflow-y:auto; margin-top:6px}
-.logitem{font-size:16px; padding:9px 0; border-bottom:2px dashed var(--panel-dark)}
-.logitem:last-child{border-bottom:none}
-.logitem .who{color:var(--on); font-weight:bold}
-.logitem .when{color:var(--sub); font-size:13px; display:block; margin-top:2px}
-.topbar{display:flex; justify-content:space-between; align-items:center; margin-bottom:2px}
-.logout{color:var(--sub); font-family:'VT323',monospace; font-size:15px; background:none; border:none; cursor:pointer; padding:4px; text-decoration:underline}
-.adv{margin-top:12px; border-top:2px dashed var(--panel-dark); padding-top:10px}
-.adv summary{color:var(--sub); font-size:15px; cursor:pointer}
-@media (prefers-reduced-motion: reduce){ .pixels{animation:none} .dot.on,.dot.mid{animation:none} }
+:root{--bg:#070b09;--s1:#0e1613;--s2:#141f1a;--ln:rgba(255,255,255,.07);--ln2:rgba(255,255,255,.14);--tx:#e9f0ea;--mu:#93a599;--dm:#5f7167;--ac:#4ade80;--am:#fbbf24;--rd:#f87171;--r:16px}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;scrollbar-width:thin;scrollbar-color:#22322a transparent}
+html{background:var(--bg)}
+body{margin:0;min-height:100vh;color:var(--tx);font:15px/1.5 Inter,system-ui,sans-serif;background:radial-gradient(900px 500px at 50% -120px,rgba(74,222,128,.10),transparent 70%),var(--bg);padding:max(20px,env(safe-area-inset-top)) 16px max(28px,env(safe-area-inset-bottom));overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;z-index:-1;opacity:.55;background-image:linear-gradient(var(--ln) 1px,transparent 1px),linear-gradient(90deg,var(--ln) 1px,transparent 1px);background-size:44px 44px;-webkit-mask-image:radial-gradient(ellipse at 50% 0,#000,transparent 72%);mask-image:radial-gradient(ellipse at 50% 0,#000,transparent 72%)}
+.fb{position:fixed;bottom:-20px;width:8px;height:8px;background:var(--ac);opacity:0;z-index:-1;animation:rise 20s linear infinite}
+.fb:nth-child(even){width:6px;height:6px;animation-duration:27s}
+@keyframes rise{0%{transform:translateY(0) rotate(0);opacity:0}10%{opacity:.22}90%{opacity:.12}100%{transform:translateY(-110vh) rotate(90deg);opacity:0}}
+@keyframes fade{from{opacity:0}}
+@keyframes up{to{opacity:1;transform:none}}
+@keyframes slide{from{opacity:0;transform:translateX(-8px)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pop{from{transform:scale(.92);opacity:0}}
+@keyframes bump{50%{transform:scale(1.14);color:var(--ac)}}
+@keyframes shim{to{background-position:-200% 0}}
+@keyframes pulse{0%{box-shadow:0 0 0 0 currentColor}70%{box-shadow:0 0 0 6px transparent}100%{box-shadow:0 0 0 0 transparent}}
+.hidden{display:none!important}
+.rv{opacity:0;transform:translateY(12px);animation:up .6s cubic-bezier(.2,.7,.2,1) forwards;animation-delay:var(--d,0s)}
+.view{animation:fade .35s ease}
+.wrap{max-width:520px;margin:0 auto}
+.brand{display:flex;align-items:center;gap:11px}
+.bn{font-weight:800;letter-spacing:.14em;font-size:15px;line-height:1.2}
+.bs{font-size:11px;color:var(--mu);letter-spacing:.04em}
+.blk{width:28px;height:28px;position:relative;flex:none}
+.blk:before{content:"";position:absolute;left:0;top:0;width:7px;height:7px;background:#6fbf3f;box-shadow:7px 0 #5da233,14px 0 #6fbf3f,21px 0 #5da233,0 7px #5da233,7px 7px #6fbf3f,14px 7px #5da233,21px 7px #6fbf3f,0 14px #7a5230,7px 14px #5c3d24,14px 14px #7a5230,21px 14px #5c3d24,0 21px #5c3d24,7px 21px #7a5230,14px 21px #5c3d24,21px 21px #7a5230}
+.top{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.chip{margin-left:auto;display:flex;align-items:center;gap:8px;padding:4px 6px 4px 4px;border:1px solid var(--ln);border-radius:99px;background:var(--s1)}
+.chip #un{font-size:13px;font-weight:600}
+.av{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:700}
+.ib{width:28px;height:28px;border:0;border-radius:50%;background:transparent;color:var(--mu);display:grid;place-items:center;cursor:pointer;transition:.2s}
+.ib:hover{color:var(--tx);background:rgba(255,255,255,.08)}
+.ic{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.grid{display:grid;gap:16px}
+.grid>*{min-width:0}
+.card{position:relative;background:linear-gradient(180deg,var(--s2),var(--s1));border:1px solid var(--ln);border-radius:var(--r);padding:18px}
+.card:after{content:"";position:absolute;left:18px;right:18px;top:0;height:1px;background:linear-gradient(90deg,transparent,rgba(74,222,128,.35),transparent)}
+.h{display:flex;align-items:center;gap:10px;margin:0 0 14px;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--mu)}
+.h .ic{color:var(--ac)}
+.bd{margin-left:auto;font-size:11px;padding:2px 9px;border-radius:99px;background:rgba(255,255,255,.06);color:var(--mu);letter-spacing:0;text-transform:none;transition:.3s}
+.bd.live{color:var(--am);background:rgba(251,191,36,.12)}
+.t{font-size:22px;margin:0;font-weight:700}
+.sb{font-size:12px;color:var(--mu)}
+.f{display:block;margin-top:14px;font-size:12px;font-weight:500;color:var(--mu)}
+input{display:block;width:100%;margin-top:6px;padding:12px 14px;border-radius:12px;border:1px solid var(--ln2);background:#0a110e;color:var(--tx);font:15px Inter,system-ui,sans-serif;outline:none;transition:.2s}
+input:focus{border-color:var(--ac);box-shadow:0 0 0 3px rgba(74,222,128,.15)}
+.err{color:var(--rd);font-size:13px;margin-top:12px}
+.adv{margin-top:16px;font-size:13px;color:var(--mu)}
+.adv summary{cursor:pointer}
+.login{max-width:400px;margin:7vh auto 0}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 14px;border-radius:12px;border:1px solid var(--ln2);background:var(--s2);color:var(--tx);font:600 14px Inter,system-ui,sans-serif;cursor:pointer;transition:transform .15s,background .2s,border-color .2s,opacity .2s}
+.btn:hover:not(:disabled){transform:translateY(-1px);border-color:rgba(255,255,255,.28)}
+.btn:active:not(:disabled){transform:scale(.97)}
+.btn:disabled{opacity:.38;cursor:not-allowed}
+.btn.p{background:var(--ac);color:#04140a;border-color:transparent}
+.btn.a{color:var(--am);border-color:rgba(251,191,36,.35);background:rgba(251,191,36,.08)}
+.btn.d{color:var(--rd);border-color:rgba(248,113,113,.35);background:rgba(248,113,113,.08)}
+.btn.w{width:100%;margin-top:18px}
+.sp{width:14px;height:14px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:spin .7s linear infinite}
+.sh{display:flex;align-items:center;gap:12px}
+.tile{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:rgba(74,222,128,.1);color:var(--ac);border:1px solid rgba(74,222,128,.25);flex:none}
+.tile .ic{width:22px;height:22px}
+.nm{font-weight:700;font-size:17px;line-height:1.2}
+.pill{margin-left:auto;display:inline-flex;align-items:center;gap:7px;padding:5px 11px;border-radius:99px;font-size:12px;font-weight:600;border:1px solid var(--ln2);color:var(--mu);transition:.35s}
+.pill i{width:7px;height:7px;border-radius:50%;background:currentColor}
+.pill.on{color:var(--ac);border-color:rgba(74,222,128,.4);background:rgba(74,222,128,.08)}
+.pill.on i{animation:pulse 1.8s infinite}
+.pill.mid{color:var(--am);border-color:rgba(251,191,36,.4);background:rgba(251,191,36,.08)}
+.pill.mid i{animation:pulse 1s infinite}
+.pill.bad{color:var(--rd);border-color:rgba(248,113,113,.4);background:rgba(248,113,113,.08)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 0}
+.st{background:#0a110e;border:1px solid var(--ln);border-radius:12px;padding:11px 12px;min-width:0}
+.st span{display:block;font-size:10px;color:var(--dm);text-transform:uppercase;letter-spacing:.07em}
+.st b{display:block;margin-top:3px;font:500 14px 'JetBrains Mono',monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bump{animation:bump .4s}
+.prog{margin:0 0 16px;padding:12px 14px;border-radius:12px;background:rgba(251,191,36,.06);border:1px solid rgba(251,191,36,.25);animation:fade .3s}
+.prog .r{display:flex;justify-content:space-between;gap:10px;font-size:13px;color:var(--am);margin-bottom:9px}
+.bar{height:6px;border-radius:9px;background:rgba(255,255,255,.08);overflow:hidden}
+.bar i{display:block;height:100%;width:0;border-radius:9px;background:linear-gradient(90deg,var(--am),#fde68a,var(--am));background-size:200% 100%;animation:shim 1.4s linear infinite;transition:width .8s cubic-bezier(.3,.7,.2,1)}
+.acts{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:10px}
+.con{background:#050807;border:1px solid var(--ln);border-radius:12px;padding:12px;height:230px;overflow-y:auto;font:12px/1.65 'JetBrains Mono',monospace;color:#9fb3a7;word-break:break-word}
+.con div{animation:fade .3s}
+.con .ok{color:var(--ac);font-weight:500}
+.con .er{color:var(--rd)}
+.con .wn{color:var(--am)}
+.pl{display:flex;align-items:center;gap:12px;padding:10px 0;border-top:1px solid var(--ln);animation:slide .4s}
+.pl:first-child{border-top:0;padding-top:0}
+.pa{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;font-weight:700;font-size:14px}
+.pn{font-weight:600}
+.ps{margin-left:auto;font-size:12px;color:var(--ac);display:flex;align-items:center;gap:6px}
+.ps:before{content:"";width:6px;height:6px;border-radius:50%;background:var(--ac)}
+.em{padding:20px 8px;text-align:center;color:var(--dm);font-size:13px}
+.em .ic{width:28px;height:28px;margin-bottom:8px;opacity:.6}
+.scr{max-height:280px;overflow-y:auto}
+.ac{display:flex;gap:12px;padding:10px 0;border-top:1px solid var(--ln)}
+.ac:first-child{border-top:0;padding-top:0}
+.ai{width:30px;height:30px;flex:none;border-radius:50%;display:grid;place-items:center}
+.ai .ic{width:15px;height:15px}
+.ai.g{background:rgba(74,222,128,.12);color:var(--ac)}
+.ai.r{background:rgba(248,113,113,.12);color:var(--rd)}
+.ai.a{background:rgba(251,191,36,.12);color:var(--am)}
+.ai.n{background:rgba(255,255,255,.07);color:var(--mu)}
+.at{font-size:14px;min-width:0;word-break:break-word}
+.at small{display:block;color:var(--dm);font-size:12px}
+.note{display:flex;gap:12px;margin-top:16px;padding:14px 16px;border-radius:14px;background:rgba(251,191,36,.05);border:1px solid rgba(251,191,36,.22);color:#d9c58f;font-size:13px}
+.note .ic{color:var(--am);margin-top:2px}
+.note b{display:block;color:var(--am);margin-bottom:2px}
+.ft{text-align:center;color:var(--dm);font-size:11px;margin-top:18px}
+.toast{position:fixed;left:50%;bottom:max(22px,env(safe-area-inset-bottom));transform:translate(-50%,30px);opacity:0;padding:11px 16px;border-radius:12px;background:#17241d;border:1px solid var(--ln2);font-size:13px;z-index:50;transition:.35s cubic-bezier(.2,.8,.2,1);pointer-events:none;max-width:90vw}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.toast.ok{border-color:rgba(74,222,128,.5)}
+.toast.er{border-color:rgba(248,113,113,.5)}
+.mod{position:fixed;inset:0;display:none;place-items:center;background:rgba(3,6,5,.7);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);z-index:60;padding:20px}
+.mod.show{display:grid;animation:fade .2s}
+.mb{width:100%;max-width:380px;background:var(--s2);border:1px solid var(--ln2);border-radius:18px;padding:22px;animation:pop .25s cubic-bezier(.2,.9,.3,1.2)}
+.mb h3{margin:0 0 6px;font-size:17px}
+.mb p{margin:0 0 18px;color:var(--mu);font-size:14px}
+.mb .rw{display:flex;gap:10px}
+.mb .btn{flex:1}
+@media(min-width:900px){.wrap{max-width:1000px}.grid{grid-template-columns:1.2fr .8fr;grid-template-areas:"srv ply" "con act"}.srv{grid-area:srv}.ply{grid-area:ply}.cns{grid-area:con}.actv{grid-area:act}}
+@media(prefers-reduced-motion:reduce){*,*:before{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}.fb{display:none}}
 </style>
 </head>
 <body>
-<div class="pixels"></div>
-<div class="firefly"></div><div class="firefly"></div><div class="firefly"></div>
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="i-play" viewBox="0 0 24 24"><polygon points="7 4 20 12 7 20 7 4" fill="currentColor"/></symbol>
+<symbol id="i-stop" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor"/></symbol>
+<symbol id="i-ref" viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-9-9c2.5 0 4.9 1 6.7 2.7L21 8"/><path d="M21 3v5h-5"/></symbol>
+<symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
+<symbol id="i-term" viewBox="0 0 24 24"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></symbol>
+<symbol id="i-act" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></symbol>
+<symbol id="i-out" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></symbol>
+<symbol id="i-srv" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></symbol>
+<symbol id="i-warn" viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></symbol>
+</defs></svg>
+<i class="fb" style="left:6%;animation-delay:-2s"></i><i class="fb" style="left:22%;animation-delay:-9s"></i><i class="fb" style="left:41%;animation-delay:-5s"></i><i class="fb" style="left:63%;animation-delay:-13s"></i><i class="fb" style="left:80%;animation-delay:-7s"></i><i class="fb" style="left:93%;animation-delay:-16s"></i>
+
 <div class="wrap">
 
-  <div id="loginView">
-    <div class="logo">
-      <div class="block"></div>
-      <h1>ZYNOX CONTROL</h1>
-    </div>
-    <p class="sub">Sign in to manage the world</p>
-    <div class="panel">
-      <label>Username</label>
-      <input id="loginUser" autocomplete="username" placeholder="Username">
-      <label>Password</label>
-      <input id="loginPass" type="password" autocomplete="current-password" placeholder="Password">
-      <button class="mcbtn" id="loginBtn">Log In</button>
-      <div id="loginErr" class="err hidden"></div>
-      <details class="adv">
-        <summary>Server address</summary>
-        <label>API URL</label>
-        <input id="apiUrl" placeholder="https://your-tunnel.trycloudflare.com">
-      </details>
-    </div>
+<section id="lv" class="view login">
+  <div class="brand rv" style="justify-content:center;margin-bottom:22px"><span class="blk"></span><div><div class="bn">ZYNOX</div><div class="bs">Control Panel</div></div></div>
+  <div class="card rv" style="--d:.08s">
+    <h1 class="t">Sign in</h1>
+    <div class="sb" style="margin-top:2px">Authorised Zynox members only.</div>
+    <label class="f">Username<input id="u" autocomplete="username" autocapitalize="off" spellcheck="false"></label>
+    <label class="f">Password<input id="p" type="password" autocomplete="current-password"></label>
+    <button class="btn p w" id="lb">Sign in</button>
+    <div class="err" id="le"></div>
+    <details class="adv"><summary>Connection settings</summary><label class="f">API address<input id="api" inputmode="url" autocapitalize="off" spellcheck="false"></label></details>
+  </div>
+</section>
+
+<section id="dv" class="view hidden">
+  <header class="top rv">
+    <div class="brand"><span class="blk"></span><div><div class="bn">ZYNOX</div><div class="bs">Control Panel</div></div></div>
+    <div class="chip"><span class="av" id="av"></span><span id="un"></span><button class="ib" id="lo" title="Sign out" aria-label="Sign out"><svg class="ic"><use href="#i-out"/></svg></button></div>
+  </header>
+
+  <div class="grid">
+    <article class="card srv rv" style="--d:.05s">
+      <div class="sh">
+        <span class="tile"><svg class="ic"><use href="#i-srv"/></svg></span>
+        <div><div class="nm">Zynox New World</div><div class="sb">Minecraft Bedrock Server</div></div>
+        <span class="pill" id="pill"><i></i><span id="pw">Checking</span></span>
+      </div>
+      <div class="stats">
+        <div class="st"><span>Uptime</span><b id="up">—</b></div>
+        <div class="st"><span>Players</span><b id="pc">0</b></div>
+        <div class="st"><span>Last action</span><b id="la">—</b></div>
+      </div>
+      <div class="prog hidden" id="pg"><div class="r"><span id="pt">Starting server…</span><span id="pe"></span></div><div class="bar"><i id="pb"></i></div></div>
+      <div class="acts">
+        <button class="btn p" id="bS" disabled><svg class="ic"><use href="#i-play"/></svg>Start</button>
+        <button class="btn a" id="bR" disabled><svg class="ic"><use href="#i-ref"/></svg>Restart</button>
+        <button class="btn d" id="bX" disabled><svg class="ic"><use href="#i-stop"/></svg>Stop</button>
+      </div>
+      <div class="err" id="nt"></div>
+    </article>
+
+    <article class="card ply rv" style="--d:.1s">
+      <h2 class="h"><svg class="ic"><use href="#i-users"/></svg>Online players<span class="bd" id="pcb">0</span></h2>
+      <div id="pl"></div>
+    </article>
+
+    <article class="card cns rv" style="--d:.15s">
+      <h2 class="h"><svg class="ic"><use href="#i-term"/></svg>Server console<span class="bd" id="cb">Idle</span></h2>
+      <div class="con" id="con"><div>Waiting for server output…</div></div>
+    </article>
+
+    <article class="card actv rv" style="--d:.2s">
+      <h2 class="h"><svg class="ic"><use href="#i-act"/></svg>Activity log</h2>
+      <div class="scr" id="al"></div>
+    </article>
   </div>
 
-  <div id="dashView" class="hidden">
-    <div class="topbar">
-      <div class="logo">
-        <div class="block"></div>
-        <h1>ZYNOX</h1>
-      </div>
-      <button class="logout" id="logoutBtn">Log out</button>
-    </div>
-    <p class="sub" id="whoami"></p>
-
-    <div class="panel">
-      <div class="status-line">
-        <span class="dot off" id="dot"></span><span class="serverline">ZYNOX NEW WORLD</span>
-      </div>
-      <div class="statustext" id="statusText">Checking…</div>
-      <div class="uptime hidden" id="uptimeText"></div>
-      <div class="players" id="playersText"></div>
-      <div class="row">
-        <button class="mcbtn btn-start" id="startBtn"><span class="icon">▶</span>Start</button>
-        <button class="mcbtn btn-stop" id="stopBtn"><span class="icon">■</span>Stop</button>
-        <button class="mcbtn btn-restart" id="restartBtn"><span class="icon">⟳</span>Restart</button>
-      </div>
-      <div id="actionErr" class="err hidden"></div>
-      <div class="lastaction hidden" id="lastAction"></div>
-    </div>
-
-    <div class="panel">
-      <div class="serverline" style="margin-bottom:12px">ACTIVITY LOG</div>
-      <div class="loglist" id="logList"><div class="statustext">Loading…</div></div>
-    </div>
-  </div>
+  <div class="note rv" style="--d:.25s"><svg class="ic"><use href="#i-warn"/></svg><div><b>Usage policy</b>Server controls are provided to authorised Zynox members only. Stopping or restarting the server without a valid reason, or in order to disrupt other players, is a violation of this policy. Every action is recorded against your username, and accounts found misusing these controls will be suspended without prior notice.</div></div>
+  <div class="ft">Zynox Control Panel</div>
+</section>
 
 </div>
 
+<div class="mod" id="md"><div class="mb"><h3 id="mt"></h3><p id="mp"></p><div class="rw"><button class="btn" id="mx">Cancel</button><button class="btn" id="mc"></button></div></div></div>
+<div class="toast" id="ts" role="status" aria-live="polite"></div>
+
 <script>
-const SERVER_ID = "zynoxnew";
-const els = id => document.getElementById(id);
+const $=id=>document.getElementById(id),SID="zynoxnew",DEF="https://frill-glowing-jingling.ngrok-free.dev";
+const ls={g:k=>{try{return localStorage.getItem(k)}catch(e){return null}},s:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}},d:k=>{try{localStorage.removeItem(k)}catch(e){}}};
+const API=()=>(ls.g("zynox_api_url")||DEF).replace(/\/$/,"");
+let S={},pt,tk=0,ac;
 
-let actx;
-function beep(freq, dur, type){
+function bp(f,d,t){try{ac=ac||new(window.AudioContext||window.webkitAudioContext)();const o=ac.createOscillator(),g=ac.createGain();o.type=t||"sine";o.frequency.value=f;g.gain.setValueAtTime(.05,ac.currentTime);g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+d);o.connect(g);g.connect(ac.destination);o.start();o.stop(ac.currentTime+d)}catch(e){}}
+const vb=p=>{try{navigator.vibrate&&navigator.vibrate(p)}catch(e){}};
+const sk={c(){bp(420,.06);vb(12)},ok(){bp(520,.1);setTimeout(()=>bp(780,.12),90);vb([18,30,18])},er(){bp(150,.18,"sawtooth");vb(70)}};
+document.addEventListener("click",e=>{if(e.target.closest(".btn,.ib"))sk.c()});
+
+let tt;function toast(m,k){const t=$("ts");t.textContent=m;t.className="toast show "+(k||"");clearTimeout(tt);tt=setTimeout(()=>t.className="toast",3200)}
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const ago=i=>{const m=Math.max(0,Math.floor((Date.now()-new Date(i))/6e4));if(m<1)return"just now";if(m<60)return m+"m ago";const h=Math.floor(m/60);return h<24?h+"h "+m%60+"m ago":Math.floor(h/24)+"d ago"};
+const fm=ms=>{const s=Math.max(0,Math.floor(ms/1e3));return Math.floor(s/60)+":"+String(s%60).padStart(2,"0")};
+const upt=ms=>{const s=Math.floor(ms/1e3),h=Math.floor(s/3600),m=Math.floor(s%3600/60);return h?h+"h "+m+"m":m+"m "+s%60+"s"};
+const hue=n=>{let h=0;for(const c of n)h=(h*31+c.charCodeAt(0))%360;return h};
+const EXP=()=>Number(ls.g("zynox_start_ms"))||90000;
+const PM={ONLINE:["on","Online"],OFFLINE:["","Offline"],STARTING:["mid","Starting"],STOPPING:["mid","Stopping"],CRASHED:["bad","Crashed"]};
+const AM={start:["g","play","started the server"],stop:["r","stop","stopped the server"],restart:["a","ref","restarted the server"]};
+const cl=l=>/Server started\./.test(l)?'<div class="ok">'+esc(l)+'</div><div class="ok">✓ Server started successfully</div>':'<div class="'+(/error|fail|crash/i.test(l)?"er":/warn/i.test(l)?"wn":"")+'">'+esc(l)+'</div>';
+
+function out(m){ls.d("zynox_token");ls.d("zynox_username");clearTimeout(pt);S={};$("dv").classList.add("hidden");$("lv").classList.remove("hidden");$("le").textContent=m||""}
+async function api(path,opt){opt=opt||{};const r=await fetch(API()+path,Object.assign({},opt,{headers:Object.assign({},opt.headers||{},{Authorization:"Bearer "+ls.g("zynox_token")})}));if(r.status===401){out("Your session has expired. Please sign in again.");throw new Error("401")}return r.json()}
+
+$("lb").onclick=async()=>{
+  const u=$("u").value.trim(),p=$("p").value,a=($("api").value.trim()||DEF).replace(/\/$/,""),b=$("lb");
+  $("le").textContent="";
+  if(!u||!p){$("le").textContent="Enter your username and password.";sk.er();return}
+  b.disabled=true;b.innerHTML='<span class="sp"></span>Signing in';
   try{
-    actx = actx || new (window.AudioContext || window.webkitAudioContext)();
-    const o = actx.createOscillator(); const g = actx.createGain();
-    o.type = type || "square"; o.frequency.value = freq;
-    g.gain.setValueAtTime(0.06, actx.currentTime);
-    g.gain.exponentialRampToValueAtTime(0.001, actx.currentTime + dur);
-    o.connect(g); g.connect(actx.destination);
-    o.start(); o.stop(actx.currentTime + dur);
-  }catch(e){}
+    const r=await fetch(a+"/api/login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({username:u,password:p})});
+    const d=await r.json();
+    if(!d.success)throw new Error("cred");
+    ls.s("zynox_api_url",a);ls.s("zynox_token",d.token);ls.s("zynox_username",d.username);
+    $("p").value="";sk.ok();show();
+  }catch(e){
+    $("le").textContent=e.message==="cred"?"Invalid username or password.":"Unable to reach the server. Check that it is online and the API address is correct.";sk.er();
+  }
+  b.disabled=false;b.textContent="Sign in";
+};
+["u","p"].forEach(i=>$(i).addEventListener("keydown",e=>{if(e.key==="Enter")$("lb").click()}));
+$("lo").onclick=()=>out("");
+
+function show(){
+  $("lv").classList.add("hidden");$("dv").classList.remove("hidden");
+  const n=ls.g("zynox_username")||"",h=hue(n);
+  $("un").textContent=n;$("av").textContent=n.charAt(0).toUpperCase();
+  $("av").style.background="hsl("+h+" 45% 26%)";$("av").style.color="hsl("+h+" 75% 78%)";
+  tk=0;tick();
 }
-function sfxClick(){ beep(320, 0.08); if(navigator.vibrate) navigator.vibrate(15); }
-function sfxConfirm(){ beep(520, 0.12); beep(700, 0.1); if(navigator.vibrate) navigator.vibrate([20,30,20]); }
-function sfxError(){ beep(140, 0.2, "sawtooth"); if(navigator.vibrate) navigator.vibrate(80); }
+async function tick(){
+  clearTimeout(pt);
+  if(!ls.g("zynox_token"))return;
+  if(!document.hidden)await refresh(tk%4===0);
+  tk++;
+  pt=setTimeout(tick,S.st==="STARTING"||S.st==="STOPPING"?3000:30000);
+}
+document.addEventListener("visibilitychange",()=>{if(!document.hidden&&ls.g("zynox_token")){tk=0;tick()}});
 
-document.querySelectorAll(".mcbtn").forEach(b => b.addEventListener("click", sfxClick));
-
-function getApiUrl(){ return (localStorage.getItem("zynox_api_url") || "").replace(/\/$/,""); }
-function setApiUrl(v){ localStorage.setItem("zynox_api_url", v.replace(/\/$/,"")); }
-function getToken(){ return localStorage.getItem("zynox_token"); }
-function getUser(){ return localStorage.getItem("zynox_username"); }
-
-try {
-  els("apiUrl").value = getApiUrl();
-  if (getToken()) showDashboard();
-} catch(e){}
-
-els("loginBtn").onclick = async () => {
-  const user = els("loginUser").value.trim();
-  const pass = els("loginPass").value;
-  const api = els("apiUrl").value.trim();
-  els("loginErr").classList.add("hidden");
-  if (!api || !user || !pass) {
-    sfxError();
-    els("loginErr").textContent = "Fill in server address, username and password.";
-    els("loginErr").classList.remove("hidden");
+async function refresh(lg){
+  try{
+    const d=await api("/api/servers/"+SID+"/status");
+    if(d.success)apply(d.server);
+  }catch(e){
+    if(e.message!=="401"){S.st=null;$("pill").className="pill bad";$("pw").textContent="Unreachable"}
     return;
   }
-  try {
-    setApiUrl(api);
-    const r = await fetch(api.replace(/\/$/,"") + "/api/login", {
-      method: "POST", headers: {"Content-Type":"application/json"},
-      body: JSON.stringify({username:user, password:pass})
-    });
-    const data = await r.json();
-    if (!data.success) throw new Error(data.message || "Login failed");
-    localStorage.setItem("zynox_token", data.token);
-    localStorage.setItem("zynox_username", data.username);
-    sfxConfirm();
-    showDashboard();
-  } catch(e) {
-    sfxError();
-    els("loginErr").textContent = "Couldn't log in — check server address and credentials.";
-    els("loginErr").classList.remove("hidden");
+  if(S.st==="STARTING"||S.st==="STOPPING"||!S.cl)loadCon();
+  if(lg)loadLog();
+}
+function apply(s){
+  S.st=s.status;S.startedAt=s.startedAt;S.players=s.onlinePlayers||[];
+  if(s.status==="STARTING"&&!S.since){if(s.startingAt){S.since=Date.parse(s.startingAt);S.exact=1}else{S.since=Date.now()}}
+  if(s.status==="ONLINE"&&S.since){
+    const d=Date.now()-S.since;
+    if(S.exact&&d>1e4&&d<6e5)ls.s("zynox_start_ms",d);
+    toast("Server started in "+fm(d),"ok");sk.ok();
   }
-};
-
-els("logoutBtn").onclick = () => {
-  try {
-    localStorage.removeItem("zynox_token");
-    localStorage.removeItem("zynox_username");
-  } catch(e){}
-  els("dashView").classList.add("hidden");
-  els("loginView").classList.remove("hidden");
-};
-
-let serverStartedAt = null;
-
-function showDashboard(){
-  els("loginView").classList.add("hidden");
-  els("dashView").classList.remove("hidden");
-  els("whoami").textContent = "Logged in as " + (getUser() || "");
-  refreshStatus();
-  refreshLogs();
-  setInterval(function(){ if(!document.hidden) refreshStatus(); }, 30000); document.addEventListener("visibilitychange", function(){ if(!document.hidden){ refreshStatus(); refreshLogs(); } });
-  setInterval(function(){ if(!document.hidden) refreshLogs(); }, 120000);
-  setInterval(tickUptime, 1000);
+  if(s.status!=="STARTING"){S.since=null;S.exact=0}
+  const m=PM[s.status]||["",s.status];
+  $("pill").className="pill "+m[0];$("pw").textContent=m[1];
+  const on=s.status==="ONLINE",off=s.status==="OFFLINE"||s.status==="CRASHED";
+  $("bS").disabled=!off;$("bR").disabled=!on;$("bX").disabled=!on;
+  const n=S.players.length;
+  if($("pc").textContent!==String(n)){$("pc").textContent=n;$("pc").classList.remove("bump");void $("pc").offsetWidth;$("pc").classList.add("bump")}
+  $("pcb").textContent=n;
+  const k=S.players.join("|")+"#"+on;
+  if(k!==S.pk){
+    S.pk=k;
+    $("pl").innerHTML=n?S.players.map(p=>'<div class="pl"><span class="pa" style="background:hsl('+hue(p)+' 45% 24%);color:hsl('+hue(p)+' 75% 78%)">'+esc(p.charAt(0).toUpperCase())+'</span><span class="pn">'+esc(p)+'</span><span class="ps">Online</span></div>').join(""):'<div class="em"><svg class="ic"><use href="#i-users"/></svg><div>'+(on?"No players online right now":"Server is not running")+'</div></div>';
+  }
+  $("nt").textContent=s.status==="CRASHED"&&s.lastError?s.lastError:"";
+  $("cb").textContent=s.status==="STARTING"?"Live":s.status==="STOPPING"?"Live":"Idle";
+  $("cb").className="bd"+(s.status==="STARTING"||s.status==="STOPPING"?" live":"");
 }
-
-function timeAgo(iso){
-  const diff = Math.max(0, Date.now() - new Date(iso).getTime());
-  const m = Math.floor(diff / 60000);
-  if (m < 1) return "just now";
-  if (m < 60) return m + "m ago";
-  const h = Math.floor(m / 60);
-  if (h < 24) return h + "h " + (m % 60) + "m ago";
-  return Math.floor(h / 24) + "d ago";
-}
-
-function tickUptime(){
-  const el = els("uptimeText");
-  if (!serverStartedAt) { el.classList.add("hidden"); return; }
-  const diff = Math.max(0, Date.now() - new Date(serverStartedAt).getTime());
-  const h = Math.floor(diff / 3600000);
-  const m = Math.floor((diff % 3600000) / 60000);
-  const s = Math.floor((diff % 60000) / 1000);
-  el.textContent = "Up for " + (h ? h + "h " : "") + m + "m " + s + "s";
-  el.classList.remove("hidden");
-}
-
-async function refreshStatus(){
-  try {
-    const r = await fetch(getApiUrl() + "/api/servers/" + SERVER_ID + "/status");
-    const data = await r.json();
-    if (!data.success) return;
-    const s = data.server;
-    const dot = els("dot");
-    dot.className = "dot " + (s.status === "ONLINE" ? "on" : (s.status === "OFFLINE" ? "off" : "mid"));
-    els("statusText").textContent = s.status;
-    serverStartedAt = s.status === "ONLINE" ? s.startedAt : null;
-    if (!serverStartedAt) els("uptimeText").classList.add("hidden");
-    els("playersText").textContent = s.status === "ONLINE"
-      ? (s.onlinePlayerCount + " player" + (s.onlinePlayerCount === 1 ? "" : "s") + " online" +
-         (s.onlinePlayers.length ? ": " + s.onlinePlayers.join(", ") : ""))
-      : "";
-  } catch(e){
-    els("statusText").textContent = "Can't reach server";
+function paint(){
+  const st=S.st;
+  $("up").textContent=st==="ONLINE"&&S.startedAt?upt(Date.now()-Date.parse(S.startedAt)):"—";
+  const b=st==="STARTING"||st==="STOPPING";
+  $("pg").classList.toggle("hidden",!b);
+  if(st==="STARTING"){
+    const e=Date.now()-(S.since||Date.now()),x=EXP();
+    $("pt").textContent=e>x?"Taking longer than usual…":"Starting server…";
+    $("pe").textContent=fm(e)+" / ~"+fm(x);
+    $("pb").style.width=Math.min(95,e/x*100)+"%";
+  }else if(st==="STOPPING"){
+    $("pt").textContent="Stopping server…";$("pe").textContent="";$("pb").style.width="100%";
   }
 }
+setInterval(paint,1000);
 
-async function refreshLogs(){
-  try {
-    const r = await fetch(getApiUrl() + "/api/logs", {
-      headers: {"Authorization": "Bearer " + getToken()}
-    });
-    const data = await r.json();
-    if (!data.success) return;
-
-    const lastEl = els("lastAction");
-    if (data.log.length) {
-      const last = data.log[0];
-      lastEl.innerHTML = '<span class="who">' + escapeHtml(last.username) + '</span> ' +
-        escapeHtml(last.action) + ' · ' + timeAgo(last.timestamp);
-      lastEl.classList.remove("hidden");
-    }
-
-    const list = els("logList");
-    if (!data.log.length) { list.innerHTML = '<div class="statustext">No activity yet.</div>'; return; }
-    list.innerHTML = data.log.map(function(entry){
-      const when = new Date(entry.timestamp).toLocaleString();
-      return '<div class="logitem"><span class="who">' + escapeHtml(entry.username) + '</span> ' +
-             escapeHtml(entry.action) + '<span class="when">' + when + '</span></div>';
-    }).join("");
-  } catch(e){}
-}
-
-function escapeHtml(s){
-  return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-}
-
-async function doAction(action, btn){
-  els("actionErr").classList.add("hidden");
-  const original = btn.textContent;
-  btn.disabled = true; btn.textContent = "…";
-  try {
-    const r = await fetch(getApiUrl() + "/api/servers/" + SERVER_ID + "/" + action, {
-      method: "POST",
-      headers: {"Authorization": "Bearer " + getToken()}
-    });
-    const data = await r.json();
-    if (data.success) { sfxConfirm(); } else {
-      sfxError();
-      els("actionErr").textContent = data.message || "Action failed.";
-      els("actionErr").classList.remove("hidden");
-    }
-    refreshStatus();
-    refreshLogs();
-  } catch(e) {
-    sfxError();
-    els("actionErr").textContent = "Couldn't reach the server.";
-    els("actionErr").classList.remove("hidden");
-  } finally {
-    btn.disabled = false; btn.textContent = original;
+async function loadCon(){
+  try{
+    const d=await api("/api/servers/"+SID+"/console");
+    S.cl=1;
+    if(!d.success)return;
+    const c=$("con"),bot=c.scrollHeight-c.scrollTop-c.clientHeight<40,ln=d.lines||[],k=ln.length+"|"+(ln[ln.length-1]||"");
+    if(k===S.ck)return;
+    S.ck=k;
+    c.innerHTML=ln.length?ln.map(cl).join(""):"<div>Waiting for server output…</div>";
+    if(bot)c.scrollTop=c.scrollHeight;
+  }catch(e){
+    if(e.message!=="401"&&!S.cl){S.cl=1;$("con").innerHTML='<div class="wn">Live console is not available yet. Update the server API to enable it.</div>'}
   }
 }
+async function loadLog(){
+  try{
+    const d=await api("/api/logs");
+    if(!d.success)return;
+    const l=d.log||[];
+    $("la").textContent=l[0]?l[0].username+" · "+ago(l[0].timestamp).replace(" ago",""):"—";
+    $("al").innerHTML=l.length?l.slice(0,25).map(e=>{
+      const c=/^command:/.test(e.action),m=c?["n","term","ran "+e.action.replace(/^command:\s*/,"")]:(AM[e.action]||["n","act",e.action]);
+      return '<div class="ac"><span class="ai '+m[0]+'"><svg class="ic"><use href="#i-'+m[1]+'"/></svg></span><div class="at"><b>'+esc(e.username)+'</b> '+esc(m[2])+'<small title="'+esc(new Date(e.timestamp).toLocaleString())+'">'+ago(e.timestamp)+'</small></div></div>';
+    }).join(""):'<div class="em">No activity recorded yet</div>';
+  }catch(e){}
+}
 
-els("startBtn").onclick = () => doAction("start", els("startBtn"));
-els("stopBtn").onclick = () => doAction("stop", els("stopBtn"));
-els("restartBtn").onclick = () => doAction("restart", els("restartBtn"));
+async function act(a){
+  const b={start:$("bS"),stop:$("bX"),restart:$("bR")}[a],h=b.innerHTML;
+  b.disabled=true;b.innerHTML='<span class="sp"></span>'+{start:"Starting",stop:"Stopping",restart:"Restarting"}[a];
+  try{
+    const d=await api("/api/servers/"+SID+"/"+a,{method:"POST"});
+    if(d.success){sk.ok();toast(d.message||"Command sent","ok");if(a==="start"){S.since=Date.now();S.exact=1}}
+    else{sk.er();toast(d.message||"Action failed","er")}
+  }catch(e){if(e.message!=="401"){sk.er();toast("Unable to reach the server","er")}}
+  b.innerHTML=h;tk=0;tick();
+}
+function ask(a){
+  const n=(S.players||[]).length,s=a==="stop";
+  $("mt").textContent=s?"Stop the server?":"Restart the server?";
+  $("mp").textContent=(n?n+(n>1?" players are":" player is")+" currently online and will be disconnected. ":"")+"This action is recorded under your account.";
+  $("mc").className="btn "+(s?"d":"a");$("mc").textContent=s?"Stop server":"Restart server";
+  $("mc").onclick=()=>{$("md").classList.remove("show");act(a)};
+  $("md").classList.add("show");
+}
+$("bS").onclick=()=>act("start");
+$("bX").onclick=()=>ask("stop");
+$("bR").onclick=()=>ask("restart");
+$("mx").onclick=()=>$("md").classList.remove("show");
+$("md").onclick=e=>{if(e.target.id==="md")$("md").classList.remove("show")};
+
+$("api").value=ls.g("zynox_api_url")||DEF;
+if(ls.g("zynox_token"))show();
 </script>
 </body>
 </html>
