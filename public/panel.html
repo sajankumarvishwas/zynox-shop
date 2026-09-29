@@ -443,14 +443,34 @@ async function loadDay(){
   try{
     var r=await api("/api/sessions?from="+encodeURIComponent(d.toISOString())+"&to="+encodeURIComponent(e.toISOString()));
     if(!r.success)return;
-    var ss=r.sessions,nm={};ss.forEach(function(x){nm[x.name]=1});var n=Object.keys(nm).length;
+    var ss=r.sessions;
+    var g={};
+    ss.forEach(function(x){
+      if(!g[x.name])g[x.name]={name:x.name,total:0,sessions:[]};
+      var ms=(x.leftAt?Date.parse(x.leftAt):Date.now())-Date.parse(x.joinedAt);
+      g[x.name].total+=ms;
+      g[x.name].sessions.push(x);
+    });
+    var players=Object.keys(g).map(function(k){return g[k]});
+    players.forEach(function(p){p.sessions.sort(function(a,b){return Date.parse(b.joinedAt)-Date.parse(a.joinedAt)})});
+    players.sort(function(a,b){return b.total-a.total});
+    var n=players.length;
     $("zsum").textContent=n+" player"+(n===1?"":"s")+" · "+ss.length+" session"+(ss.length===1?"":"s");
-    $("zsl").innerHTML=ss.length?ss.map(function(x){
-      var h=hue(x.name),ms=(x.leftAt?Date.parse(x.leftAt):Date.now())-Date.parse(x.joinedAt);
-      return '<div class="pl"><span class="pa" style="background:hsl('+h+' 45% 24%);color:hsl('+h+' 75% 78%)">'+esc(x.name.charAt(0).toUpperCase())+'</span><div><div class="pn">'+esc(x.name)+'</div><small class="sm">'+tm(x.joinedAt)+' &rarr; '+(x.leftAt?tm(x.leftAt):"now")+'</small></div>'+(x.leftAt?'<span class="dur">'+upt(ms)+'</span>':'<span class="ps">Playing</span>')+'</div>';
+    $("zsl").innerHTML=players.length?players.map(function(p){
+      var h=hue(p.name);
+      var rows=p.sessions.map(function(x){
+        return '<div class="cm" style="padding-left:46px"><small class="sm">'+tm(x.joinedAt)+' &rarr; '+(x.leftAt?tm(x.leftAt):"now")+'</small>'+(x.leftAt?'':' <span class="ps" style="margin-left:6px">Playing</span>')+'</div>';
+      }).join("");
+      return '<div class="zprow"><div class="pl" data-tgl style="cursor:pointer"><span class="pa" style="background:hsl('+h+' 45% 24%);color:hsl('+h+' 75% 78%)">'+esc(p.name.charAt(0).toUpperCase())+'</span><div><div class="pn">'+esc(p.name)+'</div><small class="sm">'+p.sessions.length+' session'+(p.sessions.length===1?"":"s")+'</small></div><span class="dur">'+upt(p.total)+'</span></div><div class="zdet hidden">'+rows+'</div></div>';
     }).join(""):'<div class="em">No sessions recorded for this day</div>';
   }catch(e){}
 }
+document.addEventListener("click",function(e){
+  var row=e.target.closest("#zsl [data-tgl]");
+  if(!row)return;
+  var det=row.parentElement.querySelector(".zdet");
+  if(det)det.classList.toggle("hidden");
+});
 function fillPl(){
   var sel=$("zps"),cur=sel.value,ps=S.players||[];
   sel.innerHTML='<option value="">Select player</option>'+ps.map(function(p){return "<option>"+esc(p)+"</option>"}).join("");
