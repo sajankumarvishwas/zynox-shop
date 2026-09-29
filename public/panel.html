@@ -303,7 +303,7 @@ function apply(s){
   const k=S.players.join("|")+"#"+on;
   if(k!==S.pk){
     S.pk=k;
-    $("pl").innerHTML=n?S.players.map(p=>'<div class="pl"><span class="pa" style="background:hsl('+hue(p)+' 45% 24%);color:hsl('+hue(p)+' 75% 78%)">'+esc(p.charAt(0).toUpperCase())+'</span><span class="pn">'+esc(p)+'</span><span class="ps">Online</span></div>').join(""):'<div class="em"><svg class="ic"><use href="#i-users"/></svg><div>'+(on?"No players online right now":"Server is not running")+'</div></div>';
+    $("pl").innerHTML=n?S.players.map(p=>'<div class="pl"><span class="pa" style="background:hsl('+hue(p)+' 45% 24%);color:hsl('+hue(p)+' 75% 78%)">'+esc(p.charAt(0).toUpperCase())+'</span><span class="pn">'+esc(p)+'</span><span class="ps">Online</span>'+((window.zxOwn&&window.zxOwn())?'<button class="btn d" style="margin-left:8px;padding:6px 10px" data-kick="'+esc(p)+'">Kick</button>':'')+'</div>').join(""):'<div class="em"><svg class="ic"><use href="#i-users"/></svg><div>'+(on?"No players online right now":"Server is not running")+'</div></div>';
   }
   $("nt").textContent=s.status==="CRASHED"&&s.lastError?s.lastError:"";
   $("cb").textContent=s.status==="STARTING"?"Live":s.status==="STOPPING"?"Live":"Idle";
@@ -603,6 +603,61 @@ setInterval(function(){
   if(on&&on.dataset.p==="tools")loadBk();
 },5000);
 setInterval(paintBk,1000);
+build();
+})();
+</script>
+<!-- zynox-v4 -->
+<script>
+(function(){
+window.zxOwn=function(){return (ls.g("zynox_username")||"").toUpperCase()==="ZYNOX"};
+var SV="zynoxnew";
+var IP="147.185.221.213",PORT="25892",DISCORD="https://discord.gg/xT9DtRBPh";
+function fail(e,m){if(e&&e.message==="401")return;sk.er();toast(m||"Unable to reach the server","er")}
+function build(){
+  var g=document.querySelector("#dv .grid");
+  g.insertAdjacentHTML("beforeend",
+    '<article class="card" data-pg="server"><h2 class="h"><svg class="ic" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M6 8h.01M10 8h.01"/></svg>Connect</h2>'+
+    '<div class="sb">IP Address</div><div class="r2"><input id="zip" readonly value="'+IP+'" style="flex:1;padding:10px 12px;border-radius:10px;border:1px solid var(--ln2);background:#0a110e;color:var(--tx);font:14px JetBrains Mono,monospace"><button class="btn" id="zcip" style="padding:10px 14px">Copy</button></div>'+
+    '<div class="sb" style="margin-top:10px">Port</div><div class="r2"><input id="zpt2" readonly value="'+PORT+'" style="flex:1;padding:10px 12px;border-radius:10px;border:1px solid var(--ln2);background:#0a110e;color:var(--tx);font:14px JetBrains Mono,monospace"><button class="btn" id="zcpt" style="padding:10px 14px">Copy</button></div>'+
+    (DISCORD?'<a href="'+DISCORD+'" target="_blank" rel="noopener" class="btn w" style="text-decoration:none;margin-top:14px;display:flex">Join our Discord</a>':'')+
+    '</article>'+
+    '<article class="card hidden" data-pg="tools" data-own="1"><h2 class="h"><svg class="ic" viewBox="0 0 24 24"><path d="M11 5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h4"/><path d="M13 19a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2h-4"/></svg>Announcement (owner)</h2><label class="f">Message<input id="zam" maxlength="200" placeholder="Message to all players"></label><button class="btn p w" id="zas">Send announcement</button></article>'+
+    '<article class="card hidden" data-pg="tools" data-own="1"><h2 class="h"><svg class="ic"><use href="#i-term"/></svg>Server command (owner)</h2><label class="f">Command<input id="zcm" placeholder="e.g. gamerule keepInventory true"></label><button class="btn w" id="zcs">Send command</button></article>');
+  $("zcip").onclick=function(){navigator.clipboard.writeText(IP).then(function(){sk.ok();toast("IP copied","ok")}).catch(function(){})};
+  $("zcpt").onclick=function(){navigator.clipboard.writeText(PORT).then(function(){sk.ok();toast("Port copied","ok")}).catch(function(){})};
+  $("zas").onclick=async function(){
+    var m=$("zam").value.trim();
+    if(!m){sk.er();toast("Enter a message","er");return}
+    try{
+      var d=await api("/api/servers/"+SV+"/announce",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({message:m})});
+      if(d.success){sk.ok();toast("Announcement sent","ok");$("zam").value=""}else{sk.er();toast(d.message||"Failed","er")}
+    }catch(e){fail(e)}
+  };
+  $("zcs").onclick=async function(){
+    var c=$("zcm").value.trim();
+    if(!c){sk.er();toast("Enter a command","er");return}
+    try{
+      var d=await api("/api/servers/"+SV+"/command",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({command:c})});
+      if(d.success){sk.ok();toast("Command sent","ok");$("zcm").value=""}else{sk.er();toast(d.message||"Failed","er")}
+    }catch(e){fail(e)}
+  };
+  document.addEventListener("click",async function(e){
+    var b=e.target.closest("button[data-kick]");
+    if(!b)return;
+    var p=b.dataset.kick;
+    $("mt").textContent="Kick "+p+"?";
+    $("mp").textContent="They can rejoin immediately. This is recorded under your account.";
+    $("mc").className="btn d";$("mc").textContent="Kick";
+    $("mc").onclick=async function(){
+      $("md").classList.remove("show");
+      try{
+        var d=await api("/api/servers/"+SV+"/kick",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({player:p})});
+        if(d.success){sk.ok();toast(d.message||"Kicked","ok")}else{sk.er();toast(d.message||"Failed","er")}
+      }catch(err){fail(err)}
+    };
+    $("md").classList.add("show");
+  });
+}
 build();
 })();
 </script>
