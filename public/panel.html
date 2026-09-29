@@ -236,7 +236,7 @@ const AM={start:["g","play","started the server"],stop:["r","stop","stopped the 
 const cl=l=>/Server started\./.test(l)?'<div class="ok">'+esc(l)+'</div><div class="ok">✓ Server started successfully</div>':'<div class="'+(/error|fail|crash/i.test(l)?"er":/warn/i.test(l)?"wn":"")+'">'+esc(l)+'</div>';
 
 function out(m){ls.d("zynox_token");ls.d("zynox_username");clearTimeout(pt);S={};$("dv").classList.add("hidden");$("lv").classList.remove("hidden");$("le").textContent=m||""}
-async function api(path,opt){opt=opt||{};const r=await fetch(API()+path,Object.assign({},opt,{headers:Object.assign({},opt.headers||{},{Authorization:"Bearer "+ls.g("zynox_token"),"ngrok-skip-browser-warning":"1"})}));if(r.status===401){out("Your session has expired. Please sign in again.");throw new Error("401")}return r.json()}
+async function api(path,opt){opt=opt||{};const r=await fetch(API()+path,Object.assign({},opt,{headers:Object.assign({},opt.headers||{},{Authorization:"Bearer "+ls.g("zynox_token"),"ngrok-skip-browser-warning":"1"})}));if(r.status===401){var sm="Your session has expired. Please sign in again.";try{var j=await r.clone().json();if(j&&j.message==="Account suspended")sm="This account has been suspended. Contact the owner."}catch(x){}out(sm);throw new Error("401")}return r.json()}
 
 $("lb").onclick=async()=>{
   const u=$("u").value.trim(),p=$("p").value,a=($("api").value.trim()||DEF).replace(/\/$/,""),b=$("lb");
@@ -246,11 +246,11 @@ $("lb").onclick=async()=>{
   try{
     const r=await fetch(a+"/api/login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({username:u,password:p})});
     const d=await r.json();
-    if(!d.success)throw new Error("cred");
+    if(!d.success)throw new Error(d.message==="Account suspended"||/^Too many/.test(d.message||"")?d.message:"cred");
     ls.s("zynox_api_url",a);ls.s("zynox_token",d.token);ls.s("zynox_username",d.username);
     $("p").value="";sk.ok();show();
   }catch(e){
-    $("le").textContent=e.message==="cred"?"Invalid username or password.":"Unable to reach the server. Check that it is online and the API address is correct.";sk.er();
+    $("le").textContent=e.message==="cred"?"Invalid username or password.":(e.message==="Account suspended"?"This account has been suspended. Contact the owner.":(/^Too many/.test(e.message)?e.message:"Unable to reach the server. Check that it is online and the API address is correct."));sk.er();
   }
   b.disabled=false;b.textContent="Sign in";
 };
@@ -409,7 +409,7 @@ function setPage(p){
   document.querySelectorAll(".pgnav button").forEach(function(b){b.classList.toggle("on",b.dataset.p===p)});
   window.scrollTo(0,0);
   if(p==="players")loadDay();
-  if(p==="tools"){fillPl();loadTools()}
+  if(p==="tools"){fillPl();loadTools();if(window.zxTools)window.zxTools()}
   if(p==="chat")loadChat();
 }
 function go(d){var l=pages(),i=l.indexOf(page)+d;if(i>=0&&i<l.length){sk.c();setPage(l[i])}}
@@ -519,6 +519,91 @@ setInterval(function(){
 },15000);
 var os=show;show=function(){os.apply(this,arguments);init()};
 if(ls.g("zynox_token"))init();
+})();
+</script>
+<!-- zynox-v3 -->
+<script>
+(function(){
+var OWN=function(){return (ls.g("zynox_username")||"").toUpperCase()==="ZYNOX"};
+var SV="zynoxnew",bk={running:false,last:null};
+function conf(t,p,cls,lab,fn){$("mt").textContent=t;$("mp").textContent=p;$("mc").className="btn "+cls;$("mc").textContent=lab;$("mc").onclick=function(){$("md").classList.remove("show");fn()};$("md").classList.add("show")}
+function fail(e,m){if(e&&e.message==="401")return;sk.er();toast(m||"Unable to reach the server","er")}
+function build(){
+  var g=document.querySelector("#dv .grid");
+  g.insertAdjacentHTML("beforeend",
+  '<article class="card hidden" data-pg="tools"><h2 class="h"><svg class="ic" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>World backup<span class="bd" id="zbb"></span></h2><div class="sb" id="zbt">Loading...</div><button class="btn w" id="zbk" disabled>Back up world</button><div class="sb" id="zbn" style="margin-top:10px">Available only while the server is offline. The 5 most recent backups are kept.</div></article>'+
+  '<article class="card hidden" data-pg="tools" data-own="1"><h2 class="h"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>Automation (owner)</h2>'+
+  '<label class="f">Restart automatically after a crash<select class="sel" id="zar"><option value="1">On</option><option value="0">Off</option></select></label>'+
+  '<label class="f">Daily restart<select class="sel" id="zde"><option value="0">Off</option><option value="1">On</option></select></label>'+
+  '<label class="f">Daily restart time (phone time)<input id="zdt" type="time" value="04:00"></label>'+
+  '<label class="f">Back up before the daily restart<select class="sel" id="zbr"><option value="1">On</option><option value="0">Off</option></select></label>'+
+  '<button class="btn p w" id="zsv">Save automation</button>'+
+  '<div class="sb" style="margin-top:10px">Players get a 60 second warning in game before a daily restart.</div></article>'+
+  '<article class="card hidden" data-pg="tools" data-own="1"><h2 class="h"><svg class="ic"><use href="#i-users"/></svg>Accounts (owner)</h2><div id="zac"></div><div class="sb" style="margin-top:12px">Suspended accounts are signed out immediately and cannot log in until restored.</div></article>');
+  $("zbk").onclick=async function(){
+    $("zbk").disabled=true;
+    try{
+      var d=await api("/api/servers/"+SV+"/backup",{method:"POST"});
+      if(d.success){sk.ok();toast("Backup started","ok");bk.running=true}else{sk.er();toast(d.message||"Could not start the backup","er")}
+    }catch(e){fail(e)}
+    loadBk();
+  };
+  $("zsv").onclick=async function(){
+    var body={autoRestart:$("zar").value==="1",dailyEnabled:$("zde").value==="1",dailyTime:$("zdt").value,backupOnRestart:$("zbr").value==="1"};
+    try{
+      var d=await api("/api/settings",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
+      if(d.success){sk.ok();toast("Automation saved","ok")}else{sk.er();toast(d.message||"Could not save","er")}
+    }catch(e){fail(e)}
+  };
+  $("zac").addEventListener("click",function(e){
+    var b=e.target.closest("button[data-u]");if(!b)return;
+    var u=b.dataset.u,sus=b.dataset.s==="1";
+    conf(sus?"Suspend "+u+"?":"Restore "+u+"?",sus?"They will be signed out immediately and cannot log in until restored.":"They will be able to log in again.",sus?"d":"p",sus?"Suspend":"Restore",async function(){
+      try{
+        var d=await api("/api/admin/suspend",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({username:u,suspended:sus})});
+        if(d.success){sk.ok();toast(sus?u+" suspended":u+" restored","ok")}else{sk.er();toast(d.message||"Failed","er")}
+      }catch(err){fail(err)}
+      loadAc();
+    });
+  });
+}
+function paintBk(){
+  if(!$("zbt"))return;
+  var l=bk.last;
+  $("zbt").textContent=bk.running?"Backup in progress...":(l?(l.ok?"Last backup: "+ago(l.at)+(l.size?" ("+l.size+")":""):"Last backup failed "+ago(l.at)):"No backup yet.");
+  $("zbb").textContent=bk.running?"Running":"";
+  $("zbb").className="bd"+(bk.running?" live":"");
+  $("zbk").disabled=bk.running||!(S.st==="OFFLINE"||S.st==="CRASHED");
+}
+async function loadBk(){
+  try{var r=await api("/api/servers/"+SV+"/backup");if(!r.success)return;bk.running=r.running;bk.last=r.last;paintBk()}catch(e){}
+}
+async function loadCfg(){
+  if(!OWN())return;
+  try{
+    var r=await api("/api/settings");if(!r.success)return;
+    var c=r.settings;
+    $("zar").value=c.autoRestart?"1":"0";$("zde").value=c.dailyEnabled?"1":"0";$("zdt").value=c.dailyTime;$("zbr").value=c.backupOnRestart?"1":"0";
+  }catch(e){}
+}
+async function loadAc(){
+  if(!OWN())return;
+  try{
+    var r=await api("/api/admin/users");if(!r.success)return;
+    $("zac").innerHTML=r.users.map(function(u){
+      var h=hue(u.username);
+      return '<div class="pl"><span class="pa" style="background:hsl('+h+' 45% 24%);color:hsl('+h+' 75% 78%)">'+esc(u.username.charAt(0))+'</span><div><div class="pn">'+esc(u.username)+'</div><small class="sm">'+(u.owner?"Owner":(u.suspended?"Suspended":"Active"))+'</small></div>'+(u.owner?'':'<button class="btn '+(u.suspended?'p':'d')+'" style="margin-left:auto;padding:8px 12px" data-u="'+esc(u.username)+'" data-s="'+(u.suspended?0:1)+'">'+(u.suspended?"Restore":"Suspend")+'</button>')+'</div>';
+    }).join("");
+  }catch(e){}
+}
+window.zxTools=function(){loadBk();loadCfg();loadAc()};
+setInterval(function(){
+  if(document.hidden||!ls.g("zynox_token"))return;
+  var on=document.querySelector(".pgnav button.on");
+  if(on&&on.dataset.p==="tools")loadBk();
+},5000);
+setInterval(paintBk,1000);
+build();
 })();
 </script>
 </body>
