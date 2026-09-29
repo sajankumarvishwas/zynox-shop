@@ -379,5 +379,147 @@ $("md").onclick=e=>{if(e.target.id==="md")$("md").classList.remove("show")};
 $("api").value=ls.g("zynox_api_url")||DEF;
 if(ls.g("zynox_token"))show();
 </script>
+<!-- zynox-v2 -->
+<style>
+#dv{padding-bottom:88px}
+.pgnav{position:fixed;left:0;right:0;bottom:0;z-index:40;display:flex;justify-content:center;padding:14px 12px max(10px,env(safe-area-inset-bottom));background:linear-gradient(180deg,transparent,rgba(7,11,9,.94) 45%);pointer-events:none}
+.pgnav div{pointer-events:auto;display:flex;gap:4px;padding:5px;border:1px solid var(--ln2);border-radius:99px;background:rgba(14,22,19,.94);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.pgnav button{border:0;background:transparent;color:var(--mu);font:600 12px Inter,system-ui,sans-serif;padding:9px 13px;border-radius:99px;cursor:pointer;display:flex;align-items:center;gap:6px;transition:.25s}
+.pgnav button.on{background:var(--ac);color:#04140a}
+.sel{display:block;width:100%;margin-top:6px;padding:12px 14px;border-radius:12px;border:1px solid var(--ln2);background:#0a110e;color:var(--tx);font:15px Inter,system-ui,sans-serif;outline:none}
+.r2{display:flex;gap:10px;align-items:center}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.sm{display:block;font-size:12px;color:var(--dm)}
+.dur{margin-left:auto;font:500 13px 'JetBrains Mono',monospace;color:var(--mu);white-space:nowrap}
+.cm{padding:9px 0;border-top:1px solid var(--ln);font-size:14px;word-break:break-word}
+.cm:first-child{border-top:0;padding-top:0}
+@media(min-width:900px){.grid{grid-template-columns:1fr;grid-template-areas:none}.grid>*{grid-area:auto!important}.wrap{max-width:560px}}
+</style>
+<script>
+(function(){
+var built=false,page="server",dayOff=0,tl=null,pkey="";
+var OWN=function(){return (ls.g("zynox_username")||"").toUpperCase()==="ZYNOX"};
+var pages=function(){return OWN()?["server","players","tools","chat"]:["server","players","tools"]};
+var ICON={server:'<svg class="ic"><use href="#i-srv"/></svg>',players:'<svg class="ic"><use href="#i-users"/></svg>',tools:'<svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>',chat:'<svg class="ic" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>'};
+var LBL={server:"Server",players:"Players",tools:"Tools",chat:"Chat"};
+var tm=function(i){return new Date(i).toLocaleTimeString([],{hour:"numeric",minute:"2-digit"})};
+function setPage(p){
+  page=p;
+  document.querySelectorAll("#dv .card[data-pg]").forEach(function(c){c.classList.toggle("hidden",c.dataset.pg!==p||(c.dataset.own&&!OWN()))});
+  document.querySelectorAll(".pgnav button").forEach(function(b){b.classList.toggle("on",b.dataset.p===p)});
+  window.scrollTo(0,0);
+  if(p==="players")loadDay();
+  if(p==="tools"){fillPl();loadTools()}
+  if(p==="chat")loadChat();
+}
+function go(d){var l=pages(),i=l.indexOf(page)+d;if(i>=0&&i<l.length){sk.c();setPage(l[i])}}
+function build(){
+  var g=document.querySelector("#dv .grid"),dv=$("dv");
+  [["srv","server"],["ply","players"],["cns","server"],["actv","server"]].forEach(function(x){var e=g.querySelector("."+x[0]);if(e)e.dataset.pg=x[1]});
+  g.insertAdjacentHTML("beforeend",
+  '<article class="card" data-pg="players"><h2 class="h"><svg class="ic"><use href="#i-act"/></svg>Session history</h2><div class="r2"><button class="btn" id="zpv" aria-label="Previous day">&lsaquo;</button><div id="zdl" style="flex:1;text-align:center;font-weight:600"></div><button class="btn" id="znx" aria-label="Next day">&rsaquo;</button></div><div class="sb" id="zsum" style="text-align:center;margin:10px 0 12px"></div><div class="scr" id="zsl"></div></article>'+
+  '<article class="card" data-pg="tools"><h2 class="h">'+ICON.tools+'Teleport<span class="bd" id="zlim"></span></h2><div class="sb" id="zpt"></div><label class="f">Player<select class="sel" id="zps"></select></label><button class="btn p w" id="ztb" disabled>Teleport to set point</button><div class="sb" id="zcd" style="margin-top:10px"></div></article>'+
+  '<article class="card" data-pg="tools" data-own="1"><h2 class="h">'+ICON.tools+'Teleport point (owner)</h2><div class="g3"><input id="zx" type="number" step="any" placeholder="X"><input id="zy" type="number" step="any" placeholder="Y"><input id="zz" type="number" step="any" placeholder="Z"></div><button class="btn w" id="zsp">Save point</button></article>'+
+  '<article class="card" data-pg="chat" data-own="1"><h2 class="h">'+ICON.chat+'Server chat<span class="bd">Last 24h</span></h2><div class="scr" id="zcl" style="max-height:60vh;min-height:180px"></div></article>');
+  var nav=document.createElement("nav");nav.className="pgnav";
+  nav.innerHTML="<div>"+["server","players","tools","chat"].map(function(p){return '<button data-p="'+p+'" id="zn-'+p+'">'+ICON[p]+LBL[p]+"</button>"}).join("")+"</div>";
+  dv.appendChild(nav);
+  nav.addEventListener("click",function(e){var b=e.target.closest("button");if(b)setPage(b.dataset.p)});
+  var sx=0,sy=0;
+  dv.addEventListener("touchstart",function(e){sx=e.changedTouches[0].clientX;sy=e.changedTouches[0].clientY},{passive:true});
+  dv.addEventListener("touchend",function(e){var dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;if(Math.abs(dx)<70||Math.abs(dx)<Math.abs(dy)*1.6||e.target.closest("input,select,.con,.scr"))return;go(dx<0?1:-1)},{passive:true});
+  $("zpv").onclick=function(){dayOff--;loadDay()};
+  $("znx").onclick=function(){if(dayOff<0){dayOff++;loadDay()}};
+  $("zps").onchange=updTp;
+  $("ztb").onclick=doTp;
+  $("zsp").onclick=savePt;
+  built=true;
+}
+async function loadDay(){
+  var d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()+dayOff);
+  var e=new Date(d);e.setDate(e.getDate()+1);
+  $("zdl").textContent=dayOff===0?"Today":d.toLocaleDateString([],{day:"numeric",month:"short",year:"numeric"});
+  $("znx").disabled=dayOff>=0;
+  try{
+    var r=await api("/api/sessions?from="+encodeURIComponent(d.toISOString())+"&to="+encodeURIComponent(e.toISOString()));
+    if(!r.success)return;
+    var ss=r.sessions,nm={};ss.forEach(function(x){nm[x.name]=1});var n=Object.keys(nm).length;
+    $("zsum").textContent=n+" player"+(n===1?"":"s")+" · "+ss.length+" session"+(ss.length===1?"":"s");
+    $("zsl").innerHTML=ss.length?ss.map(function(x){
+      var h=hue(x.name),ms=(x.leftAt?Date.parse(x.leftAt):Date.now())-Date.parse(x.joinedAt);
+      return '<div class="pl"><span class="pa" style="background:hsl('+h+' 45% 24%);color:hsl('+h+' 75% 78%)">'+esc(x.name.charAt(0).toUpperCase())+'</span><div><div class="pn">'+esc(x.name)+'</div><small class="sm">'+tm(x.joinedAt)+' &rarr; '+(x.leftAt?tm(x.leftAt):"now")+'</small></div>'+(x.leftAt?'<span class="dur">'+upt(ms)+'</span>':'<span class="ps">Playing</span>')+'</div>';
+    }).join(""):'<div class="em">No sessions recorded for this day</div>';
+  }catch(e){}
+}
+function fillPl(){
+  var sel=$("zps"),cur=sel.value,ps=S.players||[];
+  sel.innerHTML='<option value="">Select player</option>'+ps.map(function(p){return "<option>"+esc(p)+"</option>"}).join("");
+  if(ps.indexOf(cur)>=0)sel.value=cur;
+  pkey=ps.join("|");updTp();
+}
+function updTp(){
+  var cd=tl&&!tl.owner&&tl.nextAt?Date.parse(tl.nextAt)-Date.now():0;
+  $("ztb").disabled=!($("zps").value&&S.st==="ONLINE"&&tl&&tl.point&&cd<=0);
+  $("zcd").textContent=!tl?"":(!tl.point?"Teleport point is not set yet.":(tl.owner?"Owner: no limit.":(cd>0?"Next teleport available in "+upt(cd):"Available now.")));
+  $("zlim").textContent=!tl?"":(tl.owner?"Unlimited":"1 per 24h");
+  $("zpt").textContent=tl&&tl.point?"Point: X "+tl.point.x+"  Y "+tl.point.y+"  Z "+tl.point.z:"";
+}
+async function loadTools(){
+  try{
+    var r=await api("/api/tools");if(!r.success)return;
+    tl=r;
+    if(r.point&&r.owner&&!$("zx").value){$("zx").value=r.point.x;$("zy").value=r.point.y;$("zz").value=r.point.z}
+    updTp();
+  }catch(e){}
+}
+function doTp(){
+  var p=$("zps").value;if(!p)return;
+  $("mt").textContent="Teleport "+p+"?";
+  $("mp").textContent=(OWN()?"":"You can do this once every 24 hours. ")+"The player will be moved to the set point. This is recorded under your account.";
+  $("mc").className="btn p";$("mc").textContent="Teleport";
+  $("mc").onclick=async function(){
+    $("md").classList.remove("show");
+    try{
+      var d=await api("/api/servers/"+SID+"/teleport",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({player:p})});
+      if(d.success){sk.ok();toast(d.message||"Teleported","ok")}else{sk.er();toast(d.message||"Teleport failed","er")}
+    }catch(e){if(e.message!=="401"){sk.er();toast("Unable to reach the server","er")}}
+    loadTools();if(typeof loadLog==="function")loadLog();
+  };
+  $("md").classList.add("show");
+}
+async function savePt(){
+  var v=[$("zx").value,$("zy").value,$("zz").value];
+  if(v.some(function(x){return x===""})){sk.er();toast("Enter X, Y and Z","er");return}
+  try{
+    var d=await api("/api/tools/point",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({x:+v[0],y:+v[1],z:+v[2]})});
+    if(d.success){sk.ok();toast("Teleport point saved","ok");loadTools()}else{sk.er();toast(d.message||"Could not save","er")}
+  }catch(e){if(e.message!=="401"){sk.er();toast("Unable to reach the server","er")}}
+}
+async function loadChat(){
+  try{
+    var r=await api("/api/chat");if(!r.success)return;
+    var c=$("zcl"),bot=c.scrollHeight-c.scrollTop-c.clientHeight<60,m=r.messages||[];
+    c.innerHTML=m.length?m.map(function(x){var h=hue(x.name);return '<div class="cm"><b style="color:hsl('+h+' 70% 72%)">'+esc(x.name)+'</b> <small class="sm" style="display:inline">'+tm(x.t)+'</small><div>'+esc(x.msg)+'</div></div>'}).join(""):'<div class="em">No chat messages in the last 24 hours</div>';
+    if(bot)c.scrollTop=c.scrollHeight;
+  }catch(e){}
+}
+function init(){
+  if(!built)build();
+  $("zn-chat").classList.toggle("hidden",!OWN());
+  dayOff=0;tl=null;setPage("server");
+}
+setInterval(function(){
+  if(!built||document.hidden||!ls.g("zynox_token")||$("dv").classList.contains("hidden"))return;
+  if(page==="tools"){if((S.players||[]).join("|")!==pkey)fillPl();else updTp()}
+},1000);
+setInterval(function(){
+  if(!built||document.hidden||!ls.g("zynox_token")||$("dv").classList.contains("hidden"))return;
+  if(page==="players"&&dayOff===0)loadDay();
+  if(page==="chat")loadChat();
+},15000);
+var os=show;show=function(){os.apply(this,arguments);init()};
+if(ls.g("zynox_token"))init();
+})();
+</script>
 </body>
 </html>
