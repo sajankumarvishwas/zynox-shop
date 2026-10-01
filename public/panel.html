@@ -401,9 +401,9 @@ if(ls.g("zynox_token"))show();
 (function(){
 var built=false,page="server",dayOff=0,tl=null,pkey="";
 var OWN=function(){return (ls.g("zynox_username")||"").toUpperCase()==="ZYNOX"};
-var pages=function(){return OWN()?["server","players","tools","chat"]:["server","players","tools"]};
-var ICON={server:'<svg class="ic"><use href="#i-srv"/></svg>',players:'<svg class="ic"><use href="#i-users"/></svg>',tools:'<svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>',chat:'<svg class="ic" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>'};
-var LBL={server:"Server",players:"Players",tools:"Tools",chat:"Chat"};
+var pages=function(){return OWN()?["server","players","tools","mods","chat"]:["server","players","tools"]};
+var ICON={server:'<svg class="ic"><use href="#i-srv"/></svg>',players:'<svg class="ic"><use href="#i-users"/></svg>',tools:'<svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>',mods:'<svg class="ic" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>',chat:'<svg class="ic" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>'};
+var LBL={server:"Server",players:"Players",tools:"Tools",mods:"Mods",chat:"Chat"};
 var tm=function(i){return new Date(i).toLocaleTimeString([],{hour:"numeric",minute:"2-digit",hour12:true})};
 function setPage(p){
   page=p;
@@ -413,6 +413,7 @@ function setPage(p){
   if(p==="players"){loadDay();loadWeek()}
   if(p==="tools"){fillPl();loadTools();if(window.zxTools)window.zxTools()}
   if(p==="chat")loadChat();
+  if(p==="mods"&&window.zxMods)window.zxMods();
 }
 function go(d){var l=pages(),i=l.indexOf(page)+d;if(i>=0&&i<l.length){sk.c();setPage(l[i])}}
 function build(){
@@ -425,7 +426,7 @@ function build(){
   '<article class="card" data-pg="tools" data-own="1"><h2 class="h">'+ICON.tools+'Teleport point (owner)</h2><div class="g3"><input id="zx" type="number" step="any" placeholder="X"><input id="zy" type="number" step="any" placeholder="Y"><input id="zz" type="number" step="any" placeholder="Z"></div><button class="btn w" id="zsp">Save point</button></article>'+
   '<article class="card" data-pg="chat" data-own="1"><h2 class="h">'+ICON.chat+'Server chat<span class="bd">Last 24h</span></h2><div class="scr" id="zcl" style="max-height:60vh;min-height:180px"></div></article>');
   var nav=document.createElement("nav");nav.className="pgnav";
-  nav.innerHTML="<div>"+["server","players","tools","chat"].map(function(p){return '<button data-p="'+p+'" id="zn-'+p+'">'+ICON[p]+LBL[p]+"</button>"}).join("")+"</div>";
+  nav.innerHTML="<div>"+["server","players","tools","mods","chat"].map(function(p){return '<button data-p="'+p+'" id="zn-'+p+'">'+ICON[p]+LBL[p]+"</button>"}).join("")+"</div>";
   dv.appendChild(nav);
   nav.addEventListener("click",function(e){var b=e.target.closest("button");if(b)setPage(b.dataset.p)});
   var sx=0,sy=0;
@@ -551,6 +552,7 @@ async function loadChat(){
 function init(){
   if(!built)build();
   $("zn-chat").classList.toggle("hidden",!OWN());
+  $("zn-mods").classList.toggle("hidden",!OWN());
   dayOff=0;tl=null;setPage("server");
   setTimeout(function(){setPage("server")},80);
 }
@@ -915,6 +917,124 @@ setInterval(function(){
 build();
 loadRules();
 loadMod();
+})();
+</script>
+<!-- zynox-v9 -->
+<script>
+(function(){
+var SV="zynoxnew";
+function fail(e,m){if(e&&e.message==="401")return;sk.er();toast(m||"Unable to reach the server","er")}
+function ab2b64(buffer){
+  var bytes=new Uint8Array(buffer),chunk=0x8000,bin="";
+  for(var i=0;i<bytes.length;i+=chunk){bin+=String.fromCharCode.apply(null,bytes.subarray(i,i+chunk))}
+  return btoa(bin);
+}
+function build(){
+  var g=document.querySelector("#dv .grid");
+  g.insertAdjacentHTML("beforeend",
+    '<article class="card hidden" data-pg="mods"><h2 class="h">'+
+      '<svg class="ic" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>'+
+      'Mods &amp; Addons</h2>'+
+    '<label class="f">Upload .mcpack / .mcaddon<input type="file" id="zmf" accept=".mcpack,.mcaddon,.zip"></label>'+
+    '<button class="btn p w" id="zmup" disabled>Upload</button>'+
+    '<div class="sb" style="margin-top:16px">Active</div><div id="zmact" style="margin-top:6px"></div>'+
+    '<div class="sb" style="margin-top:16px">Saved (inactive)</div><div id="zminact" style="margin-top:6px"></div>'+
+    '<div class="sb" style="margin-top:12px">Changes apply the next time the server is stopped and started.</div>'+
+    '</article>'+
+    '<article class="card hidden" data-pg="tools"><h2 class="h"><svg class="ic" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Change password</h2>'+
+    '<label class="f">Current password<input id="zcpc" type="password"></label>'+
+    '<label class="f">New password<input id="zcpn" type="password"></label>'+
+    '<label class="f">Confirm new password<input id="zcpn2" type="password"></label>'+
+    '<div class="sb" style="margin-top:8px">Use at least 6 characters. Mixing letters and numbers is safer.</div>'+
+    '<button class="btn p w" id="zcpbtn">Change password</button>'+
+    '</article>'
+  );
+  $("zmf").onchange=function(){$("zmup").disabled=!$("zmf").files.length};
+  $("zmup").onclick=async function(){
+    var file=$("zmf").files[0];
+    if(!file)return;
+    $("zmup").disabled=true;var oh=$("zmup").textContent;$("zmup").innerHTML='<span class="sp"></span>Uploading';
+    try{
+      var buf=await file.arrayBuffer();
+      var b64=ab2b64(buf);
+      var d=await api("/api/mods/upload",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({filename:file.name,data:b64})});
+      if(d.success){sk.ok();toast("Uploaded "+(d.added||[]).length+" pack(s)","ok");$("zmf").value="";loadMods()}else{sk.er();toast(d.message||"Upload failed","er")}
+    }catch(e){fail(e)}
+    $("zmup").disabled=!$("zmf").files.length;$("zmup").textContent=oh;
+  };
+  $("zcpbtn").onclick=async function(){
+    var cur=$("zcpc").value,n1=$("zcpn").value,n2=$("zcpn2").value;
+    if(!cur||!n1){sk.er();toast("Fill in all fields","er");return}
+    if(n1!==n2){sk.er();toast("New passwords do not match","er");return}
+    if(n1.length<6){sk.er();toast("New password must be at least 6 characters","er");return}
+    try{
+      var d=await api("/api/change-password",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({currentPassword:cur,newPassword:n1})});
+      if(d.success){
+        sk.ok();toast("Password changed","ok");
+        setTimeout(function(){out("Password changed. Please sign in again.")},1200);
+      }else{sk.er();toast(d.message||"Failed","er")}
+    }catch(e){fail(e)}
+  };
+}
+function modRow(m){
+  var h=hue(m.name);
+  return '<div class="pl"><span class="pa" style="background:hsl('+h+' 45% 24%);color:hsl('+h+' 75% 78%)">'+esc(m.name.charAt(0).toUpperCase())+'</span><div><div class="pn">'+esc(m.name)+'</div><small class="sm">v'+esc(m.version)+' &middot; '+(m.type==="resource"?"Resource":"Behavior")+(m.description?(' &middot; '+esc(m.description.slice(0,60))):'')+'</small></div>'+
+    '<button class="btn '+(m.active?"d":"p")+'" style="margin-left:auto;padding:8px 10px" data-modtgl="'+esc(m.id)+'" data-act="'+(m.active?0:1)+'">'+(m.active?"Deactivate":"Activate")+'</button>'+
+    (m.active?'':'<button class="btn" style="padding:8px 10px;margin-left:6px" data-moddel="'+esc(m.id)+'">Delete</button>')+
+  '</div>';
+}
+async function loadMods(){
+  try{
+    var r=await api("/api/mods");
+    if(!r.success){$("zmact").innerHTML='<div class="em">Owner only</div>';$("zminact").innerHTML="";return}
+    var mods=r.mods||[],act=mods.filter(function(m){return m.active}),inact=mods.filter(function(m){return !m.active});
+    $("zmact").innerHTML=act.length?act.map(modRow).join(""):'<div class="em">No active mods</div>';
+    $("zminact").innerHTML=inact.length?inact.map(modRow).join(""):'<div class="em">No saved mods</div>';
+  }catch(e){}
+}
+document.addEventListener("click",async function(e){
+  var t=e.target.closest("button[data-modtgl]");
+  if(t){
+    var id=t.dataset.modtgl,activate=t.dataset.act==="1";
+    t.disabled=true;
+    try{
+      var d=await api("/api/mods/"+(activate?"activate":"deactivate"),{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({id:id})});
+      if(d.success){sk.ok();toast(activate?"Activated":"Deactivated","ok")}else{sk.er();toast(d.message||"Failed","er")}
+    }catch(err){fail(err)}
+    loadMods();
+    return;
+  }
+  var dl=e.target.closest("button[data-moddel]");
+  if(dl){
+    var id2=dl.dataset.moddel;
+    $("mt").textContent="Delete this mod?";
+    $("mp").textContent="This removes the saved pack files. This cannot be undone.";
+    $("mc").className="btn d";$("mc").textContent="Delete";
+    $("mc").onclick=async function(){
+      $("md").classList.remove("show");
+      try{
+        var d2=await api("/api/mods/delete",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({id:id2})});
+        if(d2.success){sk.ok();toast("Deleted","ok")}else{sk.er();toast(d2.message||"Failed","er")}
+      }catch(err){fail(err)}
+      loadMods();
+    };
+    $("md").classList.add("show");
+  }
+});
+window.zxMods=loadMods;
+document.body.insertAdjacentHTML("beforeend", '<div class="card hidden" id="zmodpend" style="position:fixed;left:16px;right:16px;bottom:78px;z-index:30;max-width:488px;margin:0 auto;padding:12px 16px"><div class="err" style="margin:0"><svg class="ic" style="width:16px;height:16px;vertical-align:-3px;margin-right:6px"><use href="#i-warn"/></svg>Mod changes are pending. Restart the server to apply them.</div></div>');
+async function checkPending(){
+  if(!OWN())return;
+  try{
+    var r=await api("/api/mods");
+    if(!r.success)return;
+    var onBtn=document.querySelector(".pgnav button.on");
+    var onServer=onBtn&&onBtn.dataset.p==="server";
+    $("zmodpend").classList.toggle("hidden", !(onServer && r.pendingRestart));
+  }catch(e){}
+}
+setInterval(function(){if(!document.hidden&&ls.g("zynox_token"))checkPending()},12000);
+build();
 })();
 </script>
 </body>
