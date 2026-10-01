@@ -149,7 +149,22 @@ input:focus{border-color:var(--ac)}
 @media(min-width:900px){.grid{grid-template-columns:1fr}.wrap{max-width:560px}}
 @media(prefers-reduced-motion:reduce){body:before{animation:none}.pill.on i,.pill.mid i{animation:none}}
 </style>
-</head>
+<style>
+/* zynox-theme2 */
+.pgnav div{gap:2px;padding:4px}
+.pgnav button{flex-direction:column;gap:4px;padding:8px 9px;font-size:10px;min-width:52px;letter-spacing:.3px}
+.pgnav button .ic{width:17px;height:17px}
+article[data-own="1"]{position:relative}
+article[data-own="1"] .h{flex-wrap:wrap}
+article[data-own="1"] .h::after{content:"OWNER";order:5;font-family:'Press Start 2P',monospace;font-size:7px;letter-spacing:1px;color:#2a1d02;background:var(--am);padding:3px 5px;border:1px solid #6b4d05;margin-left:auto}
+article[data-own="1"] .bd{order:4}
+.grid{align-items:start}
+article:has(#zcpbtn){order:-3}
+article:has(#ztb){order:-2}
+article:has(#zbnbtn){order:3}
+article:has(#zpdbtn){order:3}
+@media(prefers-reduced-motion:reduce){}
+</style></head>
 <body>
 <svg width="0" height="0" style="position:absolute"><defs>
 <symbol id="i-play" viewBox="0 0 24 24"><polygon points="7 4 20 12 7 20 7 4" fill="currentColor"/></symbol>
