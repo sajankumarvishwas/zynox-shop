@@ -178,12 +178,13 @@ article:has(#zpdbtn){order:3}
 #ztfilter button{flex:1 1 45%}
 </style><style>
 /* zynox-chat-refine */
-.zc-row{display:flex;gap:10px;margin-bottom:10px;align-items:flex-start}
-.zc-av{width:30px;height:30px;flex:none;font-size:13px}
-.zc-av-sp{width:30px;flex:none}
-.zc-grouped{margin-bottom:4px}
-.zc-hd{display:flex;align-items:baseline;gap:8px;margin-bottom:3px}
-.zc-bub{background:#0a0f08;border:2px solid var(--ln2);padding:8px 11px;font-size:17px;line-height:1.4;word-break:break-word;max-width:100%;display:inline-block}
+.zc-grid{display:grid;grid-template-columns:30px 1fr;gap:10px;margin-bottom:4px}
+.zc-grid.zc-first{margin-top:12px}
+.zc-grid:first-child.zc-first{margin-top:0}
+.zc-av{width:30px;height:30px;font-size:13px;align-self:start}
+.zc-hd{display:flex;align-items:baseline;gap:8px;margin-bottom:4px;min-width:0}
+.zc-hd b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.zc-bub{background:#0a0f08;border:2px solid var(--ln2);padding:8px 11px;font-size:17px;line-height:1.4;word-break:break-word;min-width:0;width:fit-content;max-width:100%}
 #zcl{padding-right:2px}
 </style></head>
 <body>
@@ -606,9 +607,9 @@ async function loadChat(){
     m.forEach(function(x){
       var h=hue(x.name),t=Date.parse(x.t),grouped=x.name===lastName&&(t-lastT)<120000;
       if(grouped){
-        html+='<div class="zc-row zc-grouped"><div class="zc-av-sp"></div><div class="zc-bub">'+esc(x.msg)+'</div></div>';
+        html+='<div class="zc-grid"><span></span><div class="zc-bub">'+esc(x.msg)+'</div></div>';
       }else{
-        html+='<div class="zc-row"><span class="pa zc-av" style="background:hsl('+h+' 45% 24%);color:hsl('+h+' 75% 78%)">'+esc(x.name.charAt(0).toUpperCase())+'</span><div><div class="zc-hd"><b style="color:hsl('+h+' 70% 72%)">'+esc(x.name)+'</b><small class="sm">'+tm(x.t)+'</small></div><div class="zc-bub">'+esc(x.msg)+'</div></div></div>';
+        html+='<div class="zc-grid zc-first"><span class="pa zc-av" style="background:hsl('+h+' 45% 24%);color:hsl('+h+' 75% 78%)">'+esc(x.name.charAt(0).toUpperCase())+'</span><div><div class="zc-hd"><b style="color:hsl('+h+' 70% 72%)">'+esc(x.name)+'</b><small class="sm">'+tm(x.t)+'</small></div><div class="zc-bub">'+esc(x.msg)+'</div></div></div>';
       }
       lastName=x.name;lastT=t;
     });
