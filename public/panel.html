@@ -176,6 +176,15 @@ article:has(#zpdbtn){order:3}
 /* zynox-settings-css */
 #ztfilter{flex-wrap:wrap}
 #ztfilter button{flex:1 1 45%}
+</style><style>
+/* zynox-chat-refine */
+.zc-row{display:flex;gap:10px;margin-bottom:10px;align-items:flex-start}
+.zc-av{width:30px;height:30px;flex:none;font-size:13px}
+.zc-av-sp{width:30px;flex:none}
+.zc-grouped{margin-bottom:4px}
+.zc-hd{display:flex;align-items:baseline;gap:8px;margin-bottom:3px}
+.zc-bub{background:#0a0f08;border:2px solid var(--ln2);padding:8px 11px;font-size:17px;line-height:1.4;word-break:break-word;max-width:100%;display:inline-block}
+#zcl{padding-right:2px}
 </style></head>
 <body>
 <svg width="0" height="0" style="position:absolute"><defs>
@@ -592,7 +601,18 @@ async function loadChat(){
   try{
     var r=await api("/api/chat");if(!r.success)return;
     var c=$("zcl"),bot=c.scrollHeight-c.scrollTop-c.clientHeight<60,m=r.messages||[];
-    c.innerHTML=m.length?m.map(function(x){var h=hue(x.name);return '<div class="cm"><b style="color:hsl('+h+' 70% 72%)">'+esc(x.name)+'</b> <small class="sm" style="display:inline">'+tm(x.t)+'</small><div>'+esc(x.msg)+'</div></div>'}).join(""):'<div class="em">No chat messages in the last 24 hours</div>';
+    if(!m.length){c.innerHTML='<div class="em">No chat messages in the last 24 hours</div>';return}
+    var html="",lastName=null,lastT=0;
+    m.forEach(function(x){
+      var h=hue(x.name),t=Date.parse(x.t),grouped=x.name===lastName&&(t-lastT)<120000;
+      if(grouped){
+        html+='<div class="zc-row zc-grouped"><div class="zc-av-sp"></div><div class="zc-bub">'+esc(x.msg)+'</div></div>';
+      }else{
+        html+='<div class="zc-row"><span class="pa zc-av" style="background:hsl('+h+' 45% 24%);color:hsl('+h+' 75% 78%)">'+esc(x.name.charAt(0).toUpperCase())+'</span><div><div class="zc-hd"><b style="color:hsl('+h+' 70% 72%)">'+esc(x.name)+'</b><small class="sm">'+tm(x.t)+'</small></div><div class="zc-bub">'+esc(x.msg)+'</div></div></div>';
+      }
+      lastName=x.name;lastT=t;
+    });
+    c.innerHTML=html;
     if(bot)c.scrollTop=c.scrollHeight;
   }catch(e){}
 }
