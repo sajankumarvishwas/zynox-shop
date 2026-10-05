@@ -458,7 +458,7 @@ function setPage(p){
   window.scrollTo(0,0);
   if(p==="players"){loadDay();loadWeek()}
   if(p==="tools"){fillPl();loadTools();if(window.zxTools)window.zxTools()}
-  if(p==="chat")loadChat();
+  if(p==="chat"){loadChat();if(window.zxBotStatus)window.zxBotStatus()}
   if(p==="mods"&&window.zxMods)window.zxMods();
 }
 function go(d){var l=pages(),i=l.indexOf(page)+d;if(i>=0&&i<l.length){sk.c();setPage(l[i])}}
@@ -470,7 +470,8 @@ function build(){
   '<article class="card" data-pg="players"><h2 class="h"><svg class="ic"><use href="#i-act"/></svg>Session history</h2><div class="r2"><button class="btn" id="zpv" aria-label="Previous day">&lsaquo;</button><div id="zdl" style="flex:1;text-align:center;font-weight:600"></div><button class="btn" id="znx" aria-label="Next day">&rsaquo;</button></div><div class="sb" id="zsum" style="text-align:center;margin:10px 0 12px"></div><div class="scr" id="zsl"></div></article>'+
   '<article class="card" data-pg="tools" data-sub="game"><h2 class="h">'+ICON.tools+'Teleport<span class="bd" id="zlim"></span></h2><div class="sb" id="zpt"></div><label class="f">Player<select class="sel" id="zps"></select></label><button class="btn p w" id="ztb" disabled>Teleport to set point</button><div class="sb" id="zcd" style="margin-top:10px"></div></article>'+
   '<article class="card" data-pg="tools" data-own="1" data-sub="maint"><h2 class="h">'+ICON.tools+'Teleport point (owner)</h2><div class="g3"><input id="zx" type="number" step="any" placeholder="X"><input id="zy" type="number" step="any" placeholder="Y"><input id="zz" type="number" step="any" placeholder="Z"></div><button class="btn w" id="zsp">Save point</button></article>'+
-  '<article class="card" data-pg="chat" data-own="1"><h2 class="h">'+ICON.chat+'Server chat<span class="bd">Last 24h</span></h2><div class="scr" id="zcl" style="max-height:60vh;min-height:180px"></div></article>');
+  '<article class="card hidden" data-pg="chat" data-own="1"><h2 class="h"><svg class="ic" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4M8 16h0M16 16h0"/></svg>ZynoxAI<span class="bd" id="zbotbd">Checking</span></h2><div class="sb" id="zbotsb"></div><button class="btn p w" id="zbotbtn">Start ZynoxAI</button></article>'+
+    '<article class="card" data-pg="chat" data-own="1"><h2 class="h">'+ICON.chat+'Server chat<span class="bd">Last 24h</span></h2><div class="scr" id="zcl" style="max-height:60vh;min-height:180px"></div></article>');
   var nav=document.createElement("nav");nav.className="pgnav";
   nav.innerHTML="<div>"+["server","players","tools","mods","chat"].map(function(p){return '<button data-p="'+p+'" id="zn-'+p+'">'+ICON[p]+LBL[p]+"</button>"}).join("")+"</div>";
   dv.appendChild(nav);
@@ -1295,6 +1296,42 @@ setInterval(function(){
   if(p==="players")loadPlayerStats();
 },5000);
 build();
+})();
+</script>
+<!-- zynox-botctl -->
+<script>
+(function(){
+function fail(e,m){if(e&&e.message==="401")return;sk.er();toast(m||"Unable to reach the server","er")}
+async function loadBotStatus(){
+  try{
+    var r=await api("/api/bot/status");
+    if(!r.success)return;
+    var on=r.status==="ONLINE";
+    $("zbotbd").textContent=on?"Online":"Offline";
+    $("zbotbd").className="bd"+(on?" live":"");
+    $("zbotsb").textContent=on?"ZynoxAI is in the game.":"ZynoxAI is not in the game right now.";
+    $("zbotbtn").textContent=on?"Stop ZynoxAI":"Start ZynoxAI";
+    $("zbotbtn").className="btn w"+(on?" d":" p");
+  }catch(e){}
+}
+document.addEventListener("click",async function(e){
+  var b=e.target.closest("#zbotbtn");
+  if(!b)return;
+  var starting=b.textContent.indexOf("Start")===0;
+  b.disabled=true;var oh=b.innerHTML;b.innerHTML='<span class="sp"></span>'+(starting?"Starting":"Stopping");
+  try{
+    var d=await api("/api/bot/"+(starting?"start":"stop"),{method:"POST"});
+    if(d.success){sk.ok();toast(d.message||"Done","ok")}else{sk.er();toast(d.message||"Failed","er")}
+  }catch(err){fail(err)}
+  b.disabled=false;
+  loadBotStatus();
+});
+setInterval(function(){
+  if(document.hidden||!ls.g("zynox_token"))return;
+  var onBtn=document.querySelector(".pgnav button.on");
+  if(onBtn&&onBtn.dataset.p==="chat")loadBotStatus();
+},6000);
+window.zxBotStatus=loadBotStatus;
 })();
 </script>
 </body>
