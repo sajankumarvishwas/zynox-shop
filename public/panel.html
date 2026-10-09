@@ -186,6 +186,95 @@ article:has(#zpdbtn){order:3}
 .zc-hd b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .zc-bub{background:#0a0f08;border:2px solid var(--ln2);padding:8px 11px;font-size:17px;line-height:1.4;word-break:break-word;min-width:0;width:fit-content;max-width:100%}
 #zcl{padding-right:2px}
+</style><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"><style>
+/* zynox-premium-v1 — dark bento command-center override */
+:root{
+  --bg:#0a0b0d; --s1:#131419; --s2:#1a1c22; --ln:rgba(255,255,255,.07); --ln2:rgba(255,255,255,.12);
+  --tx:#f1f2f4; --mu:#9499a3; --ac:#34d399; --am:#f5b94d; --rd:#f2555b; --r:14px;
+}
+*{box-sizing:border-box}
+body{
+  font-family:'Inter',system-ui,-apple-system,sans-serif !important;
+  background:
+    radial-gradient(1100px 560px at 50% -220px, rgba(52,211,153,.07), transparent 60%),
+    linear-gradient(180deg,#0c0d10 0%,#07080a 100%) !important;
+}
+body:before{
+  background-image:
+    linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px) !important;
+  background-size:48px 48px !important;
+  animation:none !important; opacity:.5 !important;
+}
+.pixels,.firefly{display:none !important}
+.bn,.t,.mb h3{font-family:'Inter',system-ui,sans-serif !important; letter-spacing:-.01em !important; text-shadow:none !important; font-weight:800 !important}
+.serverline,.h{font-family:'Inter',system-ui,sans-serif !important; letter-spacing:.02em !important}
+.card{
+  background:linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,.012)), var(--s1) !important;
+  border:1px solid var(--ln) !important; border-radius:var(--r) !important;
+  box-shadow:0 1px 0 rgba(255,255,255,.04) inset, 0 10px 28px -16px rgba(0,0,0,.6) !important;
+  backdrop-filter:blur(14px) saturate(140%); -webkit-backdrop-filter:blur(14px) saturate(140%);
+  padding:20px !important;
+}
+.card:after{display:none !important}
+.h{color:var(--mu) !important; font-weight:600 !important; font-size:12px !important; letter-spacing:.08em !important; text-transform:uppercase !important}
+.h .ic{color:var(--ac) !important}
+.bd{background:rgba(255,255,255,.06) !important; border:1px solid var(--ln) !important; color:var(--mu) !important; border-radius:999px !important; font-family:'Inter',sans-serif !important; font-weight:600 !important; font-size:11px !important; letter-spacing:.02em !important}
+.bd.live{color:var(--am) !important; background:rgba(245,185,77,.12) !important; border-color:rgba(245,185,77,.3) !important}
+article[data-own="1"] .h::after{font-family:'Inter',sans-serif !important; font-weight:700 !important; font-size:10px !important; letter-spacing:.04em !important; border-radius:999px !important}
+.sb{font-family:'Inter',sans-serif !important; font-size:13px !important; color:var(--mu) !important}
+.f{font-family:'Inter',sans-serif !important; font-size:12px !important; font-weight:600 !important; letter-spacing:.03em !important; color:var(--mu) !important; text-transform:uppercase !important}
+input,.sel,textarea{
+  font-family:'Inter',sans-serif !important; font-size:15px !important;
+  background:rgba(255,255,255,.03) !important; border:1px solid var(--ln2) !important; border-radius:10px !important;
+  box-shadow:none !important; color:var(--tx) !important; padding:11px 13px !important;
+}
+input:focus,.sel:focus,textarea:focus{border-color:var(--ac) !important; box-shadow:0 0 0 3px rgba(52,211,153,.15) !important}
+.btn{
+  font-family:'Inter',sans-serif !important; font-weight:600 !important; font-size:14px !important; letter-spacing:0 !important;
+  background:rgba(255,255,255,.045) !important; border:1px solid var(--ln2) !important; border-radius:10px !important;
+  box-shadow:none !important; color:var(--tx) !important; transition:background .15s,border-color .15s,transform .1s !important;
+}
+.btn:hover:not(:disabled){background:rgba(255,255,255,.08) !important}
+.btn:active:not(:disabled){transform:scale(.98) !important; box-shadow:none !important}
+.btn.p{background:var(--ac) !important; color:#04140d !important; border-color:transparent !important}
+.btn.a{background:var(--am) !important; color:#2a1d02 !important; border-color:transparent !important}
+.btn.d{background:var(--rd) !important; color:#2a0808 !important; border-color:transparent !important}
+.pill{background:rgba(255,255,255,.04) !important; border:1px solid var(--ln2) !important; border-radius:999px !important; font-family:'Inter',sans-serif !important; font-weight:600 !important; font-size:13px !important}
+.pill i{border-radius:50% !important}
+.pill.on{background:rgba(52,211,153,.1) !important; border-color:rgba(52,211,153,.35) !important; color:var(--ac) !important}
+.pill.on i{box-shadow:0 0 10px 2px var(--ac) !important}
+.pill.mid{background:rgba(245,185,77,.1) !important; border-color:rgba(245,185,77,.35) !important; color:var(--am) !important}
+.pill.bad{background:rgba(242,85,91,.1) !important; border-color:rgba(242,85,91,.35) !important; color:var(--rd) !important}
+.st{background:rgba(255,255,255,.025) !important; border:1px solid var(--ln) !important; border-radius:11px !important}
+.st span{font-family:'Inter',sans-serif !important; font-size:10px !important; letter-spacing:.05em !important}
+.prog{background:rgba(245,185,77,.07) !important; border:1px solid rgba(245,185,77,.25) !important; border-radius:11px !important}
+.bar{border-radius:99px !important; background:rgba(255,255,255,.06) !important}
+.con{background:#08090b !important; border:1px solid var(--ln) !important; border-radius:11px !important}
+.pl,.ac{border-top:1px solid var(--ln) !important}
+.pa,.av,.ai{border-radius:10px !important; border:1px solid var(--ln) !important}
+.pn{font-family:'Inter',sans-serif !important; font-weight:600 !important}
+.ps{font-family:'Inter',sans-serif !important; font-size:13px !important}
+.em{color:#6b7078 !important; font-family:'Inter',sans-serif !important; font-size:13px !important}
+.note{background:rgba(245,185,77,.06) !important; border:1px solid rgba(245,185,77,.22) !important; border-radius:var(--r) !important; font-family:'Inter',sans-serif !important; font-size:13px !important}
+.note b{font-family:'Inter',sans-serif !important}
+.ft{font-family:'Inter',sans-serif !important; color:#5c6066 !important}
+.toast{background:#17191f !important; border:1px solid var(--ln2) !important; border-radius:11px !important; font-family:'Inter',sans-serif !important; font-size:14px !important; box-shadow:0 10px 28px -12px rgba(0,0,0,.6) !important}
+.mb{background:linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,.012)), var(--s2) !important; border:1px solid var(--ln2) !important; border-radius:16px !important}
+.mb p{font-family:'Inter',sans-serif !important; font-size:14px !important}
+.pgnav div{background:rgba(16,17,21,.85) !important; border:1px solid var(--ln2) !important; border-radius:999px !important; backdrop-filter:blur(18px) saturate(150%) !important; -webkit-backdrop-filter:blur(18px) saturate(150%) !important}
+.pgnav button{font-family:'Inter',sans-serif !important; font-weight:600 !important; font-size:10px !important; border-radius:999px !important}
+.pgnav button.on{background:var(--ac) !important; color:#04140d !important}
+.chip{background:rgba(255,255,255,.04) !important; border:1px solid var(--ln2) !important; border-radius:999px !important}
+.chip #un{font-family:'Inter',sans-serif !important; font-weight:600 !important; font-size:14px !important}
+.ib{border-radius:8px !important}
+.dur,.con{font-family:'JetBrains Mono',monospace !important}
+.sm{font-family:'Inter',sans-serif !important; font-size:12px !important; color:#6b7078 !important}
+.cm{font-family:'Inter',sans-serif !important; font-size:14px !important; border-top:1px solid var(--ln) !important}
+.zc-bub{background:rgba(255,255,255,.03) !important; border:1px solid var(--ln) !important; border-radius:12px !important; font-family:'Inter',sans-serif !important; font-size:14px !important}
+.login{max-width:380px !important}
+.blk{filter:drop-shadow(0 2px 6px rgba(0,0,0,.4)) !important}
+@media(prefers-reduced-motion:reduce){body:before{animation:none !important}}
 </style></head>
 <body>
 <svg width="0" height="0" style="position:absolute"><defs>
