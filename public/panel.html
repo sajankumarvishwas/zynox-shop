@@ -419,7 +419,7 @@ padding:4px 0;overflow:hidden}
 <section id="dv" class="view hidden">
   <header class="top rv">
     <div class="brand"><span class="blk"></span><div><div class="bn">ZYNOX</div><div class="bs">Control Panel</div></div></div>
-    <div class="chip"><span class="av" id="av"></span><span id="un"></span><button class="ib" id="lo" title="Sign out" aria-label="Sign out"><svg class="ic"><use href="#i-out"/></svg></button></div>
+    <div class="chip"><span class="av" id="av"></span><span id="un"></span><button class="ib" id="zfs" title="Fullscreen" aria-label="Toggle fullscreen"><svg class="ic" id="zfsicon" viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M8 21H5a2 2 0 0 1-2-2v-3M16 21h3a2 2 0 0 0 2-2v-3"/></svg></button><button class="ib" id="lo" title="Sign out" aria-label="Sign out"><svg class="ic"><use href="#i-out"/></svg></button></div>
   </header>
 
   <div class="grid">
@@ -1608,6 +1608,32 @@ function run(){
   setTimeout(run,500);
 }
 run();
+})();
+</script>
+<!-- zynox-fullscreen -->
+<script>
+(function(){
+var ICON_EXPAND='<path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M8 21H5a2 2 0 0 1-2-2v-3M16 21h3a2 2 0 0 0 2-2v-3"/>';
+var ICON_COLLAPSE='<path d="M9 3v3a2 2 0 0 1-2 2H4M15 3v3a2 2 0 0 0 2 2h3M9 21v-3a2 2 0 0 0-2-2H4M15 21v-3a2 2 0 0 1 2-2h3"/>';
+function paint(){
+  var on=!!(document.fullscreenElement||document.webkitFullscreenElement);
+  var icon=document.getElementById("zfsicon");
+  if(icon)icon.innerHTML=on?ICON_COLLAPSE:ICON_EXPAND;
+}
+function toggle(){
+  var el=document.documentElement;
+  if(document.fullscreenElement||document.webkitFullscreenElement){
+    (document.exitFullscreen||document.webkitExitFullscreen||function(){}).call(document);
+  }else{
+    (el.requestFullscreen||el.webkitRequestFullscreen||function(){}).call(el);
+  }
+}
+document.addEventListener("click",function(e){
+  if(e.target.closest("#zfs"))toggle();
+});
+document.addEventListener("fullscreenchange",paint);
+document.addEventListener("webkitfullscreenchange",paint);
+paint();
 })();
 </script>
 </body>
