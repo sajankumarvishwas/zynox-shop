@@ -438,7 +438,41 @@ padding:4px 0;overflow:hidden}
 .zping.y{color:#8a5a0e;background:#f3e3bf}
 .zping.r{color:#7a241e;background:#f2d3cf}
 @media(prefers-reduced-motion:reduce){.zin,.zpwr-main.zon{animation:none !important}}
-</style></head>
+</style><style>
+/* zynox-btn-fix */
+.zpwr{display:grid !important;grid-template-columns:1.5fr 1fr 1fr !important;gap:10px !important;margin:18px 0 6px !important;align-items:stretch !important}
+.zpwr-main,.zpwr-side{grid-row:auto !important;grid-column:auto !important;width:auto !important;height:74px !important;border-radius:14px !important;
+  display:flex !important;flex-direction:column !important;align-items:center !important;justify-content:center !important;gap:6px !important;
+  font:700 13px Inter,system-ui,sans-serif !important;letter-spacing:.02em !important;text-transform:none !important;border-width:1px !important;border-style:solid !important}
+.zpwr-main{order:-1;background:linear-gradient(180deg,#8fdcab,#3fa56a) !important;border-color:#1f6b42 !important;color:#06301a !important;
+  box-shadow:0 4px 0 #1f6b42,0 10px 16px -8px rgba(31,107,66,.55),inset 0 1px 0 rgba(255,255,255,.55) !important}
+.zpwr-main .ic{width:24px !important;height:24px !important}
+.zpwr-main:active:not(:disabled){transform:translateY(4px) !important;box-shadow:0 0 0 #1f6b42,inset 0 2px 4px rgba(0,0,0,.2) !important}
+.zpwr-side{background:linear-gradient(180deg,#fbf9f2,#e6dfcb) !important;box-shadow:0 3px 0 rgba(0,0,0,.14),inset 0 1px 0 rgba(255,255,255,.9) !important}
+.zpwr-side .ic{width:20px !important;height:20px !important}
+.zpwr-side.a{border-color:#c79a4c !important;color:#6b4a0c !important}
+.zpwr-side.d{border-color:#c6756c !important;color:#7a241e !important}
+.zpwr-side:active:not(:disabled){transform:translateY(3px) !important;box-shadow:inset 0 2px 4px rgba(0,0,0,.2) !important}
+.zpwr-main:disabled,.zpwr-side:disabled{opacity:.4 !important}
+@keyframes zring2{0%{box-shadow:0 4px 0 #1f6b42,0 0 0 0 rgba(47,143,92,.5)}100%{box-shadow:0 4px 0 #1f6b42,0 0 0 14px rgba(47,143,92,0)}}
+.zpwr-main.zon{animation:zring2 2s ease-out infinite !important;background:linear-gradient(180deg,#b6f0c9,#4fbf7d) !important}
+@media(max-width:360px){.zpwr{grid-template-columns:1fr 1fr 1fr !important}}
+</style><style>
+/* zynox-assets-v1 */
+.zmascot{display:flex;justify-content:center;margin:-6px 0 10px}
+.zbody{transform-origin:32px 54px;animation:zbounce 1.8s ease-in-out infinite}
+.zsh{transform-origin:32px 58px;animation:zshadow 1.8s ease-in-out infinite}
+.zeyes{transform-origin:32px 35px;animation:zblink 4s infinite}
+@keyframes zbounce{0%,100%{transform:scale(1.06,.92)}45%{transform:translateY(-9px) scale(.96,1.05)}}
+@keyframes zshadow{0%,100%{transform:scaleX(1);opacity:.8}45%{transform:scaleX(.7);opacity:.4}}
+@keyframes zblink{0%,92%,100%{transform:scaleY(1)}95%{transform:scaleY(.1)}}
+.zfloat{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.zfloat i{position:absolute;bottom:-30px;display:block;opacity:0;animation:zrise linear infinite}
+@keyframes zrise{0%{transform:translateY(0) rotate(0);opacity:0}10%{opacity:.35}90%{opacity:.2}100%{transform:translateY(-110vh) rotate(180deg);opacity:0}}
+.zconf{position:fixed;top:-12px;width:9px;height:9px;z-index:200;pointer-events:none;border-radius:2px;transition:transform 2.2s cubic-bezier(.2,.6,.4,1),opacity 2.2s}
+@media(prefers-reduced-motion:reduce){.zbody,.zsh,.zeyes,.zfloat i{animation:none}.zconf{display:none}}
+</style>
+</head>
 <body>
 <svg width="0" height="0" style="position:absolute"><defs>
 <symbol id="i-play" viewBox="0 0 24 24"><polygon points="7 4 20 12 7 20 7 4" fill="currentColor"/></symbol>
@@ -455,7 +489,7 @@ padding:4px 0;overflow:hidden}
 
 <div class="wrap">
 
-<section id="lv" class="view login">
+<section id="lv" class="view login"><div class="zmascot" aria-hidden="true"><svg viewBox="0 0 64 64" width="84" height="84"><ellipse class="zsh" cx="32" cy="58" rx="18" ry="3" fill="rgba(60,50,30,.25)"/><g class="zbody"><rect x="10" y="14" width="44" height="40" rx="6" fill="#73c948" stroke="#2f6b1f" stroke-width="3"/><rect x="14" y="18" width="36" height="8" rx="3" fill="#9be46f" opacity=".7"/><g class="zeyes"><rect x="20" y="30" width="7" height="9" rx="2" fill="#1b2a14"/><rect x="37" y="30" width="7" height="9" rx="2" fill="#1b2a14"/></g><rect x="26" y="44" width="12" height="3" rx="1.5" fill="#1b2a14"/></g></svg></div>
   <div class="brand rv" style="justify-content:center;margin-bottom:22px"><span class="blk"></span><div><div class="bn">ZYNOX</div><div class="bs">Control Panel</div></div></div>
   <div class="card rv" style="--d:.08s">
     <h1 class="t">Sign in</h1>
@@ -1782,6 +1816,41 @@ async function wake(){
 document.addEventListener("visibilitychange",wake);
 document.addEventListener("click",wake,{once:true});
 setTimeout(animateCards,1200);
+})();
+</script>
+<!-- zynox-assets-v1-js -->
+<script>
+(function(){
+var fl=document.createElement("div");fl.className="zfloat";
+var cols=["#73c948","#c79a4c","#8fc7a0","#b8a77a","#6fb0a0"];
+for(var i=0;i<14;i++){
+  var b=document.createElement("i"),sz=8+Math.random()*14;
+  b.style.cssText="left:"+(Math.random()*100)+"%;width:"+sz+"px;height:"+sz+"px;background:"+cols[i%cols.length]+";animation-duration:"+(16+Math.random()*18)+"s;animation-delay:-"+(Math.random()*30)+"s;border-radius:2px";
+  fl.appendChild(b);
+}
+document.body.insertBefore(fl,document.body.firstChild);
+function confetti(){
+  var c=["#2f8f5c","#f5b94d","#e0675d","#5aa7e6","#b07ad8"];
+  for(var i=0;i<42;i++){
+    var p=document.createElement("div");p.className="zconf";
+    p.style.left=(10+Math.random()*80)+"vw";p.style.background=c[i%c.length];
+    document.body.appendChild(p);
+    (function(p){
+      requestAnimationFrame(function(){
+        p.style.transform="translate("+((Math.random()-.5)*160)+"px,"+(window.innerHeight*(.55+Math.random()*.45))+"px) rotate("+(Math.random()*720)+"deg)";
+        p.style.opacity="0";
+      });
+      setTimeout(function(){p.remove()},2400);
+    })(p);
+  }
+}
+var was=null;
+setInterval(function(){
+  var pill=document.getElementById("pill");if(!pill)return;
+  var on=pill.classList.contains("on");
+  if(was===false&&on)confetti();
+  was=on;
+},800);
 })();
 </script>
 </body>
