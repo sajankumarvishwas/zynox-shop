@@ -1853,5 +1853,17 @@ setInterval(function(){
 },800);
 })();
 </script>
+<!-- zynox-sfx-v1 -->
+<script>
+(function(){
+var cache={};
+function play(n,v){try{var a=cache[n]||(cache[n]=new Audio("/sounds/"+n+".ogg"));var c=a.cloneNode();c.volume=v;c.play().catch(function(){})}catch(e){}}
+if(typeof sk!=="undefined"){
+sk.c=function(){play("click",.5);try{navigator.vibrate&&navigator.vibrate(12)}catch(e){}};
+sk.ok=function(){play("ok",.6);try{navigator.vibrate&&navigator.vibrate([18,30,18])}catch(e){}};
+sk.er=function(){play("err",.6);try{navigator.vibrate&&navigator.vibrate(70)}catch(e){}};
+}
+})();
+</script>
 </body>
 </html>
