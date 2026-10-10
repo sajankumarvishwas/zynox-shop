@@ -3,7 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#070b09">
+<meta name="theme-color" content="#ece6d6">
+<link rel="manifest" href="/zynox-manifest.json">
+<link rel="icon" href="/zynox-icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/zynox-icon.svg">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Zynox Control</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1634,6 +1640,25 @@ document.addEventListener("click",function(e){
 document.addEventListener("fullscreenchange",paint);
 document.addEventListener("webkitfullscreenchange",paint);
 paint();
+})();
+</script>
+<!-- zynox-autofullscreen -->
+<script>
+(function(){
+var done=false;
+function tryFs(){
+  if(done)return;
+  done=true;
+  var el=document.documentElement;
+  try{(el.requestFullscreen||el.webkitRequestFullscreen||function(){}).call(el).catch(function(){})}catch(e){}
+  document.removeEventListener("pointerdown",tryFs,true);
+  document.removeEventListener("touchstart",tryFs,true);
+  document.removeEventListener("click",tryFs,true);
+}
+document.addEventListener("pointerdown",tryFs,true);
+document.addEventListener("touchstart",tryFs,true);
+document.addEventListener("click",tryFs,true);
+if(window.matchMedia("(display-mode: fullscreen)").matches||navigator.standalone){done=true}
 })();
 </script>
 </body>

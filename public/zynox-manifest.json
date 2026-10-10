@@ -1,0 +1,12 @@
+{
+  "name": "Zynox Control Panel",
+  "short_name": "Zynox",
+  "start_url": "/panel.html",
+  "display": "fullscreen",
+  "orientation": "portrait",
+  "background_color": "#ece6d6",
+  "theme_color": "#ece6d6",
+  "icons": [
+    { "src": "/zynox-icon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}
