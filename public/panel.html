@@ -392,6 +392,52 @@ padding:4px 0;overflow:hidden}
 .zmod-lbl{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);padding:12px 20px 4px}
 .zmod .card{border:none!important;box-shadow:none!important;border-radius:0!important;background:transparent!important;backdrop-filter:none!important}
 .zmod .card+.card{border-top:1px solid var(--ln)!important;margin-top:2px;padding-top:18px!important}
+</style><style>
+/* zynox-power-ctrl */
+.zpwr{display:grid !important;grid-template-columns:72px 1fr 72px !important;align-items:center !important;gap:14px !important;margin:22px 0 4px !important}
+.zpwr-main{
+  grid-row:1;grid-column:2;height:92px;border-radius:50%;border:4px solid #1c5c3a;
+  background:radial-gradient(circle at 35% 30%,#d8f3df,#8fd3a4 55%,#4fa16c 100%);
+  box-shadow:0 6px 0 #1c5c3a,0 10px 18px -6px rgba(28,92,58,.5),inset 0 2px 4px rgba(255,255,255,.6);
+  color:#0e3321;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+  font:700 13px 'VT323',Inter,sans-serif;letter-spacing:.04em;text-transform:uppercase;cursor:pointer;
+  transition:transform .08s;
+}
+.zpwr-main .ic{width:34px;height:34px}
+.zpwr-main:active:not(:disabled){transform:translateY(5px);box-shadow:0 1px 0 #1c5c3a,inset 0 2px 4px rgba(0,0,0,.15)}
+.zpwr-main:disabled{opacity:.42;cursor:not-allowed}
+.zpwr-side{
+  height:64px;width:64px;border-radius:50%;border:3px solid;background:#f3efe3;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+  font:600 9px 'VT323',Inter,sans-serif;letter-spacing:.03em;text-transform:uppercase;cursor:pointer;
+  box-shadow:0 3px 0 rgba(0,0,0,.15),inset 0 1px 0 rgba(255,255,255,.7);transition:transform .08s;
+}
+.zpwr-side .ic{width:18px;height:18px}
+.zpwr-side:active:not(:disabled){transform:translateY(2px);box-shadow:inset 0 2px 4px rgba(0,0,0,.15)}
+.zpwr-side:disabled{opacity:.4;cursor:not-allowed}
+.zpwr-side.a{border-color:#c79a4c;color:#6b4a0c}
+.zpwr-side.d{border-color:#c6756c;color:#7a241e}
+.zbanner{height:46px;margin:-20px -20px 16px;position:relative;overflow:hidden;border-bottom:1px solid var(--ln2);
+  background:linear-gradient(180deg,#bfe0ca 0%,#eee8d8 100%)}
+.zbanner i{position:absolute;bottom:0;display:block;width:10px;height:10px;background:#3f7a2c}
+</style><style>.zbanner svg{display:block}.zcloud{animation:zdrift 24s linear infinite}@keyframes zdrift{from{transform:translateX(-30px)}to{transform:translateX(40px)}}@media(prefers-reduced-motion:reduce){.zcloud{animation:none}}</style><style>
+/* zynox-final-v1 */
+::selection{background:rgba(47,143,92,.3)}
+*{scrollbar-width:thin;scrollbar-color:#b9ae8f transparent}
+:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+.btn,.zpwr-main,.zpwr-side{transition:transform .12s,box-shadow .2s,filter .2s !important}
+.btn:hover:not(:disabled){transform:translateY(-1px)}
+.zpwr-side:hover:not(:disabled){transform:translateY(-2px)}
+@keyframes zcardin{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.zin{animation:zcardin .45s cubic-bezier(.2,.7,.2,1) both}
+@keyframes zring{0%{box-shadow:0 6px 0 #1c5c3a,0 0 0 0 rgba(47,143,92,.55)}100%{box-shadow:0 6px 0 #1c5c3a,0 0 0 22px rgba(47,143,92,0)}}
+.zpwr-main.zon{animation:zring 2s ease-out infinite;background:radial-gradient(circle at 35% 30%,#eafff0,#7fe0a0 55%,#2f9a5c 100%)}
+.zping{margin-left:auto;margin-right:8px;font:600 11px 'JetBrains Mono',monospace;padding:4px 9px;border-radius:999px;border:1px solid var(--ln2);background:#e4ddc9;color:var(--mu);white-space:nowrap}
+.zping:before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:currentColor;margin-right:6px;vertical-align:1px}
+.zping.g{color:#1c5c3a;background:#d7ecdf}
+.zping.y{color:#8a5a0e;background:#f3e3bf}
+.zping.r{color:#7a241e;background:#f2d3cf}
+@media(prefers-reduced-motion:reduce){.zin,.zpwr-main.zon{animation:none !important}}
 </style></head>
 <body>
 <svg width="0" height="0" style="position:absolute"><defs>
@@ -429,7 +475,7 @@ padding:4px 0;overflow:hidden}
   </header>
 
   <div class="grid">
-    <article class="card srv rv" style="--d:.05s">
+    <article class="card srv rv" style="--d:.05s"><div class="zbanner" id="zynox-banner-svg"><svg viewBox="0 0 320 54" preserveAspectRatio="xMidYMax slice" width="100%" height="100%" aria-hidden="true"><rect width="320" height="54" fill="#cfe8d6"/><g fill="#fff"><rect x="30" y="8" width="2" height="2"/><rect x="120" y="14" width="2" height="2"/><rect x="200" y="6" width="2" height="2"/><rect x="280" y="16" width="2" height="2"/></g><g class="zcloud" fill="#ffffff" opacity=".85"><rect x="60" y="10" width="26" height="6"/><rect x="66" y="6" width="14" height="4"/><rect x="220" y="16" width="30" height="6"/><rect x="228" y="12" width="14" height="4"/></g><polygon points="0,54 0,34 40,22 80,36 130,18 180,38 230,24 280,36 320,26 320,54" fill="#8fc7a0"/><polygon points="0,54 0,44 60,36 120,46 190,34 260,46 320,38 320,54" fill="#4fa16c"/><rect x="21" y="48" width="3" height="6" fill="#6b4a30"/><rect x="18" y="40" width="9" height="9" fill="#2f7a4a"/><rect x="20" y="37" width="5" height="4" fill="#3f9a5c"/><rect x="49" y="52" width="3" height="6" fill="#6b4a30"/><rect x="46" y="44" width="9" height="9" fill="#2f7a4a"/><rect x="48" y="41" width="5" height="4" fill="#3f9a5c"/><rect x="213" y="46" width="3" height="6" fill="#6b4a30"/><rect x="210" y="38" width="9" height="9" fill="#2f7a4a"/><rect x="212" y="35" width="5" height="4" fill="#3f9a5c"/><rect x="249" y="50" width="3" height="6" fill="#6b4a30"/><rect x="246" y="42" width="9" height="9" fill="#2f7a4a"/><rect x="248" y="39" width="5" height="4" fill="#3f9a5c"/><rect x="293" y="48" width="3" height="6" fill="#6b4a30"/><rect x="290" y="40" width="9" height="9" fill="#2f7a4a"/><rect x="292" y="37" width="5" height="4" fill="#3f9a5c"/><rect x="0" y="50" width="320" height="4" fill="#3f7a2c"/></svg></div>
       <div class="sh">
         <span class="tile"><svg class="ic"><use href="#i-srv"/></svg></span>
         <div><div class="nm">Zynox New World</div><div class="sb">Minecraft Bedrock Server</div></div>
@@ -441,10 +487,10 @@ padding:4px 0;overflow:hidden}
         <div class="st"><span>Last action</span><b id="la">—</b></div>
       </div>
       <div class="prog hidden" id="pg"><div class="r"><span id="pt">Starting server…</span><span id="pe"></span></div><div class="bar"><i id="pb"></i></div></div>
-      <div class="acts">
-        <button class="btn p" id="bS" disabled><svg class="ic"><use href="#i-play"/></svg>Start</button>
-        <button class="btn a" id="bR" disabled><svg class="ic"><use href="#i-ref"/></svg>Restart</button>
-        <button class="btn d" id="bX" disabled><svg class="ic"><use href="#i-stop"/></svg>Stop</button>
+      <div class="acts zpwr">
+        <button class="zpwr-side a" id="bR" disabled><svg class="ic"><use href="#i-ref"/></svg><span>Restart</span></button>
+        <button class="zpwr-main" id="bS" disabled><svg class="ic" viewBox="0 0 24 24"><use href="#i-play"/></svg><span id="zpwrLbl">Start</span></button>
+        <button class="zpwr-side d" id="bX" disabled><svg class="ic"><use href="#i-stop"/></svg><span>Stop</span></button>
       </div>
       <div class="err" id="nt"></div>
     </article>
@@ -578,6 +624,7 @@ function apply(s){
   $("pill").className="pill "+m[0];$("pw").textContent=m[1];
   const on=s.status==="ONLINE",off=s.status==="OFFLINE"||s.status==="CRASHED";
   $("bS").disabled=!off;$("bR").disabled=!on;$("bX").disabled=!on;
+  var lbl=document.getElementById("zpwrLbl");if(lbl)lbl.textContent=on?"Online":(s.status==="STARTING"?"Starting":(s.status==="STOPPING"?"Stopping":"Start"));
   const n=S.players.length;
   if($("pc").textContent!==String(n)){$("pc").textContent=n;$("pc").classList.remove("bump");void $("pc").offsetWidth;$("pc").classList.add("bump")}
   $("pcb").textContent=n;
@@ -1659,6 +1706,82 @@ document.addEventListener("pointerdown",tryFs,true);
 document.addEventListener("touchstart",tryFs,true);
 document.addEventListener("click",tryFs,true);
 if(window.matchMedia("(display-mode: fullscreen)").matches||navigator.standalone){done=true}
+})();
+</script>
+<!-- zynox-final-v1-js -->
+<script>
+(function(){
+var actx;
+function ctx(){try{actx=actx||new (window.AudioContext||window.webkitAudioContext)()}catch(e){}return actx}
+function tone(f,t0,d,v,type){
+  var a=ctx();if(!a)return;
+  var o=a.createOscillator(),g=a.createGain();
+  o.type=type||"triangle";o.frequency.value=f;
+  g.gain.setValueAtTime(0.0001,a.currentTime+t0);
+  g.gain.exponentialRampToValueAtTime(v||.08,a.currentTime+t0+.02);
+  g.gain.exponentialRampToValueAtTime(.0001,a.currentTime+t0+d);
+  o.connect(g);g.connect(a.destination);o.start(a.currentTime+t0);o.stop(a.currentTime+t0+d+.02);
+}
+function chime(){tone(523,0,.18,.08);tone(659,.12,.18,.08);tone(784,.24,.32,.09)}
+function tick(){tone(900,0,.03,.04,"square")}
+
+/* nav tick */
+document.addEventListener("click",function(e){if(e.target.closest(".pgnav button"))tick()});
+
+/* card entrance on page switch */
+function animateCards(){
+  var i=0;
+  document.querySelectorAll("#dv .grid > *").forEach(function(c){
+    if(c.offsetParent===null)return;
+    c.classList.remove("zin");void c.offsetWidth;
+    c.style.animationDelay=(i++*55)+"ms";
+    c.classList.add("zin");
+  });
+}
+document.addEventListener("click",function(e){if(e.target.closest(".pgnav button,#ztfilter button"))setTimeout(animateCards,30)});
+
+/* ping badge */
+var ping=null;
+function ensurePing(){
+  if(ping&&document.body.contains(ping))return;
+  var chip=document.querySelector("#dv .chip");
+  if(!chip)return;
+  ping=document.createElement("span");ping.className="zping";ping.textContent="-- ms";
+  chip.parentNode.insertBefore(ping,chip);
+}
+var of=window.fetch;
+window.fetch=function(u){
+  var t0=performance.now(),url=String(u&&u.url?u.url:u);
+  var p=of.apply(this,arguments);
+  if(url.indexOf("/status")>-1){
+    p.then(function(){
+      var ms=Math.round(performance.now()-t0);
+      ensurePing();
+      if(ping){ping.textContent=ms+" ms";ping.className="zping "+(ms<250?"g":ms<700?"y":"r")}
+    }).catch(function(){ensurePing();if(ping){ping.textContent="offline";ping.className="zping r"}});
+  }
+  return p;
+};
+
+/* power button glow + chime when server turns online */
+var wasOn=null;
+setInterval(function(){
+  var pill=document.getElementById("pill"),btn=document.getElementById("bS");
+  if(!pill||!btn)return;
+  var on=pill.classList.contains("on");
+  btn.classList.toggle("zon",on);
+  if(wasOn===false&&on)chime();
+  wasOn=on;
+},700);
+
+/* keep screen awake while panel is open */
+var lock=null;
+async function wake(){
+  try{if("wakeLock" in navigator&&!document.hidden&&!lock){lock=await navigator.wakeLock.request("screen");lock.addEventListener("release",function(){lock=null})}}catch(e){}
+}
+document.addEventListener("visibilitychange",wake);
+document.addEventListener("click",wake,{once:true});
+setTimeout(animateCards,1200);
 })();
 </script>
 </body>
