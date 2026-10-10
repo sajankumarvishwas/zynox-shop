@@ -39,9 +39,16 @@ background-size:600px 600px;animation:drift 90s linear infinite}
 .brand{display:flex;align-items:center;gap:12px}
 .bn{font-family:'Press Start 2P',monospace;font-size:17px;letter-spacing:1px;line-height:1.3;color:var(--tx);text-shadow:2px 2px 0 #000}
 .bs{font-size:16px;color:var(--mu)}
-.blk{width:34px;height:34px;position:relative;flex:none;filter:drop-shadow(1px 2px 0 #000)}
-.blk:before{content:"";position:absolute;left:0;top:0;width:8.5px;height:8.5px;background:#6fbf3f;
-box-shadow:8.5px 0 #5da233,17px 0 #6fbf3f,25.5px 0 #5da233,0 8.5px #5da233,8.5px 8.5px #6fbf3f,17px 8.5px #5da233,25.5px 8.5px #6fbf3f,0 17px #7a5230,8.5px 17px #5c3d24,17px 17px #7a5230,25.5px 17px #5c3d24,0 25.5px #5c3d24,8.5px 25.5px #7a5230,17px 25.5px #5c3d24,25.5px 25.5px #7a5230}
+.blk{width:34px;height:34px;position:relative;flex:none;filter:drop-shadow(1px 2px 0 rgba(0,0,0,.35))}
+.blk:before{content:"";position:absolute;left:0;top:0;width:4.25px;height:4.25px;background:#73c948;
+box-shadow:4.25px 0 #67b83e,8.5px 0 #7ad051,12.75px 0 #67b83e,17px 0 #73c948,21.25px 0 #5ca639,25.5px 0 #73c948,29.75px 0 #67b83e,
+0 4.25px #5ca639,4.25px 4.25px #73c948,8.5px 4.25px #67b83e,12.75px 4.25px #7ad051,17px 4.25px #5ca639,21.25px 4.25px #73c948,25.5px 4.25px #67b83e,29.75px 4.25px #5ca639,
+0 8.5px #67b83e,4.25px 8.5px #5ca639,8.5px 8.5px #73c948,12.75px 8.5px #67b83e,17px 8.5px #7ad051,21.25px 8.5px #5ca639,25.5px 8.5px #73c948,29.75px 8.5px #67b83e,
+0 12.75px #6b4a30,4.25px 12.75px #7a5637,8.5px 12.75px #5e3f28,12.75px 12.75px #6b4a30,17px 12.75px #7a5637,21.25px 12.75px #5e3f28,25.5px 12.75px #6b4a30,29.75px 12.75px #7a5637,
+0 17px #5e3f28,4.25px 17px #6b4a30,8.5px 17px #7a5637,12.75px 17px #5e3f28,17px 17px #6b4a30,21.25px 17px #7a5637,25.5px 17px #5e3f28,29.75px 17px #6b4a30,
+0 21.25px #6b4a30,4.25px 21.25px #5e3f28,8.5px 21.25px #7a5637,12.75px 21.25px #6b4a30,17px 21.25px #5e3f28,21.25px 21.25px #7a5637,25.5px 21.25px #6b4a30,29.75px 21.25px #5e3f28,
+0 25.5px #5e3f28,4.25px 25.5px #7a5637,8.5px 25.5px #6b4a30,12.75px 25.5px #5e3f28,17px 25.5px #7a5637,21.25px 25.5px #6b4a30,25.5px 25.5px #5e3f28,29.75px 25.5px #7a5637,
+0 29.75px #7a5637,4.25px 29.75px #6b4a30,8.5px 29.75px #5e3f28,12.75px 29.75px #7a5637,17px 29.75px #6b4a30,21.25px 29.75px #5e3f28,25.5px 29.75px #7a5637,29.75px 29.75px #6b4a30}
 .top{display:flex;align-items:center;gap:12px;margin-bottom:18px}
 .chip{margin-left:auto;display:flex;align-items:center;gap:8px;padding:4px 7px 4px 4px;border:2px solid var(--ln2);background:var(--s1);box-shadow:inset 0 0 0 1px rgba(255,255,255,.08)}
 .chip #un{font-size:17px;font-weight:600}
@@ -460,8 +467,28 @@ const API=()=>(ls.g("zynox_api_url")||DEF).replace(/\/$/,"");
 let S={},pt,tk=0,ac;
 
 function bp(f,d,t){try{ac=ac||new(window.AudioContext||window.webkitAudioContext)();const o=ac.createOscillator(),g=ac.createGain();o.type=t||"sine";o.frequency.value=f;g.gain.setValueAtTime(.05,ac.currentTime);g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+d);o.connect(g);g.connect(ac.destination);o.start();o.stop(ac.currentTime+d)}catch(e){}}
+function click(vol){
+  try{
+    ac=ac||new(window.AudioContext||window.webkitAudioContext)();
+    const dur=.045,n=Math.floor(ac.sampleRate*dur),buf=ac.createBuffer(1,n,ac.sampleRate),d=buf.getChannelData(0);
+    for(let i=0;i<n;i++){const t=i/n;d[i]=(Math.random()*2-1)*Math.pow(1-t,6)}
+    const src=ac.createBufferSource();src.buffer=buf;
+    const g=ac.createGain();g.gain.value=vol||.22;
+    const hp=ac.createBiquadFilter();hp.type="highpass";hp.frequency.value=1800;
+    src.connect(hp);hp.connect(g);g.connect(ac.destination);src.start();
+  }catch(e){}
+}
+function thunk(vol){
+  try{
+    ac=ac||new(window.AudioContext||window.webkitAudioContext)();
+    const o=ac.createOscillator(),g=ac.createGain();
+    o.type="square";o.frequency.setValueAtTime(140,ac.currentTime);o.frequency.exponentialRampToValueAtTime(60,ac.currentTime+.08);
+    g.gain.setValueAtTime(vol||.14,ac.currentTime);g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+.09);
+    o.connect(g);g.connect(ac.destination);o.start();o.stop(ac.currentTime+.1);
+  }catch(e){}
+}
 const vb=p=>{try{navigator.vibrate&&navigator.vibrate(p)}catch(e){}};
-const sk={c(){bp(420,.06);vb(12)},ok(){bp(520,.1);setTimeout(()=>bp(780,.12),90);vb([18,30,18])},er(){bp(150,.18,"sawtooth");vb(70)}};
+const sk={c(){click(.2);thunk(.1);vb(12)},ok(){click(.22);setTimeout(()=>bp(640,.09),40);vb([18,30,18])},er(){click(.25);bp(140,.18,"sawtooth");vb(70)}};
 document.addEventListener("click",e=>{if(e.target.closest(".btn,.ib"))sk.c()});
 
 let tt;function toast(m,k){const t=$("ts");t.textContent=m;t.className="toast show "+(k||"");clearTimeout(tt);tt=setTimeout(()=>t.className="toast",3200)}
