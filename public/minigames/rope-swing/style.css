@@ -1,0 +1,220 @@
+:root{
+  --bg:#05070c;
+  --panel:#0d111a;
+  --line:#8ee9ff;
+  --accent:#69f0ff;
+  --muted:#8290a6;
+  --text:#f4f8ff;
+}
+
+*{box-sizing:border-box}
+
+html,body{
+  margin:0;
+  min-height:100%;
+  background:
+    radial-gradient(circle at 50% 18%,rgba(72,220,255,.10),transparent 30%),
+    radial-gradient(circle at 20% 80%,rgba(117,72,255,.08),transparent 32%),
+    var(--bg);
+  color:var(--text);
+  font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+  overflow:hidden;
+}
+
+.game-shell{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+}
+
+.hud{
+  position:relative;
+  z-index:20;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:16px;
+  padding:18px 22px;
+  border-bottom:1px solid rgba(120,235,255,.12);
+  background:rgba(5,7,12,.82);
+  backdrop-filter:blur(12px);
+}
+
+.brand{
+  font-weight:900;
+  letter-spacing:.16em;
+  font-size:12px;
+  color:var(--accent);
+}
+
+.hint{
+  color:var(--muted);
+  font:700 10px monospace;
+  letter-spacing:.12em;
+  text-align:right;
+}
+
+.game-stage{
+  position:relative;
+  flex:1;
+  min-height:0;
+  overflow:hidden;
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  touch-action:none;
+  user-select:none;
+}
+
+.sky-glow{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.018),transparent 18%),
+    repeating-linear-gradient(0deg,transparent 0 4px,rgba(255,255,255,.018) 5px);
+}
+
+.grid-floor{
+  position:absolute;
+  left:-15%;
+  right:-15%;
+  bottom:-26%;
+  height:58%;
+  opacity:.22;
+  pointer-events:none;
+  transform:perspective(700px) rotateX(63deg);
+  background-image:
+    linear-gradient(rgba(105,240,255,.11) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(105,240,255,.11) 1px,transparent 1px);
+  background-size:42px 42px;
+}
+
+.rope{
+  position:absolute;
+  top:72px;
+  left:50%;
+  width:4px;
+  height:clamp(220px,42vh,360px);
+  transform:translateX(-50%) rotate(8deg);
+  transform-origin:top center;
+  cursor:grab;
+  z-index:10;
+  will-change:transform;
+}
+
+.rope:active{
+  cursor:grabbing;
+}
+
+.rope-line{
+  position:absolute;
+  inset:0;
+  width:4px;
+  border-radius:999px;
+  background:linear-gradient(90deg,#1e242c,#d3d8df,#1e242c);
+  box-shadow:
+    0 0 8px rgba(220,230,255,.26),
+    2px 0 0 rgba(255,255,255,.08);
+}
+
+.swing-icon{
+  position:absolute;
+  left:50%;
+  top:100%;
+  width:clamp(78px,14vw,120px);
+  height:clamp(78px,14vw,120px);
+  transform:translate(-50%,-28%);
+  display:grid;
+  place-items:center;
+  border-radius:28px;
+  background:
+    linear-gradient(145deg,#f7fbff,#b7c7d8);
+  border:2px solid rgba(255,255,255,.8);
+  box-shadow:
+    0 16px 30px rgba(0,0,0,.4),
+    inset 0 2px 0 rgba(255,255,255,.85);
+  font-size:clamp(40px,7vw,64px);
+  filter:drop-shadow(0 0 18px rgba(105,240,255,.18));
+  transition:transform .35s ease;
+}
+
+.origin{
+  position:absolute;
+  top:66px;
+  left:50%;
+  width:14px;
+  height:14px;
+  border-radius:50%;
+  transform:translateX(-50%);
+  background:var(--accent);
+  box-shadow:0 0 18px rgba(105,240,255,.8);
+  z-index:12;
+  pointer-events:none;
+}
+
+.controls{
+  position:absolute;
+  left:50%;
+  bottom:24px;
+  transform:translateX(-50%);
+  z-index:20;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:10px;
+  border:1px solid rgba(120,235,255,.12);
+  border-radius:14px;
+  background:rgba(8,12,19,.76);
+  backdrop-filter:blur(10px);
+}
+
+.controls button,
+.controls a{
+  appearance:none;
+  border:1px solid rgba(105,240,255,.28);
+  background:#111824;
+  color:#dffbff;
+  padding:11px 14px;
+  border-radius:10px;
+  font:800 10px monospace;
+  letter-spacing:.08em;
+  text-decoration:none;
+  cursor:pointer;
+}
+
+.controls button:hover,
+.controls a:hover{
+  border-color:rgba(105,240,255,.7);
+  background:#162231;
+}
+
+@media(max-width:700px){
+  .hud{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .hint{
+    text-align:left;
+  }
+
+  .rope{
+    top:82px;
+    height:42vh;
+  }
+
+  .controls{
+    width:calc(100% - 24px);
+    justify-content:center;
+  }
+
+  .controls button,
+  .controls a{
+    flex:1;
+    text-align:center;
+  }
+}

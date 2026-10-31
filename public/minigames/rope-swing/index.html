@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>ROPE SWING — ZYNOX ARCADE</title>
+  <link rel="stylesheet" href="/minigames/rope-swing/style.css">
+</head>
+<body>
+  <main class="game-shell">
+    <div class="hud">
+      <div class="brand">ZYNOX / ARCADE</div>
+      <div class="hint">DRAG THE ROPE • RELEASE • WATCH IT SWING</div>
+    </div>
+
+    <section class="game-stage" aria-label="Rope Swing game">
+      <div class="sky-glow"></div>
+      <div class="grid-floor"></div>
+
+      <div id="rope" class="rope" aria-label="Draggable rope">
+        <div class="rope-line"></div>
+        <div id="swing-icon" class="swing-icon" aria-hidden="true">🪢</div>
+      </div>
+
+      <div class="origin"></div>
+
+      <div class="controls">
+        <button id="resetBtn" type="button">RESET SWING</button>
+        <a href="/#minigames">← BACK TO MINIGAMES</a>
+      </div>
+    </section>
+  </main>
+
+  <script src="/minigames/rope-swing/game.js"></script>
+</body>
+</html>

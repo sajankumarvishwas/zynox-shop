@@ -1674,6 +1674,7 @@ function cardOf(innerId){
 function group(label, innerIds){
   var cards=innerIds.map(cardOf).filter(Boolean);
   if(!cards.length||cards.length<2)return false;
+  if(cards.some(function(c){return c.closest(".zmod")})) return true;
   var wrap=document.createElement("div");
   wrap.className="zmod";
   var lbl=document.createElement("div");

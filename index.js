@@ -9,6 +9,17 @@ const CONFIG_PATH = "./config.json";
 app.use(express.json());
 app.use(express.static("public"));
 
+
+// Health check endpoint for monitoring
+app.get("/api/health", (req, res) => {
+  res.status(200).json({
+    status: "ok",
+    service: "zynox-shop",
+    timestamp: new Date().toISOString()
+  });
+});
+
+
 app.get("/api/products", (req, res) => {
   try {
     const config = JSON.parse(fs.readFileSync(CONFIG_PATH, "utf8"));
@@ -34,6 +45,8 @@ app.get("/api/products", (req, res) => {
   }
 });
 
+
+app.use("/api/music", require("./zynoxify-music-route-hardened"));
 
 app.listen(PORT, () => {
   console.log("ZynoxSMP Shop running on port " + PORT);

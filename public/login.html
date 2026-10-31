@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZYNOX — Player Gate</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --z-black:#0b0d09;--z-charcoal:#12140f;--z-olive:#1c2016;--z-olive-2:#242a1c;
+    --z-olive-line:#3a4230;--z-purple:#9b6bff;--z-purple-dim:#5f4499;
+    --z-purple-glow:rgba(155,107,255,.35);--z-green:#7de08a;--z-green-dim:#3c6b45;
+    --z-text:#e9ecdf;--z-text-dim:#9aa392;--z-text-faint:#5f6857;
+    --font-pixel:'Press Start 2P',monospace;--font-body:'Inter',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;background:var(--z-black);color:var(--z-text);font-family:var(--font-body);overflow-x:hidden}
+  ::selection{background:var(--z-purple-dim);color:#fff}
+  a{color:inherit;text-decoration:none}button{font-family:inherit;cursor:pointer}
+
+  .pixel-frame{border:2px solid var(--z-olive-line);box-shadow:4px 4px 0 rgba(0,0,0,.55)}
+
+  .zx-header{
+    position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;
+    padding:14px 28px;background:rgba(11,13,9,.92);border-bottom:2px solid var(--z-olive-line);
+    backdrop-filter:blur(4px)
+  }
+  .zx-logo{display:flex;align-items:center;gap:10px;font-family:var(--font-pixel);font-size:13px;letter-spacing:1px}
+  .zx-logo .mark{width:22px;height:22px;background:var(--z-purple);box-shadow:3px 3px 0 var(--z-green-dim);display:inline-block}
+  .zx-nav{display:flex;gap:26px;font-size:13px;color:var(--z-text-dim)}
+  .zx-nav a:hover{color:var(--z-green)}
+  .zx-burger{display:none;width:32px;height:26px;flex-direction:column;justify-content:space-between;background:none;border:0}
+  .zx-burger span{display:block;height:3px;width:100%;background:var(--z-text)}
+
+  .gate{display:grid;grid-template-columns:55% 45%;min-height:calc(100vh - 58px)}
+
+  .gate-visual{
+    position:relative;overflow:hidden;background:
+      radial-gradient(ellipse at 30% 20%,rgba(155,107,255,.16),transparent 55%),
+      radial-gradient(ellipse at 75% 80%,rgba(125,224,138,.10),transparent 50%),
+      linear-gradient(180deg,var(--z-black) 0%,#0e100b 60%,var(--z-black) 100%);
+    display:flex;flex-direction:column;justify-content:flex-end;padding:56px 60px;
+    border-right:2px solid var(--z-olive-line)
+  }
+
+  .pixel-grid{
+    position:absolute;inset:0;background-image:
+      linear-gradient(var(--z-olive-line) 1px,transparent 1px),
+      linear-gradient(90deg,var(--z-olive-line) 1px,transparent 1px);
+    background-size:34px 34px;opacity:.14;
+    mask-image:linear-gradient(180deg,transparent,black 40%,black 75%,transparent)
+  }
+
+  .terrain{position:absolute;left:0;right:0;bottom:0;height:38%;display:flex;align-items:flex-end}
+  .terrain .col{flex:1;background:linear-gradient(180deg,#232a1a,#171b10 70%);border-top:3px solid #2c331f;box-shadow:inset 0 4px 0 rgba(125,224,138,.06)}
+
+  .float-block{
+    position:absolute;width:26px;height:26px;background:var(--z-olive-2);border:2px solid var(--z-olive-line);
+    box-shadow:3px 3px 0 rgba(0,0,0,.5);animation:float 6s ease-in-out infinite
+  }
+  .float-block.purple{border-color:var(--z-purple-dim);box-shadow:3px 3px 0 rgba(0,0,0,.5),0 0 14px var(--z-purple-glow)}
+  .float-block.green{border-color:var(--z-green-dim)}
+  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+
+  .particle{position:absolute;width:3px;height:3px;background:var(--z-green);opacity:.5;animation:drift 9s linear infinite}
+  .particle.p{background:var(--z-purple)}
+  @keyframes drift{0%{transform:translateY(0) translateX(0);opacity:0}10%{opacity:.7}90%{opacity:.4}100%{transform:translateY(-220px) translateX(20px);opacity:0}}
+
+  .status-tag{font-family:var(--font-pixel);font-size:9px;color:var(--z-purple);letter-spacing:1px;display:inline-flex;align-items:center;gap:8px;margin-bottom:22px;z-index:2;position:relative}
+  .status-tag::before{content:'';width:6px;height:6px;background:var(--z-purple);box-shadow:0 0 8px var(--z-purple)}
+  .gate-title{font-family:var(--font-pixel);font-size:clamp(22px,3.4vw,34px);line-height:1.5;z-index:2;position:relative;text-shadow:3px 3px 0 rgba(0,0,0,.6)}
+  .gate-title .accent{color:var(--z-purple)}
+  .gate-sub{margin-top:18px;max-width:420px;font-size:15px;line-height:1.6;color:var(--z-text-dim);z-index:2;position:relative}
+  .gate-sys{margin-top:26px;font-family:var(--font-pixel);font-size:9px;color:var(--z-green);letter-spacing:1px;z-index:2;position:relative}
+  .gate-sys::before{content:'▸ '}
+
+  .gate-login{display:flex;align-items:center;justify-content:center;padding:40px;background:var(--z-charcoal);position:relative}
+  .gate-login::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(255,255,255,.015) 0,rgba(255,255,255,.015) 1px,transparent 1px,transparent 3px);pointer-events:none;animation:scan 7s linear infinite}
+  @keyframes scan{0%{background-position-y:0}100%{background-position-y:200px}}
+
+  .panel{width:100%;max-width:400px;background:var(--z-olive);padding:34px 30px;position:relative;animation:panelIn .5s ease both;z-index:2}
+  @keyframes panelIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+  .panel-tag{font-family:var(--font-pixel);font-size:9px;color:var(--z-text-faint);letter-spacing:2px;margin-bottom:16px}
+  .panel h1{font-family:var(--font-pixel);font-size:16px;line-height:1.6;margin-bottom:10px}
+  .panel p.desc{font-size:13.5px;color:var(--z-text-dim);line-height:1.6;margin-bottom:26px}
+
+  .btn-google{width:100%;display:flex;align-items:center;justify-content:center;gap:12px;background:#eef0e6;color:#1a1c14;border:2px solid var(--z-olive-line);padding:14px 16px;font-weight:600;font-size:14px;box-shadow:4px 4px 0 rgba(0,0,0,.5);transition:transform .12s ease,box-shadow .12s ease}
+  .btn-google:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--z-purple-dim)}
+  .btn-google:active{transform:translate(0);box-shadow:2px 2px 0 rgba(0,0,0,.5)}
+  .btn-google svg{width:18px;height:18px;flex-shrink:0}
+
+  .divider{display:flex;align-items:center;gap:12px;margin:28px 0 20px}
+  .divider .line{flex:1;height:1px;background:var(--z-olive-line)}
+  .divider span{font-family:var(--font-pixel);font-size:8px;color:var(--z-text-faint);letter-spacing:1.5px}
+
+  .player-row{display:flex;align-items:center;justify-content:space-between;background:var(--z-olive-2);border:2px solid var(--z-olive-line);padding:12px 14px;margin-bottom:14px}
+  .player-id{display:flex;align-items:center;gap:10px}
+  .avatar{width:30px;height:30px;background:linear-gradient(135deg,var(--z-purple-dim),var(--z-olive-2));border:2px solid var(--z-olive-line);flex-shrink:0}
+  .player-id .name{font-size:13px;font-weight:600}.player-id .sub{font-size:10.5px;color:var(--z-text-faint);margin-top:2px}
+  .conn-status{font-family:var(--font-pixel);font-size:8px;color:#c98a4a;letter-spacing:1px}
+
+  .stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:18px}
+  .stat{background:var(--z-olive-2);border:2px solid var(--z-olive-line);padding:12px 8px;text-align:center}
+  .stat .label{font-family:var(--font-pixel);font-size:8px;color:var(--z-text-faint);letter-spacing:1px;margin-bottom:10px}
+  .stat .value{font-family:var(--font-pixel);font-size:11px;color:var(--z-green)}
+
+  .note{font-size:12px;line-height:1.6;color:var(--z-text-faint);margin-bottom:10px}
+  .note .flag{color:var(--z-purple);font-weight:600}
+  .back-link{display:block;text-align:center;margin-top:22px;font-size:12.5px;color:var(--z-text-dim)}
+  .back-link:hover{color:var(--z-green)}
+
+  @media(max-width:880px){
+    .zx-nav{display:none}.zx-burger{display:flex}.gate{grid-template-columns:1fr}
+    .gate-visual{border-right:none;border-bottom:2px solid var(--z-olive-line);padding:30px 24px;min-height:280px}
+    .gate-title{font-size:20px}.gate-sub{font-size:13.5px}.gate-login{padding:24px 18px 48px}.panel{max-width:none;padding:26px 20px}
+  }
+</style>
+</head>
+<body>
+
+<header class="zx-header">
+  <a href="/" class="zx-logo"><span class="mark"></span>ZYNOX</a>
+  <nav class="zx-nav">
+    <a href="/">HOME</a>
+    <a href="/minigames.html">GAMES</a>
+    <a href="/minigames.html">MINIGAMES</a>
+    <a href="/#creations">CREATIONS</a>
+  </nav>
+  <button class="zx-burger" aria-label="Menu"><span></span><span></span><span></span></button>
+</header>
+
+<main class="gate">
+  <section class="gate-visual">
+    <div class="pixel-grid"></div>
+
+    <div class="float-block purple" style="top:14%;left:18%"></div>
+    <div class="float-block green" style="top:28%;left:62%;animation-delay:1.4s"></div>
+    <div class="float-block" style="top:46%;left:38%;animation-delay:2.8s"></div>
+    <div class="float-block purple" style="top:20%;left:80%;animation-delay:.6s"></div>
+
+    <div class="particle" style="left:22%;animation-delay:0s"></div>
+    <div class="particle p" style="left:48%;animation-delay:2s"></div>
+    <div class="particle" style="left:66%;animation-delay:4s"></div>
+    <div class="particle p" style="left:80%;animation-delay:1s"></div>
+    <div class="particle" style="left:35%;animation-delay:5.5s"></div>
+
+    <div class="terrain">
+      <div class="col" style="height:60%"></div><div class="col" style="height:80%"></div>
+      <div class="col" style="height:45%"></div><div class="col" style="height:95%"></div>
+      <div class="col" style="height:55%"></div><div class="col" style="height:70%"></div>
+      <div class="col" style="height:40%"></div><div class="col" style="height:85%"></div>
+    </div>
+
+    <div class="status-tag">ZYNOX PLAYER SYSTEM</div>
+    <h1 class="gate-title">ENTER THE<br><span class="accent">ZYNOX WORLD</span></h1>
+    <p class="gate-sub">One account. Your games. Your progress. Your Zynox journey.</p>
+    <div class="gate-sys">PLAYER PROFILE • READY</div>
+  </section>
+
+  <section class="gate-login">
+    <div class="panel pixel-frame">
+      <div class="panel-tag">PLAYER LOGIN</div>
+      <h1>WELCOME BACK,<br>PLAYER</h1>
+      <p class="desc">Continue your Zynox journey with your player profile.</p>
+
+      <button class="btn-google" type="button">
+        <svg viewBox="0 0 48 48">
+          <path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12s5.373-12 12-12c3.059,0 5.842,1.154 7.961,3.039l5.657-5.657C34.046,6.053,29.268,4 24,4C12.955,4 4,12.955 4,24s8.955,20 20,20 20-8.955 20-20c0-1.341-.138-2.65-.389-3.917z"/>
+          <path fill="#FF3D00" d="M6.306 14.691l6.571 4.819C14.655 15.108 18.961 12 24 12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4c-7.682 0-14.344 4.337-17.694 10.691z"/>
+          <path fill="#4CAF50" d="M24 44c5.166 0 9.86-1.977 13.409-5.192l-6.19-5.238C29.211 35.091 26.715 36 24 36c-5.202 0-9.619-3.317-11.283-7.946l-6.522 5.025C9.505 39.556 16.227 44 24 44z"/>
+          <path fill="#1976D2" d="M43.611 20.083H42V20H24v8h11.303c-.792 2.237-2.231 4.166-4.087 5.571l6.19 5.238C36.971 39.205 44 34 44 24c0-1.341-.138-2.65-.389-3.917z"/>
+        </svg>
+        CONTINUE WITH GOOGLE
+      </button>
+
+      <div class="divider"><div class="line"></div><span>PLAYER DATA</span><div class="line"></div></div>
+
+      <div class="player-row">
+        <div class="player-id">
+          <div class="avatar"></div>
+          <div><div class="name">ZYNOX PLAYER</div><div class="sub">Guest slot</div></div>
+        </div>
+        <div class="conn-status">NOT CONNECTED</div>
+      </div>
+
+      <div class="stat-grid">
+        <div class="stat"><div class="label">MINIGAMES</div><div class="value">---</div></div>
+        <div class="stat"><div class="label">XP</div><div class="value">---</div></div>
+        <div class="stat"><div class="label">ACHIEVEMENTS</div><div class="value">---</div></div>
+      </div>
+
+      <p class="note">
+        Your game progress, scores and achievements will stay connected to your Zynox player profile.
+        <br><span class="flag">COMING WITH PLAYER ACCOUNTS</span>
+      </p>
+
+      <a href="/" class="back-link">← Back to Zynox home</a>
+    </div>
+  </section>
+</main>
+
+</body>
+</html>
