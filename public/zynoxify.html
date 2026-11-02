@@ -1,158 +1,350 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="zyx-html">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Zynoxify • Gaming Playlist</title>
-  <link rel="stylesheet" href="/style.css">
-  <style>
-    body{margin:0;background:#111;color:#fff;overflow:hidden}
-    .zyf-page{min-height:100svh;background:linear-gradient(180deg,rgba(0,0,0,.35),rgba(0,0,0,.72)),url('/assets/zynoxify/hero.png') center/cover no-repeat}
-  
-.zyf-page{position:fixed;inset:0;width:100%;height:100svh;min-height:0;overflow:hidden}
-.zyf-top{position:absolute;top:24px;left:20px;right:20px;display:flex;justify-content:space-between;align-items:center;z-index:2;font:600 11px/1.2 Arial,sans-serif;letter-spacing:2px;text-transform:uppercase}
-.zyf-live{color:#8ff0b0}
-.zyf-label{color:rgba(255,255,255,.72)}
-.zyf-hero-text{position:absolute;left:24px;right:24px;top:27%;z-index:2}
-.zyf-kicker{display:block;margin-bottom:10px;font:700 12px/1 Arial,sans-serif;letter-spacing:4px;color:rgba(255,255,255,.68)}
-.zyf-hero-text h1{margin:0;font:800 clamp(42px,12vw,78px)/.88 Arial,sans-serif;letter-spacing:-2px;color:#fff;text-shadow:0 4px 24px rgba(0,0,0,.55)}
-.zyf-hero-text p{max-width:340px;margin:18px 0 0;font:400 14px/1.5 Arial,sans-serif;color:rgba(255,255,255,.78);letter-spacing:.3px}
-.zyf-pills{display:flex;gap:10px;margin-top:22px}
-.zyf-pills button{border:1px solid rgba(255,255,255,.2);background:rgba(20,20,20,.55);backdrop-filter:blur(10px);color:#fff;border-radius:999px;padding:10px 16px;font:700 11px Arial,sans-serif;letter-spacing:1px}
-.zyf-player{position:absolute;left:14px;right:14px;bottom:14px;padding:13px 14px 11px;background:rgba(10,10,10,.74);border:1px solid rgba(255,255,255,.16);border-radius:24px;backdrop-filter:blur(22px);z-index:3;box-shadow:0 16px 45px rgba(0,0,0,.42)}
-.zyf-player-main{display:flex;align-items:center;gap:11px}
-.zyf-cover{width:52px;height:52px;min-width:52px;border-radius:15px;background:rgba(255,255,255,.055);display:grid;place-items:center;overflow:hidden}
-.zyf-disc{width:36px;height:36px;border-radius:50%;display:block;background:repeating-radial-gradient(circle,#101010 0 2px,#3b3b3b 2.5px 3.5px);border:2px solid rgba(255,255,255,.18);box-shadow:0 0 14px rgba(255,255,255,.1);position:relative}
-.zyf-disc:after{content:"";position:absolute;left:50%;top:50%;width:8px;height:8px;transform:translate(-50%,-50%);border-radius:50%;background:#bdbdbd;box-shadow:0 0 0 3px #171717}
-.zyf-track-info{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px}
-.zyf-track-info strong{font:700 12px Arial,sans-serif;letter-spacing:.5px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.zyf-track-info span{display:none;font:500 8px Arial,sans-serif;letter-spacing:1.1px;color:rgba(255,255,255,.46);white-space:nowrap}
-.zyf-controls{display:flex;align-items:center;gap:5px}
-.zyf-controls button{border:0;background:transparent;color:rgba(255,255,255,.72);width:30px;height:38px;padding:0;display:grid;place-items:center;font-size:15px}
-.zyf-controls button:active{transform:scale(.88)}
-.zyf-controls .zyf-play{width:44px;height:44px;border-radius:50%;background:#f4f4f4;color:#111;font-size:16px;box-shadow:0 5px 18px rgba(0,0,0,.3)}
-.zyf-progress{height:3px;margin-top:12px;border-radius:99px;background:rgba(255,255,255,.14);overflow:hidden}
-.zyf-progress span{display:block;width:0;height:100%;background:rgba(255,255,255,.9);border-radius:99px}
-.zyf-player.playing .zyf-disc{animation:zyfSpin 2.6s linear infinite}
-@keyframes zyfSpin{to{transform:rotate(360deg)}}
-.zyf-library{position:fixed;left:14px;right:14px;bottom:14px;height:62svh;max-height:62svh;padding:14px;background:rgba(10,10,10,.92);border:1px solid rgba(255,255,255,.14);border-radius:22px;backdrop-filter:blur(22px);z-index:5;transform:none;opacity:0;pointer-events:none;transition:opacity .18s ease;box-shadow:0 18px 50px rgba(0,0,0,.5);overflow:hidden}
- .zyf-library.open{opacity:1;pointer-events:auto}
-.zyf-library-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;font:700 11px Arial,sans-serif;letter-spacing:2px}
-.zyf-library-head button{border:0;background:rgba(255,255,255,.08);color:#fff;width:30px;height:30px;border-radius:50%;font-size:20px}
-.zyf-library-list{display:none;max-height:48svh;overflow:auto}
-.zyf-song{display:flex;align-items:center;gap:10px;padding:11px 8px;border-bottom:1px solid rgba(255,255,255,.07);cursor:pointer}
-.zyf-song:last-child{border-bottom:0}
-.zyf-song-num{width:24px;color:rgba(255,255,255,.35);font:600 10px Arial,sans-serif}
-.zyf-song-name{font:600 12px Arial,sans-serif;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.zyf-pills button{cursor:pointer}
-.zyf-playlist-list{margin-bottom:10px}
-.zyf-playlist-card{display:flex;align-items:center;gap:12px;padding:11px 8px;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.04);border-radius:16px;cursor:pointer}
-.zyf-playlist-art{width:48px;height:48px;display:grid;place-items:center;border-radius:13px;background:rgba(255,255,255,.08);font-size:22px}
-.zyf-playlist-info{flex:1;display:flex;flex-direction:column;gap:5px}
-.zyf-playlist-info strong{font:700 12px Arial,sans-serif;letter-spacing:1px;color:#fff}
-.zyf-playlist-info span{font:500 8px Arial,sans-serif;letter-spacing:1px;color:rgba(255,255,255,.45)}
-.zyf-playlist-arrow{font-size:26px;color:rgba(255,255,255,.55)}
-.zyf-search{display:none;width:100%;box-sizing:border-box;margin:0 0 10px;padding:11px 13px;border:1px solid rgba(255,255,255,.1);border-radius:13px;background:rgba(255,255,255,.06);color:#fff;outline:none;font:500 12px Arial,sans-serif}.zyf-search::placeholder{color:rgba(255,255,255,.4)}
-
-.zyf-page:after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 50% 42%,transparent 20%,rgba(0,0,0,.16) 68%,rgba(0,0,0,.48) 100%);z-index:1}
-.zyf-top,.zyf-hero-text,.zyf-player{z-index:4}
-.zyf-top{top:22px}
-.zyf-live,.zyf-label{padding:7px 11px;border:1px solid rgba(255,255,255,.08);border-radius:999px;background:rgba(8,8,8,.28);backdrop-filter:blur(8px)}
-.zyf-hero-text{top:28%;left:26px;right:26px}
-.zyf-kicker{font-size:11px;letter-spacing:5px;color:rgba(255,255,255,.58)}
-.zyf-hero-text h1{font-size:clamp(44px,12.5vw,80px);line-height:.86;letter-spacing:-2.5px;text-shadow:0 5px 28px rgba(0,0,0,.7)}
-.zyf-hero-text p{margin-top:17px;color:rgba(255,255,255,.72);font-size:13px}
-.zyf-pills{margin-top:19px}
-.zyf-pills button{background:rgba(8,8,8,.48);border-color:rgba(255,255,255,.16);box-shadow:0 6px 18px rgba(0,0,0,.18)}
-.zyf-player{bottom:16px;background:rgba(8,8,8,.76);border-color:rgba(255,255,255,.18);box-shadow:0 18px 50px rgba(0,0,0,.48)}
-.zyf-cover{background:rgba(255,255,255,.065);box-shadow:inset 0 0 0 1px rgba(255,255,255,.05)}
-.zyf-track-info strong{font-size:13px}
-.zyf-controls .zyf-play{width:48px;height:48px}
-.zyf-progress{height:3px;background:rgba(255,255,255,.13)}
-
-.zyf-page:before{content:"";position:absolute;left:0;right:0;top:0;height:42%;pointer-events:none;background:linear-gradient(180deg,rgba(0,0,0,.42),transparent);z-index:2}
-.zyf-hero-text{top:29%;max-width:390px}
-.zyf-kicker{margin-bottom:12px;text-shadow:0 2px 12px rgba(0,0,0,.7)}
-.zyf-hero-text h1{font-weight:850;text-shadow:0 6px 32px rgba(0,0,0,.78)}
-.zyf-hero-text p{max-width:315px;text-shadow:0 2px 10px rgba(0,0,0,.7)}
-.zyf-pills button{min-width:108px;padding:11px 18px;font-size:10px;letter-spacing:1.4px}
-.zyf-player{padding:12px 14px 10px;border-radius:21px}
-.zyf-player-main{gap:13px}
-.zyf-cover{width:50px;height:50px;min-width:50px;border-radius:14px}
-.zyf-track-info strong{letter-spacing:.35px}
-.zyf-controls{gap:7px}
-.zyf-controls button{width:32px;height:40px;color:rgba(255,255,255,.62)}
-.zyf-controls .zyf-play{width:48px;height:48px}
-.zyf-progress{margin-top:11px;height:2px}
-.zyf-player:after{content:"";position:absolute;left:14px;right:14px;bottom:7px;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent);pointer-events:none}
-
-
-/* ZYNOXIFY FINAL VISUAL OVERRIDES */
-.zyf-top{top:20px;left:18px;right:18px}
-.zyf-live,.zyf-label{font-size:10px;letter-spacing:1.8px;padding:8px 12px;background:rgba(8,8,8,.38);border:1px solid rgba(255,255,255,.12);box-shadow:0 6px 20px rgba(0,0,0,.18)}
-.zyf-hero-text{top:27%;left:25px;right:25px}
-.zyf-kicker{font-size:10px;letter-spacing:5px;margin-bottom:13px;color:rgba(255,255,255,.62)}
-.zyf-hero-text h1{font-size:clamp(46px,13vw,82px);line-height:.84;letter-spacing:-3px;text-shadow:0 7px 30px rgba(0,0,0,.82)}
-.zyf-hero-text p{font-size:13px;line-height:1.45;margin-top:18px;color:rgba(255,255,255,.7);text-shadow:0 3px 12px rgba(0,0,0,.65)}
-.zyf-pills{gap:9px;margin-top:20px}
-.zyf-pills button{min-width:106px;padding:11px 18px;background:rgba(10,10,10,.54);border:1px solid rgba(255,255,255,.16);box-shadow:0 8px 24px rgba(0,0,0,.22);font-size:10px;letter-spacing:1.5px}
-.zyf-player{left:14px;right:14px;bottom:15px;padding:12px 13px 10px;border-radius:23px;background:rgba(7,7,7,.8);border:1px solid rgba(255,255,255,.18);box-shadow:0 18px 48px rgba(0,0,0,.52)}
-.zyf-player-main{gap:12px}
-.zyf-cover{width:54px;height:54px;min-width:54px;border-radius:15px;background:rgba(255,255,255,.055)}
-.zyf-disc{width:38px;height:38px}
-.zyf-track-info strong{font-size:13px;letter-spacing:.2px}
-.zyf-controls{gap:4px}
-.zyf-controls button{width:34px;height:42px;color:rgba(255,255,255,.68);font-size:14px}
-.zyf-controls .zyf-play{width:50px;height:50px;background:#f7f7f7;color:#111;box-shadow:0 7px 24px rgba(0,0,0,.38)}
-.zyf-progress{height:3px;margin-top:11px;background:rgba(255,255,255,.12)}
-.zyf-page:after{background:radial-gradient(circle at 50% 40%,transparent 18%,rgba(0,0,0,.13) 58%,rgba(0,0,0,.5) 100%)}
-</style>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0d0f14">
+  <title>Zynoxify Music</title>
+  <link rel="stylesheet" href="/zynoxify.css">
+  <link rel="manifest" href="/zynoxify.webmanifest">
+  <link rel="icon" href="/assets/zynoxify/zynoxify-icon.svg" type="image/svg+xml">
+  <meta name="mobile-web-app-capable" content="yes">
 </head>
-<body>
-  <main class="zyf-page">
-  <header class="zyf-top">
-    <span class="zyf-live">● LIVE SESSION</span>
-    <span class="zyf-label">GAMING PLAYLIST</span>
+<body class="zyx-body">
+<svg xmlns="http://www.w3.org/2000/svg" width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="zi-play" viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></symbol>
+  <symbol id="zi-pause" viewBox="0 0 24 24"><rect x="6.5" y="5" width="4" height="14" rx="1.5"/><rect x="13.5" y="5" width="4" height="14" rx="1.5"/></symbol>
+  <symbol id="zi-prev" viewBox="0 0 24 24"><path d="M6 5.5h2.5v13H6zM19.5 5.5v13L9.5 12z"/></symbol>
+  <symbol id="zi-next" viewBox="0 0 24 24"><path d="M15.5 5.5H18v13h-2.5zM4.5 5.5l10 6.5-10 6.5z"/></symbol>
+  <symbol id="zi-shuffle" viewBox="0 0 24 24"><path d="M3 7h3.2c2 0 3.2 1 4.3 2.8l2.9 4.4c1.1 1.8 2.3 2.8 4.3 2.8H21M3 17h3.2c1.2 0 2.1-.4 2.9-1.1M13 8.4C13.9 7.5 15 7 16.4 7H21M18 4l3 3-3 3M18 14l3 3-3 3"/></symbol>
+  <symbol id="zi-repeat" viewBox="0 0 24 24"><path d="M4 11V9a3 3 0 0 1 3-3h13M17 3l3 3-3 3M20 13v2a3 3 0 0 1-3 3H4M7 21l-3-3 3-3"/></symbol>
+  <symbol id="zi-heart" viewBox="0 0 24 24"><path d="M12 20.2s-7.2-4.5-7.2-10.2a4.2 4.2 0 0 1 7.2-2.8 4.2 4.2 0 0 1 7.2 2.8c0 5.7-7.2 10.2-7.2 10.2z"/></symbol>
+  <symbol id="zi-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.2"/><path d="M15.8 15.8L20 20"/></symbol>
+  <symbol id="zi-list" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10"/></symbol>
+  <symbol id="zi-queue" viewBox="0 0 24 24"><path d="M4 7h11M4 12h11M4 17h7M18 11v8M15 16l3 3 3-3"/></symbol>
+  <symbol id="zi-home" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></symbol>
+  <symbol id="zi-volume" viewBox="0 0 24 24"><path d="M4 9.5v5h4l5 4v-13l-5 4z"/><path d="M16 9c1.4 1.6 1.4 4.4 0 6M18.8 6.5c2.8 3 2.8 8 0 11"/></symbol>
+  <symbol id="zi-mute" viewBox="0 0 24 24"><path d="M4 9.5v5h4l5 4v-13l-5 4z"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></symbol>
+  <symbol id="zi-close" viewBox="0 0 24 24"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/></symbol>
+  <symbol id="zi-up" viewBox="0 0 24 24"><path d="M6 14l6-6 6 6"/></symbol>
+  <symbol id="zi-down" viewBox="0 0 24 24"><path d="M6 10l6 6 6-6"/></symbol>
+  <symbol id="zi-external" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5H5V6h5"/></symbol>
+  <symbol id="zi-video" viewBox="0 0 24 24"><rect x="3" y="6" width="13" height="12" rx="2.5"/><path d="M16 10.2l5-2.7v9l-5-2.7"/></symbol>
+  <symbol id="zi-sparkle" viewBox="0 0 24 24"><path d="M12 3l1.9 5.6 5.6 1.9-5.6 1.9L12 18l-1.9-5.6L4.5 10.5l5.6-1.9z"/><path d="M19 3v4M17 5h4"/></symbol>
+  <symbol id="zi-trend" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8M15 7h6v6"/></symbol>
+  <symbol id="zi-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></symbol>
+  <symbol id="zi-film" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M7.5 5v14M16.5 5v14M3 10h4.5M3 14h4.5M16.5 10H21M16.5 14H21"/></symbol>
+  <symbol id="zi-note" viewBox="0 0 24 24"><path d="M9 18V6l10-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="16.5" cy="16" r="2.5"/></symbol>
+  <symbol id="zi-gamepad" viewBox="0 0 24 24"><path d="M6.5 8h11a3.5 3.5 0 0 1 3.4 4.3l-.8 3.6a2.4 2.4 0 0 1-4 1.2L14 15.5h-4L8 17.1a2.4 2.4 0 0 1-4-1.2l-.8-3.6A3.5 3.5 0 0 1 6.5 8z"/><path d="M8 10.5v3M6.5 12h3M16 11.5h.01M18 13h.01"/></symbol>
+  <symbol id="zi-flame" viewBox="0 0 24 24"><path d="M12 3c1 3.5 5 5.5 5 10a5 5 0 0 1-10 0c0-2 1-3.2 2.2-4.2.2 1.6 1 2.4 1.8 2.7C11 8.5 10.5 5.5 12 3z"/></symbol>
+  <symbol id="zi-wave" viewBox="0 0 24 24"><path d="M2 12c1.6-5 3.2-5 4.8 0s3.2 5 4.8 0 3.2-5 4.8 0 3.2 5 4.8 0"/></symbol>
+  <symbol id="zi-headphones" viewBox="0 0 24 24"><path d="M4 15v-3a8 8 0 0 1 16 0v3"/><rect x="3" y="14" width="4" height="6" rx="1.8"/><rect x="17" y="14" width="4" height="6" rx="1.8"/></symbol>
+  <symbol id="zi-dumbbell" viewBox="0 0 24 24"><path d="M6 7.5v9M3.5 10v4M18 7.5v9M20.5 10v4M6 12h12"/></symbol>
+  <symbol id="zi-moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></symbol>
+  <symbol id="zi-bolt" viewBox="0 0 24 24"><path d="M13 3L5 14h6l-1 7 8-11h-6z"/></symbol>
+  <symbol id="zi-expand" viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></symbol>
+  <symbol id="zi-shrink" viewBox="0 0 24 24"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></symbol>
+  <symbol id="zi-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></symbol>
+  <symbol id="zi-eye" viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></symbol>
+  <symbol id="zi-eye-off" viewBox="0 0 24 24"><path d="M3 3l18 18M10.6 5.2A10 10 0 0 1 12 5c6.4 0 10 7 10 7a17 17 0 0 1-3.2 4M6.5 6.6C3.6 8.5 2 12 2 12s3.6 7 10 7c1.7 0 3.2-.4 4.5-1M9.9 9.9a3 3 0 0 0 4.2 4.2"/></symbol>
+  <symbol id="zi-more" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></symbol>
+  <symbol id="zi-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="zi-link" viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></symbol>
+  <symbol id="zi-back" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></symbol>
+  <symbol id="zi-chev" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></symbol>
+  <symbol id="zi-edit" viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></symbol>
+  <symbol id="zi-trash" viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></symbol>
+  <symbol id="zi-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6"/><circle cx="17" cy="9" r="2.8"/><path d="M16.5 14.2c3 .2 5 2.2 5 5.3"/></symbol>
+  <symbol id="zi-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2.5"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></symbol>
+  <symbol id="zi-sync" viewBox="0 0 24 24"><path d="M4 12a8 8 0 0 1 13.7-5.6L20 8M20 4v4h-4M20 12a8 8 0 0 1-13.7 5.6L4 16M4 20v-4h4"/></symbol>
+  <symbol id="zi-bars" viewBox="0 0 24 24"><path d="M6 18V10M12 18V5M18 18V12"/></symbol>
+</svg>
+
+<main class="zyx-root" id="zyx-root">
+  <div class="zyx-splash" id="zyx-splash" role="status" aria-label="Loading Zynoxify Music">
+    <div class="zyx-splash-mark">
+      <span class="zyx-splash-ring" aria-hidden="true"></span>
+      <svg viewBox="0 0 48 48" aria-hidden="true" focusable="false">
+        <defs>
+          <linearGradient id="zyx-sg" x1="6" y1="4" x2="42" y2="46" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#ff7f98"/>
+            <stop offset=".55" stop-color="#ff2e55"/>
+            <stop offset="1" stop-color="#a4113a"/>
+          </linearGradient>
+        </defs>
+        <rect x="1.5" y="1.5" width="45" height="45" rx="14" fill="url(#zyx-sg)"/>
+        <path d="M15 15.5h18L15 32.5h18" fill="none" stroke="#ffffff" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <span class="zyx-splash-word">ZYNOXIFY</span>
+    <span class="zyx-splash-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+    <span class="zyx-splash-sub">Loading your sound</span>
+  </div>
+  <div class="zyx-backdrop" aria-hidden="true"></div>
+  <div class="zyx-orbs" aria-hidden="true"><i></i><i></i><i></i></div>
+
+  <header class="zyx-head">
+    <div class="zyx-brand">
+      <div class="zyx-logo" aria-hidden="true">
+        <svg viewBox="0 0 48 48" focusable="false">
+          <defs>
+            <linearGradient id="zyx-lg" x1="6" y1="4" x2="42" y2="46" gradientUnits="userSpaceOnUse">
+              <stop offset="0" stop-color="#ff7f98"/>
+              <stop offset=".55" stop-color="#ff2e55"/>
+              <stop offset="1" stop-color="#a4113a"/>
+            </linearGradient>
+            <linearGradient id="zyx-lh" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#ffffff" stop-opacity=".42"/>
+              <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <rect x="1.5" y="1.5" width="45" height="45" rx="14" fill="url(#zyx-lg)"/>
+          <rect x="1.5" y="1.5" width="45" height="22" rx="14" fill="url(#zyx-lh)"/>
+          <path d="M15 15.5h18L15 32.5h18" fill="none" stroke="#ffffff" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="38" cy="10" r="2" fill="#ffffff" fill-opacity=".85"/>
+        </svg>
+      </div>
+      <div class="zyx-brand-copy">
+        <span class="zyx-wordmark">ZYNOXIFY</span>
+        <span class="zyx-greet" id="zyx-greet">Music</span>
+      </div>
+    </div>
+
+
+
+    <button class="zyx-home-shuffle" id="zyx-home-shuffle" type="button" aria-label="Shuffle play online recommendations"><svg class="zyx-ic"><use href="#zi-shuffle"/></svg></button>
+    <button class="zyx-home-shuffle zyx-fs-btn" id="zyx-fs" type="button" aria-label="Enter full screen" aria-pressed="false"><svg class="zyx-ic"><use href="#zi-expand"/></svg></button>
+    <button class="zyx-home-shuffle zyx-acct-btn" id="zyx-acct" type="button" aria-label="Log in or create an account"><svg class="zyx-ic" aria-hidden="true"><use href="#zi-user"/></svg><span class="zyx-acct-initial" aria-hidden="true"></span></button>
+    <span class="zyx-chip" title="Music source status">
+      <span class="zyx-led" id="zyx-led" data-state="off" aria-hidden="true"></span>
+      <span id="zyx-status-text">Checking sources</span>
+    </span>
   </header>
-  <section class="zyf-hero-text">
-    <span class="zyf-kicker">ZYNOXIFY</span>
-    <h1>GAMING<br>PLAYLIST</h1>
-    <p>Late-night gaming. Good music. No distractions.</p>
-<div class="zyf-pills"><button>PLAYLISTS</button><button>SONGS</button></div>
+
+  <section class="zyx-home" id="zyx-home-view" aria-label="Home">
+
+
+    <div class="zyx-mood-rail" role="group" aria-label="Explore music moods">
+      <button class="zyx-mood is-active" type="button" data-home-query=""><svg class="zyx-ic" aria-hidden="true"><use href="#zi-sparkle"/></svg>For you</button>
+      <button class="zyx-mood" type="button" data-home-query="trending india"><svg class="zyx-ic" aria-hidden="true"><use href="#zi-trend"/></svg>India</button>
+      <button class="zyx-mood" type="button" data-home-query="global hits"><svg class="zyx-ic" aria-hidden="true"><use href="#zi-globe"/></svg>Global</button>
+      <button class="zyx-mood" type="button" data-home-query="bollywood"><svg class="zyx-ic" aria-hidden="true"><use href="#zi-film"/></svg>Bollywood</button>
+      <button class="zyx-mood" type="button" data-home-query="punjabi"><svg class="zyx-ic" aria-hidden="true"><use href="#zi-note"/></svg>Punjabi</button>
+      <button class="zyx-mood" type="button" data-home-query="gaming music"><svg class="zyx-ic" aria-hidden="true"><use href="#zi-gamepad"/></svg>Gaming</button>
+      <button class="zyx-mood" type="button" data-home-query="phonk music"><svg class="zyx-ic" aria-hidden="true"><use href="#zi-flame"/></svg>Phonk</button>
+      <button class="zyx-mood" type="button" data-home-query="chill music"><svg class="zyx-ic" aria-hidden="true"><use href="#zi-wave"/></svg>Chill</button>
+      <button class="zyx-mood" type="button" data-home-query="focus music"><svg class="zyx-ic" aria-hidden="true"><use href="#zi-headphones"/></svg>Focus</button>
+      <button class="zyx-mood" type="button" data-home-query="workout music"><svg class="zyx-ic" aria-hidden="true"><use href="#zi-dumbbell"/></svg>Workout</button>
+      <button class="zyx-mood" type="button" data-home-query="romantic songs"><svg class="zyx-ic" aria-hidden="true"><use href="#zi-heart"/></svg>Romance</button>
+      <button class="zyx-mood" type="button" data-home-query="night drive music"><svg class="zyx-ic" aria-hidden="true"><use href="#zi-moon"/></svg>Night drive</button>
+      <button class="zyx-mood" type="button" data-home-query="energy music"><svg class="zyx-ic" aria-hidden="true"><use href="#zi-bolt"/></svg>Energize</button>
+    </div>
+
+    <button class="zyx-pt-card" id="zyx-pt-open" type="button">
+      <span class="zyx-pt-art"><svg class="zyx-ic" aria-hidden="true"><use href="#zi-users"/></svg></span>
+      <span class="zyx-pt-copy"><strong>Play together</strong><small>Listen in sync with friends on their phones</small></span>
+      <svg class="zyx-ic" aria-hidden="true"><use href="#zi-chev"/></svg>
+    </button>
+
+    <section class="zyx-home-section" aria-labelledby="zyx-home-quick-title">
+      <div class="zyx-home-section-head">
+        <div>
+          <h2 id="zyx-home-quick-title">Quick picks</h2>
+          <p>Online picks · tap to play, hold for options</p>
+        </div>
+        <div class="zyx-home-page-tools">
+          <button class="zyx-home-page-arrow" id="zyx-home-page-prev" type="button" aria-label="Previous set">
+            <svg class="zyx-ic"><use href="#zi-prev"/></svg>
+          </button>
+          <span class="zyx-home-page-count" id="zyx-home-page-count">01 / 01</span>
+          <button class="zyx-home-page-arrow" id="zyx-home-page-next" type="button" aria-label="Next set">
+            <svg class="zyx-ic"><use href="#zi-next"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="zyx-home-pager" id="zyx-home-pager" aria-label="Swipeable song recommendations">
+        <div class="zyx-home-pages" id="zyx-home-pages"></div>
+      </div>
+      <div class="zyx-home-dots" id="zyx-home-dots" aria-hidden="true"></div>
+    </section>
+
+    <section class="zyx-home-section" aria-labelledby="zyx-caps-title">
+      <div class="zyx-home-section-head">
+        <div>
+          <h2 id="zyx-caps-title">Sound capsules</h2>
+          <p>Tap a mood, get real songs</p>
+        </div>
+      </div>
+      <div class="zyx-caps" id="zyx-caps"></div>
+    </section>
+
+
   </section>
-<div class="zyf-player">
-  <div class="zyf-player-main">
-    <div class="zyf-cover"><span class="zyf-disc"></span></div>
-    <div class="zyf-track-info">
-      <strong>SELECT A SONG</strong>
-      <span>ZYNOXIFY GAMING PLAYLIST</span>
+
+  <section class="zyx-player-view" id="zyx-player-view" aria-label="Now playing">
+    <div class="zyx-player-head">
+      <button class="zyx-player-back" id="zyx-player-back" type="button" aria-label="Back to Home">
+        <svg class="zyx-ic"><use href="#zi-down"/></svg>
+      </button>
+      <div class="zyx-player-head-center"><span class="zyx-player-label">NOW PLAYING</span><div class="zyx-mode-pill" id="zyx-mode-switch" role="group" aria-label="Presentation mode" hidden>
+      <button type="button" class="zyx-mode-btn" id="zyx-mode-cover" aria-pressed="true">Song</button>
+      <button type="button" class="zyx-mode-btn" id="zyx-mode-video" aria-pressed="false">Video</button>
+    </div></div>
+      <div class="zyx-player-tools">
+        <button class="zyx-player-more" id="zyx-more" type="button" aria-label="More actions for this song" aria-haspopup="dialog"><svg class="zyx-ic" aria-hidden="true"><use href="#zi-more"/></svg></button>
+        <button class="zyx-player-queue" id="zyx-player-queue" type="button" aria-label="Open Up Next queue">
+          <svg class="zyx-ic"><use href="#zi-queue"/></svg>
+        </button>
+      </div>
     </div>
-    <div class="zyf-controls">
-      <button class="zyf-prev" aria-label="Previous song">⏮</button>
-      <button class="zyf-play" aria-label="Play or pause">▶</button>
-      <button class="zyf-next" aria-label="Next song">⏭</button>
+
+  <section class="zyx-stage" id="zyx-stage" aria-label="Now playing stage">
+    <div class="zyx-scene" id="zyx-scene">
+      <div class="zyx-plate"></div>
+      <div class="zyx-record"><div class="zyx-disc"><span class="zyx-disc-label"></span></div></div>
+      <div class="zyx-sleeve">
+        <div class="zyx-art" id="zyx-art"></div>
+        <span class="zyx-gloss"></span>
+      </div>
     </div>
-  </div>
-  <div class="zyf-progress"><span></span></div>
-</div>
-<div class="zyf-library" id="zyf-library" aria-hidden="true">
-  <div class="zyf-library-head">
-    <strong id="zyf-library-title">PLAYLISTS</strong>
-    <button id="zyf-close" aria-label="Close">×</button>
-  </div>
-  <div class="zyf-playlist-list" id="zyf-playlist-list">
-  <div class="zyf-playlist-card" id="gaming-vibe">
-    <div class="zyf-playlist-art">🎮</div>
-    <div class="zyf-playlist-info">
-      <strong>GAMING VIBE</strong>
-      <span>92 SONGS · ZYNOXIFY</span>
+    <div class="zyx-embed" id="zyx-embed" hidden></div>
+  </section>
+
+  <section class="zyx-info" aria-label="Current track">
+    <div class="zyx-info-main">
+      <p class="zyx-source" id="zyx-source">Local collection</p>
+      <h1 class="zyx-title" id="zyx-title">Select a song</h1>
+      <p class="zyx-artist" id="zyx-artist">Zynoxify Studio</p>
     </div>
-    <span class="zyf-playlist-arrow">›</span>
-  </div>
-</div>
-<input id="zyf-search" class="zyf-search" type="search" placeholder="Search songs..." autocomplete="off">
-<div class="zyf-library-list" id="zyf-library-list"></div>
-</div>
+    <p class="zyx-sr" id="zyx-live" role="status" aria-live="polite"></p>
+  </section>
+
+  <section class="zyx-deck" aria-label="Player controls">
+    <div class="zyx-seekrow">
+      <span class="zyx-time" id="zyx-cur">0:00</span>
+      <div class="zyx-range-well">
+        <input class="zyx-range" id="zyx-seek" type="range" min="0" max="1000" value="0" step="1" aria-label="Seek position" aria-valuetext="0:00">
+      </div>
+      <span class="zyx-time" id="zyx-dur">0:00</span>
+    </div>
+
+    <div class="zyx-transport">
+      <button class="zyx-key zyx-key--sec" id="zyx-shuffle" type="button" aria-pressed="false" aria-label="Shuffle off"><svg class="zyx-ic"><use href="#zi-shuffle"/></svg></button>
+      <button class="zyx-key" id="zyx-prev" type="button" aria-label="Previous song"><svg class="zyx-ic zyx-ic--solid"><use href="#zi-prev"/></svg></button>
+      <button class="zyx-key zyx-key--play" id="zyx-play" type="button" aria-label="Play">
+        <span class="zyx-play-well"><svg class="zyx-ic zyx-ic--solid"><use id="zyx-play-use" href="#zi-play"/></svg></span>
+      </button>
+      <button class="zyx-key" id="zyx-next" type="button" aria-label="Next song"><svg class="zyx-ic zyx-ic--solid"><use href="#zi-next"/></svg></button>
+      <button class="zyx-key zyx-key--sec" id="zyx-repeat" type="button" aria-pressed="false" aria-label="Repeat off">
+        <svg class="zyx-ic"><use href="#zi-repeat"/></svg><span class="zyx-badge" id="zyx-repeat-badge" hidden>1</span>
+      </button>
+    </div>
+
+    <div class="zyx-aux">
+      <div class="zyx-aux-left">
+        <button class="zyx-key zyx-key--sm" id="zyx-fav" type="button" aria-pressed="false" aria-label="Save to favourites"><svg class="zyx-ic zyx-ic--fill"><use href="#zi-heart"/></svg></button>
+        <button class="zyx-key zyx-key--sm zyx-key--pill" id="zyx-vid" type="button" aria-pressed="false" aria-label="Show video" hidden>
+          <svg class="zyx-ic"><use href="#zi-video"/></svg><span class="zyx-vid-label" id="zyx-vid-label">Video</span>
+        </button>
+      </div>
+      <div class="zyx-vol">
+        <button class="zyx-key zyx-key--sm" id="zyx-mute" type="button" aria-pressed="false" aria-label="Mute"><svg class="zyx-ic"><use id="zyx-mute-use" href="#zi-volume"/></svg></button>
+        <div class="zyx-range-well zyx-range-well--vol">
+          <input class="zyx-range" id="zyx-vol" type="range" min="0" max="100" value="80" step="1" aria-label="Volume">
+        </div>
+      </div>
+    </div>
+  </section>
+  </section>
+
+  <section class="zyx-mini" id="zyx-mini-player" aria-label="Mini player">
+    <button class="zyx-mini-main" id="zyx-mini-open" type="button" aria-label="Open Now Playing">
+      <span class="zyx-mini-cover" id="zyx-mini-cover"><span>Z</span></span>
+      <span class="zyx-mini-copy"><strong class="zyx-mini-title" id="zyx-mini-title">Loading music…</strong><small class="zyx-mini-artist" id="zyx-mini-artist">Zynoxify Music</small></span>
+    </button>
+    <button class="zyx-mini-control zyx-mini-control--play" id="zyx-mini-play" type="button" aria-label="Play current song"><svg class="zyx-ic zyx-ic--solid"><use id="zyx-mini-play-icon" href="#zi-play"/></svg></button>
+    <button class="zyx-mini-control" id="zyx-mini-next" type="button" aria-label="Next song"><svg class="zyx-ic zyx-ic--solid"><use href="#zi-next"/></svg></button>
+  </section>
+
+  <nav class="zyx-nav" aria-label="Browse music">
+    <button class="zyx-navbtn" type="button" id="zyx-home-btn" aria-label="Home">
+      <svg class="zyx-ic"><use href="#zi-home"/></svg>
+      <span>Home</span>
+    </button>
+    <button class="zyx-navbtn" type="button" data-zyx-open="discover" aria-expanded="false" aria-controls="zyx-sheet">
+      <svg class="zyx-ic"><use href="#zi-search"/></svg>
+      <span>Search</span>
+    </button>
+    <button class="zyx-navbtn" type="button" data-zyx-open="library" aria-expanded="false" aria-controls="zyx-sheet">
+      <svg class="zyx-ic"><use href="#zi-list"/></svg>
+      <span>Library</span>
+    </button>
+
+  </nav>
+
+  <div class="zyx-scrim" id="zyx-scrim"></div>
+
+  <aside class="zyx-sheet" id="zyx-sheet" aria-label="Browse music">
+    <div class="zyx-sheet-grab" aria-hidden="true"><span></span></div>
+    <div class="zyx-sheet-head">
+      <div class="zyx-tabs" role="tablist" aria-label="Browse sections">
+        <button class="zyx-tab" role="tab" type="button" id="zyx-tab-library" aria-controls="zyx-pane-library" aria-selected="true" data-zyx-tab="library">Library</button>
+        <button class="zyx-tab" role="tab" type="button" id="zyx-tab-discover" aria-controls="zyx-pane-discover" aria-selected="false" data-zyx-tab="discover" tabindex="-1">Search</button>
+        <button class="zyx-tab" role="tab" type="button" id="zyx-tab-queue" aria-controls="zyx-pane-queue" aria-selected="false" data-zyx-tab="queue" tabindex="-1">Up Next</button>
+      </div>
+      <button class="zyx-icon-btn zyx-close" id="zyx-close" type="button" aria-label="Close browser"><svg class="zyx-ic"><use href="#zi-close"/></svg></button>
+    </div>
+
+    <section class="zyx-pane" id="zyx-pane-library" role="tabpanel" aria-labelledby="zyx-tab-library">
+      <div class="zyx-plhead" id="gaming-vibe">
+        <div><h2>Gaming Vibe</h2><p class="zyx-plsub">Local High-Energy Collection</p></div>
+        <span class="zyx-count-pill" id="zyx-count">0 songs</span>
+      </div>
+      <div class="zyx-search-wrap">
+        <svg class="zyx-ic zyx-search-ic" aria-hidden="true"><use href="#zi-search"/></svg>
+        <input class="zyx-field" id="zyx-filter" type="search" placeholder="Filter 92 local tracks..." autocomplete="off" aria-label="Filter songs">
+      </div>
+      <fieldset class="zyx-seg"><legend class="zyx-sr">Show</legend>
+        <label><input type="radio" name="zyx-show" value="all" checked><span>All Tracks</span></label>
+        <label><input type="radio" name="zyx-show" value="saved"><span>Favourites</span></label>
+          <label><input type="radio" name="zyx-show" value="lists"><span>Playlists</span></label>
+      </fieldset>
+      <div class="zyx-scroll"><ul class="zyx-list" id="zyx-list"></ul><div id="zyx-lib-empty" class="zyx-state" hidden></div></div>
+    </section>
+
+    <section class="zyx-pane" id="zyx-pane-discover" role="tabpanel" aria-labelledby="zyx-tab-discover" hidden>
+      <form id="zyx-form" role="search" autocomplete="off">
+        <div class="zyx-search-wrap">
+          <svg class="zyx-ic zyx-search-ic" aria-hidden="true"><use href="#zi-search"/></svg>
+          <input class="zyx-field" id="zyx-q" type="search" placeholder="Search YouTube Music & tracks..." maxlength="100" aria-label="Search online music">
+        </div>
+        <fieldset class="zyx-seg"><legend class="zyx-sr">Source</legend>
+          <label><input type="radio" name="zyx-provider" value="all" checked><span>All</span></label>
+          <label><input type="radio" name="zyx-provider" value="independent"><span>Independent</span></label>
+          <label><input type="radio" name="zyx-provider" value="mainstream"><span>Mainstream</span></label>
+        </fieldset>
+      </form>
+      <div class="zyx-suggest" id="zyx-suggest">
+        <h3 class="zyx-suggest-title">Suggested searches</h3>
+        <div class="zyx-suggest-list" id="zyx-suggest-list"></div>
+      </div>
+      <div class="zyx-scroll"><div id="zyx-disc-status" class="zyx-disc-status" role="status" aria-live="polite"></div><div id="zyx-results"></div></div>
+    </section>
+
+    <section class="zyx-pane" id="zyx-pane-queue" role="tabpanel" aria-labelledby="zyx-tab-queue" hidden>
+      <div class="zyx-plhead">
+        <div><h2>Up Next Queue</h2><p class="zyx-plsub">Active playback sequence</p></div>
+        <button class="zyx-btn" id="zyx-queue-reset" type="button">Reset Order</button>
+      </div>
+      <div class="zyx-scroll"><div id="zyx-queue"></div></div>
+    </section>
+  </aside>
 </main>
-<script src="/zynoxify.js"></script></body>
+<script src="/zynoxify.js" defer></script>
+<script src="/zynoxify-mobile.js" defer></script>
+<script src="/zynoxify-account.js" defer></script>
+<script src="/zynoxify-menu.js" defer></script>
+<script src="/zynoxify-library.js" defer></script>
+<script src="/zynoxify-room.js" defer></script>
+</body>
 </html>

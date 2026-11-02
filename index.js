@@ -35,6 +35,10 @@ app.get("/api/products", (req, res) => {
 });
 
 
+app.use("/api/music", require("./zynoxify-music-route-hardened"));
+app.use("/api/auth", require("./zynoxify-auth-route"));
+app.use("/api/room", require("./zynoxify-room-route"));
+
 app.listen(PORT, () => {
   console.log("ZynoxSMP Shop running on port " + PORT);
 });

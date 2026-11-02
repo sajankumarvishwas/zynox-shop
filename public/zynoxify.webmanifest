@@ -1,0 +1,15 @@
+{
+  "name": "Zynoxify Music",
+  "short_name": "Zynoxify",
+  "description": "Zynoxify Music - a clay-style music player",
+  "start_url": "/zynoxify.html",
+  "scope": "/zynoxify.html",
+  "display": "fullscreen",
+  "display_override": ["fullscreen", "standalone"],
+  "orientation": "portrait",
+  "background_color": "#0d0f14",
+  "theme_color": "#0d0f14",
+  "icons": [
+    { "src": "/assets/zynoxify/zynoxify-icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}
