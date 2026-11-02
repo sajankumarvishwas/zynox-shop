@@ -472,6 +472,7 @@ padding:4px 0;overflow:hidden}
 .zconf{position:fixed;top:-12px;width:9px;height:9px;z-index:200;pointer-events:none;border-radius:2px;transition:transform 2.2s cubic-bezier(.2,.6,.4,1),opacity 2.2s}
 @media(prefers-reduced-motion:reduce){.zbody,.zsh,.zeyes,.zfloat i{animation:none}.zconf{display:none}}
 </style>
+<style>body.zsv-smp #zn-mods,body.zsv-smp #zmodpend,body.zsv-smp [data-sub="settings"],body.zsv-smp [data-tf="settings"]{display:none!important}</style>
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute"><defs>
@@ -512,7 +513,7 @@ padding:4px 0;overflow:hidden}
     <article class="card srv rv" style="--d:.05s"><div class="zbanner" id="zynox-banner-svg"><svg viewBox="0 0 320 54" preserveAspectRatio="xMidYMax slice" width="100%" height="100%" aria-hidden="true"><rect width="320" height="54" fill="#cfe8d6"/><g fill="#fff"><rect x="30" y="8" width="2" height="2"/><rect x="120" y="14" width="2" height="2"/><rect x="200" y="6" width="2" height="2"/><rect x="280" y="16" width="2" height="2"/></g><g class="zcloud" fill="#ffffff" opacity=".85"><rect x="60" y="10" width="26" height="6"/><rect x="66" y="6" width="14" height="4"/><rect x="220" y="16" width="30" height="6"/><rect x="228" y="12" width="14" height="4"/></g><polygon points="0,54 0,34 40,22 80,36 130,18 180,38 230,24 280,36 320,26 320,54" fill="#8fc7a0"/><polygon points="0,54 0,44 60,36 120,46 190,34 260,46 320,38 320,54" fill="#4fa16c"/><rect x="21" y="48" width="3" height="6" fill="#6b4a30"/><rect x="18" y="40" width="9" height="9" fill="#2f7a4a"/><rect x="20" y="37" width="5" height="4" fill="#3f9a5c"/><rect x="49" y="52" width="3" height="6" fill="#6b4a30"/><rect x="46" y="44" width="9" height="9" fill="#2f7a4a"/><rect x="48" y="41" width="5" height="4" fill="#3f9a5c"/><rect x="213" y="46" width="3" height="6" fill="#6b4a30"/><rect x="210" y="38" width="9" height="9" fill="#2f7a4a"/><rect x="212" y="35" width="5" height="4" fill="#3f9a5c"/><rect x="249" y="50" width="3" height="6" fill="#6b4a30"/><rect x="246" y="42" width="9" height="9" fill="#2f7a4a"/><rect x="248" y="39" width="5" height="4" fill="#3f9a5c"/><rect x="293" y="48" width="3" height="6" fill="#6b4a30"/><rect x="290" y="40" width="9" height="9" fill="#2f7a4a"/><rect x="292" y="37" width="5" height="4" fill="#3f9a5c"/><rect x="0" y="50" width="320" height="4" fill="#3f7a2c"/></svg></div>
       <div class="sh">
         <span class="tile"><svg class="ic"><use href="#i-srv"/></svg></span>
-        <div><div class="nm">Zynox New World</div><div class="sb">Minecraft Bedrock Server</div></div>
+        <div><div class="nm" id="zsn">Zynox New World</div><div class="sb">Minecraft Bedrock Server</div><select id="zsel" aria-label="Select server" style="margin-top:6px;padding:5px 8px;border-radius:8px;border:1px solid var(--ln2);background:transparent;color:inherit;font:inherit;font-size:12px"><option value="zynoxnew">Zynox New World</option><option value="zynoxsmp">EchoVale</option></select></div>
         <span class="pill" id="pill"><i></i><span id="pw">Checking</span></span>
       </div>
       <div class="stats">
@@ -555,8 +556,9 @@ padding:4px 0;overflow:hidden}
 <div class="toast" id="ts" role="status" aria-live="polite"></div>
 
 <script>
-const $=id=>document.getElementById(id),SID="zynoxnew",DEF="https://frill-glowing-jingling.ngrok-free.dev";
+const $=id=>document.getElementById(id),SID=(function(){try{return localStorage.getItem("zynox_sid")==="zynoxsmp"?"zynoxsmp":"zynoxnew"}catch(e){return"zynoxnew"}})(),SNAME=SID==="zynoxsmp"?"EchoVale":"Zynox New World",DEF="https://frill-glowing-jingling.ngrok-free.dev";
 const ls={g:k=>{try{return localStorage.getItem(k)}catch(e){return null}},s:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}},d:k=>{try{localStorage.removeItem(k)}catch(e){}}};
+(function(){var n=document.getElementById("zsn"),s=document.getElementById("zsel");if(n)n.textContent=SNAME;if(SID==="zynoxsmp")document.body.classList.add("zsv-smp");if(s){s.value=SID;s.onchange=function(){try{localStorage.setItem("zynox_sid",s.value)}catch(e){}location.reload()}}})();
 const API=()=>(ls.g("zynox_api_url")||DEF).replace(/\/$/,"");
 let S={},pt,tk=0,ac;
 
@@ -764,7 +766,7 @@ if(ls.g("zynox_token"))show();
 (function(){
 var built=false,page="server",dayOff=0,tl=null,pkey="";
 var OWN=function(){return (ls.g("zynox_username")||"").toUpperCase()==="ZYNOX"};
-var pages=function(){return OWN()?["server","players","tools","mods","chat"]:["server","players","tools"]};
+var pages=function(){var l=OWN()?["server","players","tools","mods","chat"]:["server","players","tools"];return SID==="zynoxsmp"?l.filter(function(x){return x!=="mods"}):l};
 var ICON={server:'<svg class="ic"><use href="#i-srv"/></svg>',players:'<svg class="ic"><use href="#i-users"/></svg>',tools:'<svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>',mods:'<svg class="ic" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>',chat:'<svg class="ic" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>'};
 var LBL={server:"Server",players:"Players",tools:"Tools",mods:"Mods",chat:"Chat"};
 var tm=function(i){return new Date(i).toLocaleTimeString([],{hour:"numeric",minute:"2-digit",hour12:true})};
@@ -948,7 +950,7 @@ if(ls.g("zynox_token"))init();
 <script>
 (function(){
 var OWN=function(){return (ls.g("zynox_username")||"").toUpperCase()==="ZYNOX"};
-var SV="zynoxnew",bk={running:false,last:null};
+var SV=SID,bk={running:false,last:null};
 function conf(t,p,cls,lab,fn){$("mt").textContent=t;$("mp").textContent=p;$("mc").className="btn "+cls;$("mc").textContent=lab;$("mc").onclick=function(){$("md").classList.remove("show");fn()};$("md").classList.add("show")}
 function fail(e,m){if(e&&e.message==="401")return;sk.er();toast(m||"Unable to reach the server","er")}
 function build(){
@@ -1033,8 +1035,8 @@ build();
 <script>
 (function(){
 window.zxOwn=function(){return (ls.g("zynox_username")||"").toUpperCase()==="ZYNOX"};
-var SV="zynoxnew";
-var IP="147.185.221.213",PORT="25892",DISCORD="https://discord.gg/xT9DtRBPh";
+var SV=SID;
+var IP=SID==="zynoxsmp"?"147.185.221.29":"147.185.221.213",PORT=SID==="zynoxsmp"?"31894":"25892",DISCORD="https://discord.gg/xT9DtRBPh";
 function fail(e,m){if(e&&e.message==="401")return;sk.er();toast(m||"Unable to reach the server","er")}
 function build(){
   var g=document.querySelector("#dv .grid");
@@ -1087,7 +1089,7 @@ build();
 <!-- zynox-v6 -->
 <script>
 (function(){
-var SV="zynoxnew";
+var SV=SID;
 function fail(e,m){if(e&&e.message==="401")return;sk.er();toast(m||"Unable to reach the server","er")}
 function fmtKb(kb){if(kb==null)return"\u2014";var mb=kb/1024;if(mb<1024)return mb.toFixed(0)+" MB";return (mb/1024).toFixed(1)+" GB"}
 function fmtBytes(b){if(b==null)return"";var kb=b/1024;if(kb<1024)return kb.toFixed(0)+" KB";var mb=kb/1024;if(mb<1024)return mb.toFixed(1)+" MB";return (mb/1024).toFixed(2)+" GB"}
@@ -1120,7 +1122,7 @@ setInterval(function(){
   if(lastPlayers!==null && "Notification" in window && Notification.permission==="granted"){
     cur.forEach(function(p){
       if(lastPlayers.indexOf(p)===-1){
-        try{new Notification("Zynox New World",{body:p+" joined the server"})}catch(e){}
+        try{new Notification(SNAME,{body:p+" joined the server"})}catch(e){}
       }
     });
   }
@@ -1183,7 +1185,7 @@ loadSys();
 <!-- zynox-v7 -->
 <script>
 (function(){
-var SV="zynoxnew";
+var SV=SID;
 function fail(e,m){if(e&&e.message==="401")return;sk.er();toast(m||"Unable to reach the server","er")}
 function build(){
   var g=document.querySelector("#dv .grid");
@@ -1293,7 +1295,7 @@ build();
 <!-- zynox-v8 -->
 <script>
 (function(){
-var SV="zynoxnew";
+var SV=SID;
 function fail(e,m){if(e&&e.message==="401")return;sk.er();toast(m||"Unable to reach the server","er")}
 function build(){
   var g=document.querySelector("#dv .grid");
@@ -1354,7 +1356,7 @@ loadMod();
 <!-- zynox-v9 -->
 <script>
 (function(){
-var SV="zynoxnew";
+var SV=SID;
 function fail(e,m){if(e&&e.message==="401")return;sk.er();toast(m||"Unable to reach the server","er")}
 function ab2b64(buffer){
   var bytes=new Uint8Array(buffer),chunk=0x8000,bin="";
@@ -1521,7 +1523,7 @@ setInterval(function(){
 <!-- zynox-settings -->
 <script>
 (function(){
-var SV="zynoxnew";
+var SV=SID;
 function fail(e,m){if(e&&e.message==="401")return;sk.er();toast(m||"Unable to reach the server","er")}
 var MC={0:"#000000",1:"#0000AA",2:"#00AA00",3:"#00AAAA",4:"#AA0000",5:"#AA00AA",6:"#FFAA00",7:"#AAAAAA",8:"#555555",9:"#5555FF",a:"#55FF55",b:"#55FFFF",c:"#FF5555",d:"#FF55FF",e:"#FFFF55",f:"#FFFFFF"};
 function motdPreview(text){
@@ -1674,6 +1676,7 @@ function cardOf(innerId){
 function group(label, innerIds){
   var cards=innerIds.map(cardOf).filter(Boolean);
   if(!cards.length||cards.length<2)return false;
+  if(cards.some(function(c){return c.closest(".zmod")})) return true;
   var wrap=document.createElement("div");
   wrap.className="zmod";
   var lbl=document.createElement("div");

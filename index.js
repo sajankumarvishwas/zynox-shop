@@ -9,11 +9,26 @@ const CONFIG_PATH = "./config.json";
 app.use(express.json());
 app.use(express.static("public"));
 
+
+// Health check endpoint for monitoring
+app.get("/api/health", (req, res) => {
+  res.status(200).json({
+    status: "ok",
+    service: "zynox-shop",
+    timestamp: new Date().toISOString()
+  });
+});
+
+
 app.get("/api/products", (req, res) => {
   try {
-    const config = JSON.parse(fs.readFileSync(CONFIG_PATH, "utf8"));
+    const config = JSON.parse(
+      fs.readFileSync(CONFIG_PATH, "utf8")
+    );
 
-    const products = Object.entries(config.donations || {}).map(([id, donation]) => ({
+    const products = Object.entries(
+      config.donations || {}
+    ).map(([id, donation]) => ({
       id,
       name: donation.name,
       price: donation.price,
@@ -25,7 +40,10 @@ app.get("/api/products", (req, res) => {
       products
     });
   } catch (error) {
-    console.error("[Zynox Shop] Product load error:", error);
+    console.error(
+      "[Zynox Shop] Product load error:",
+      error
+    );
 
     res.status(500).json({
       success: false,
@@ -40,5 +58,7 @@ app.use("/api/auth", require("./zynoxify-auth-route"));
 app.use("/api/room", require("./zynoxify-room-route"));
 
 app.listen(PORT, () => {
-  console.log("ZynoxSMP Shop running on port " + PORT);
+  console.log(
+    "ZynoxSMP Shop running on port " + PORT
+  );
 });

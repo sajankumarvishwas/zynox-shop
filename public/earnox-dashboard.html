@@ -1085,8 +1085,92 @@ nav.bottom-nav{max-width:560px;border-radius:24px 24px 0 0;}
 @media (min-width:1024px){
 .app{max-width:640px;}
 }
+
+/* ---------- ZYNOX ADS WALL ---------- */
+.ads-panel{
+  margin-top:34px;
+}
+.ads-head{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:14px;
+}
+.ads-head h2{
+  margin:0;
+  font-family:var(--font-display);
+  font-size:1.12rem;
+  font-weight:600;
+}
+.ads-head p{
+  margin:4px 0 0;
+  font-size:.78rem;
+  color:var(--text-3);
+}
+.ads-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:14px;
+}
+.ads-slot{
+  position:relative;
+  min-height:180px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:var(--r-lg,16px);
+}
+.ads-slot--hero{
+  min-height:250px;
+  grid-column:1/-1;
+}
+.ads-slot--wide{
+  min-height:110px;
+  grid-column:1/-1;
+}
+.ads-slot-label{
+  position:absolute;
+  top:9px;
+  left:11px;
+  z-index:2;
+  font-size:.58rem;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--text-3);
+  pointer-events:none;
+}
+.ads-placeholder{
+  font-size:.72rem;
+  color:var(--text-3);
+  opacity:.7;
+  text-align:center;
+}
+.ads-real{
+  width:100%;
+  min-height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.ads-panel .adsbygoogle{
+  width:100%;
+}
+@media (max-width:560px){
+  .ads-grid{grid-template-columns:1fr;}
+  .ads-slot--hero{min-height:220px;}
+  .ads-slot--wide{min-height:90px;}
+  .ads-slot{min-height:160px;}
+}
+
 </style>
 
+<script async
+  src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4655911176497706"
+  crossorigin="anonymous"></script>
 </head>
 <body>
 <svg style="display:none" aria-hidden="true">
@@ -1418,12 +1502,68 @@ nav.bottom-nav{max-width:560px;border-radius:24px 24px 0 0;}
   </div>
 </section>
 
+
+<section class="section reveal ads-panel" style="--d:6" id="ads">
+  <div class="ads-head">
+    <div>
+      <h2>Zynox Ads</h2>
+      <p>Advertising space across your Earnox experience.</p>
+    </div>
+  </div>
+
+  <div class="ads-grid">
+
+    <div class="ads-slot ads-slot--hero">
+      <span class="ads-slot-label">Advertisement</span>
+      <div class="ads-real">
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-4655911176497706"
+             data-ad-slot="2486986510"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+        <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+      </div>
+    </div>
+
+    <div class="ads-slot">
+      <span class="ads-slot-label">Ad</span>
+      <span class="ads-placeholder">Advertisement</span>
+    </div>
+
+    <div class="ads-slot">
+      <span class="ads-slot-label">Ad</span>
+      <span class="ads-placeholder">Advertisement</span>
+    </div>
+
+    <div class="ads-slot">
+      <span class="ads-slot-label">Ad</span>
+      <span class="ads-placeholder">Advertisement</span>
+    </div>
+
+    <div class="ads-slot">
+      <span class="ads-slot-label">Ad</span>
+      <span class="ads-placeholder">Advertisement</span>
+    </div>
+
+    <div class="ads-slot ads-slot--wide">
+      <span class="ads-slot-label">Advertisement</span>
+      <span class="ads-placeholder">Advertisement</span>
+    </div>
+
+  </div>
+</section>
+
   </main>
 </div>  <nav class="bottom-nav" aria-label="Primary navigation">
   <button type="button" class="nav-item active" data-target="top" aria-current="page"><svg class="icon"><use href="#i-home"></use></svg><span>Home</span></button>
   <button type="button" class="nav-item" data-target="earn"><svg class="icon"><use href="#i-bolt"></use></svg><span>Earn</span></button>
   <button type="button" class="nav-item" data-target="wallet"><svg class="icon"><use href="#i-card"></use></svg><span>Wallet</span></button>
   <button type="button" class="nav-item" data-target="profile"><svg class="icon"><use href="#i-user"></use></svg><span>Profile</span></button>
+  <button type="button" class="nav-item" data-target="ads"><svg class="icon"><use href="#i-bolt"></use></svg><span>Ads</span></button>
+
 </nav>  <div class="toast" id="toast" role="status" aria-live="polite"></div>  <script>
 (function(){
   "use strict";
@@ -1617,7 +1757,7 @@ nav.bottom-nav{max-width:560px;border-radius:24px 24px 0 0;}
     });
   });
 
-  var sectionIds = ['top','earn','wallet','profile'];
+  var sectionIds = ['top','earn','wallet','profile','ads'];
   var sections = sectionIds.map(function(id){ return document.getElementById(id); }).filter(Boolean);
   if('IntersectionObserver' in window){
     var observer = new IntersectionObserver(function(entries){

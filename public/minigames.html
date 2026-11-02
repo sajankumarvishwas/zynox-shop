@@ -103,6 +103,72 @@
       text-shadow: 4px 0 #ff5ca8, -4px 0 #6ce5ff, 0 7px 0 rgba(0,0,0,.45);
     }
 
+    .zy-game-banner-rope {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 50% 38%, rgba(105,240,255,.18), transparent 28%),
+        linear-gradient(135deg, #071018 0%, #101923 52%, #05080d 100%);
+    }
+
+    .zy-game-banner-rope::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(rgba(105,240,255,.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(105,240,255,.045) 1px, transparent 1px);
+      background-size: 28px 28px;
+      transform: perspective(500px) rotateX(58deg) scale(1.35);
+      transform-origin: center bottom;
+      opacity: .75;
+    }
+
+    .zy-game-banner-rope::after {
+      content: "";
+      position: absolute;
+      width: 4px;
+      height: 118px;
+      top: 0;
+      left: 50%;
+      background: linear-gradient(90deg, #1b222b, #e7edf5, #1b222b);
+      box-shadow: 0 0 16px rgba(105,240,255,.22);
+      transform-origin: top center;
+      transform: translateX(-50%) rotate(9deg);
+      animation: zyRopeSwing 2.8s ease-in-out infinite alternate;
+    }
+
+    .zy-rope-visual {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      place-items: center;
+      width: 88px;
+      height: 88px;
+      margin-top: 82px;
+      border-radius: 24px;
+      font-size: 48px;
+      background: linear-gradient(145deg, #eef7ff, #aebdce);
+      border: 2px solid rgba(255,255,255,.75);
+      box-shadow:
+        0 14px 28px rgba(0,0,0,.5),
+        0 0 24px rgba(105,240,255,.16);
+      animation: zyRopeIcon 2.8s ease-in-out infinite alternate;
+    }
+
+    @keyframes zyRopeSwing {
+      from { transform: translateX(-50%) rotate(9deg); }
+      to { transform: translateX(-50%) rotate(-9deg); }
+    }
+
+    @keyframes zyRopeIcon {
+      from { transform: rotate(9deg) translateY(0); }
+      to { transform: rotate(-9deg) translateY(2px); }
+    }
+
     .zy-game-banner-bro18 {
       display: flex;
       align-items: center;
@@ -275,6 +341,19 @@
           <span class="zy-game-kicker">🎮 ZYNOX CHALLENGE</span>
           <h2>BRO, YOU'RE NOT 18+</h2>
           <p>One more Zynox creation where the game has absolutely no business being this confident about itself.</p>
+        </div>
+        <span class="zy-game-play">PLAY GAME →</span>
+      </a>
+
+      <a class="zy-game-card" href="/minigames/rope-swing/">
+        <div class="zy-game-banner zy-game-banner-rope">
+          <span class="zy-rope-visual">🪢</span>
+          <span class="zy-game-label">PLAYABLE</span>
+        </div>
+        <div class="zy-game-copy">
+          <span class="zy-game-kicker">🪢 ZYNOX ARCADE</span>
+          <h2>ROPE SWING</h2>
+          <p>Grab the rope, drag your swing and let gravity do the rest. A simple little physics toy with surprisingly addictive motion.</p>
         </div>
         <span class="zy-game-play">PLAY GAME →</span>
       </a>
