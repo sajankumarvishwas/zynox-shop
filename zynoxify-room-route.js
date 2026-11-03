@@ -21,6 +21,10 @@ const IDLE_ROOM_MS = 10 * 60 * 1000;
 const ADMIN_GRACE_MS = 45 * 1000;
 const OFFLINE_DROP_MS = 5 * 60 * 1000;
 const SHOW_OFFLINE_MS = 90 * 1000;
+const LOAD_TIMEOUT_MS = Number(process.env.ZYNOXIFY_ROOM_LOAD_TIMEOUT_MS) || 15000;
+const START_LEAD_MS = 1200;
+const RESUME_LEAD_MS = 400;
+const REACTIONS = ["heart", "flame", "bolt", "note"];
 
 const rooms = new Map();
 
@@ -82,10 +86,14 @@ function noteHit(bucket, key) {
 }
 
 /* ---------- room model ---------- */
-function positionNow(s) { return s.playing ? s.pos + (Date.now() - s.at) / 1000 : s.pos; }
+function positionNow(s) { return s.playing ? s.pos + Math.max(0, Date.now() - s.at) / 1000 : s.pos; }
 function stateView(r) {
   const s = r.state;
-  return { track: s.track, playing: s.playing, pos: s.pos, at: s.at, rev: s.rev, trackRev: s.trackRev, by: s.by, now: Date.now() };
+  return { track: s.track, playing: s.playing, pos: s.pos, at: s.at, rev: s.rev, trackRev: s.trackRev, by: s.by, now: Date.now(), loading: loadingView(r) };
+}
+function onlineMembers(r) { return Array.from(r.members.values()).filter((m) => m.clients.size > 0); }
+function loadingView(r) {
+  return r.loading ? { trackRev: r.loading.trackRev, ready: Array.from(r.loading.ready), total: onlineMembers(r).length } : null;
 }
 function membersView(r) {
   const now = Date.now();
@@ -102,8 +110,30 @@ function broadcast(r, event, data) {
 function pushMembers(r) { broadcast(r, "members", { members: membersView(r), ownerId: r.ownerId }); }
 function pushState(r) { broadcast(r, "state", stateView(r)); }
 function pushQueue(r) { broadcast(r, "queue", { queue: r.queue }); }
+function pushLoading(r) { broadcast(r, "loading", loadingView(r) || { trackRev: r.state.trackRev, ready: [], total: 0 }); }
+function pushRequests(r) { broadcast(r, "requests", { requests: r.requests }); }
+function pushSettings(r) { broadcast(r, "settings", { settings: r.settings }); }
+
+/* ---------- the "wait for everyone" barrier ---------- */
+function clearLoading(r) {
+  if (r.loading) { clearTimeout(r.loading.timer); r.loading = null; }
+}
+function finishLoading(r, trackRev) {
+  if (!r.loading || r.loading.trackRev !== trackRev) return;
+  clearLoading(r);
+  const s = r.state;
+  s.playing = true; s.pos = 0; s.at = Date.now() + START_LEAD_MS; s.rev += 1;
+  pushState(r);
+}
+function checkLoading(r) {
+  if (!r.loading) return;
+  const online = onlineMembers(r);
+  if (online.length <= 1 || online.every((m) => r.loading.ready.has(m.id))) finishLoading(r, r.loading.trackRev);
+  else pushLoading(r);
+}
 
 function dropRoom(r, reason) {
+  clearLoading(r);
   broadcast(r, "closed", { reason: reason || "closed" });
   r.members.forEach((m) => m.clients.forEach((c) => { try { c.end(); } catch (_) {} }));
   rooms.delete(r.code);
@@ -119,7 +149,7 @@ function findMember(r, mid, tok) {
 function removeMember(r, m) {
   m.clients.forEach((c) => { try { c.end(); } catch (_) {} });
   r.members.delete(m.id);
-  if (!r.members.size) { rooms.delete(r.code); return; }
+  if (!r.members.size) { clearLoading(r); rooms.delete(r.code); return; }
   if (m.id === r.ownerId) {
     const next = Array.from(r.members.values()).sort((a, b) => (b.role === "admin") - (a.role === "admin") || a.joinedAt - b.joinedAt)[0];
     r.ownerId = next.id; next.role = "admin";
@@ -129,6 +159,7 @@ function removeMember(r, m) {
     first.role = "admin"; r.ownerId = first.id;
   }
   pushMembers(r);
+  checkLoading(r);
 }
 
 /* ---------- request guards ---------- */
@@ -167,7 +198,8 @@ router.post("/create", (req, res) => {
   const admin = newMember((req.body || {}).name, "admin");
   admin.ip = req.ip;
   const r = {
-    code: code, ownerId: admin.id, members: new Map(), queue: [], banned: new Set(), createdAt: Date.now(), emptySince: null,
+    code: code, ownerId: admin.id, members: new Map(), queue: [], requests: [], banned: new Set(), createdAt: Date.now(), emptySince: null,
+    settings: { waitAll: true, openControl: false }, loading: null,
     state: { track: null, playing: false, pos: 0, at: Date.now(), rev: 0, trackRev: 0, by: admin.id }
   };
   r.members.set(admin.id, admin);
@@ -189,6 +221,7 @@ router.post("/join", (req, res) => {
   m.ip = req.ip;
   r.members.set(m.id, m);
   pushMembers(r);
+  if (r.loading) pushLoading(r);
   send(res, 200, { me: meView(r, m) });
 });
 
@@ -206,15 +239,16 @@ router.get("/:code/events", (req, res) => {
   m.clients.add(res);
   m.offlineSince = null;
   m.lastSeen = Date.now();
-  write(res, "snapshot", { code: r.code, you: { id: m.id, role: m.role, owner: m.id === r.ownerId, name: m.name }, state: stateView(r), members: membersView(r), ownerId: r.ownerId, queue: r.queue });
+  write(res, "snapshot", { code: r.code, you: { id: m.id, role: m.role, owner: m.id === r.ownerId, name: m.name }, state: stateView(r), members: membersView(r), ownerId: r.ownerId, queue: r.queue, requests: r.requests, settings: r.settings });
   pushMembers(r);
+  if (r.loading) pushLoading(r);
   const beat = setInterval(() => { try { res.write(": ping\n\n"); } catch (_) {} }, 15000);
-  req.on("close", () => {
+  res.on("close", () => {
     clearInterval(beat);
     m.clients.delete(res);
     m.lastSeen = Date.now();
     if (!m.clients.size) m.offlineSince = Date.now();
-    if (rooms.get(r.code) === r) pushMembers(r);
+    if (rooms.get(r.code) === r) { pushMembers(r); checkLoading(r); }
   });
 });
 
@@ -229,19 +263,34 @@ function authed(req, res) {
   m.lastSeen = Date.now();
   return { r: r, m: m, b: b };
 }
+function canControl(ctx, res) {
+  if (ctx.m.role === "admin" || ctx.r.settings.openControl) return true;
+  fail(res, 403, "admins_only", "Only admins can do that.");
+  return false;
+}
 function adminOnly(ctx, res) {
   if (ctx.m.role !== "admin") { fail(res, 403, "admins_only", "Only admins can do that."); return false; }
   return true;
 }
 function startTrack(r, track, by) {
   const s = r.state;
-  s.track = track; s.playing = true; s.pos = 0; s.at = Date.now(); s.rev += 1; s.trackRev += 1; s.by = by;
+  clearLoading(r);
+  s.track = track; s.pos = 0; s.rev += 1; s.trackRev += 1; s.by = by;
+  const online = onlineMembers(r).length;
+  if (r.settings.waitAll && online > 1) {
+    s.playing = false; s.at = Date.now();
+    const rev = s.trackRev;
+    r.loading = { trackRev: rev, ready: new Set(), timer: setTimeout(() => finishLoading(r, rev), LOAD_TIMEOUT_MS) };
+    if (r.loading.timer.unref) r.loading.timer.unref();
+  } else {
+    s.playing = true; s.at = Date.now() + (online > 1 ? 800 : 0);
+  }
 }
 
 router.post("/:code/cmd", (req, res) => {
   const ctx = authed(req, res);
   if (!ctx) return;
-  if (!adminOnly(ctx, res)) return;
+  if (!canControl(ctx, res)) return;
   const r = ctx.r, m = ctx.m, b = ctx.b, s = r.state;
   const type = String(b.type || "");
   const now = Date.now();
@@ -253,15 +302,18 @@ router.post("/:code/cmd", (req, res) => {
     pushState(r);
   } else if (type === "pause") {
     if (!s.track) return send(res, 200, { ok: true, rev: s.rev });
+    clearLoading(r);
     s.pos = Math.max(0, positionNow(s)); s.playing = false; s.at = now; s.rev += 1; s.by = m.id;
     pushState(r);
   } else if (type === "resume") {
-    if (!s.track) return send(res, 200, { ok: true, rev: s.rev });
-    s.playing = true; s.at = now; s.rev += 1; s.by = m.id;
+    if (!s.track || r.loading) return send(res, 200, { ok: true, rev: s.rev });
+    s.playing = true; s.at = now + (onlineMembers(r).length > 1 ? RESUME_LEAD_MS : 0); s.rev += 1; s.by = m.id;
     pushState(r);
+  } else if (type === "start-now") {
+    if (r.loading) finishLoading(r, r.loading.trackRev);
   } else if (type === "seek") {
     const p = Number(b.pos);
-    if (!s.track || !Number.isFinite(p)) return fail(res, 400, "bad_seek", "Nothing to seek.");
+    if (!s.track || !Number.isFinite(p) || r.loading) return fail(res, 400, "bad_seek", "Nothing to seek yet.");
     s.pos = Math.min(Math.max(0, p), 6 * 3600); s.at = now; s.rev += 1; s.by = m.id;
     pushState(r);
   } else if (type === "next") {
@@ -295,6 +347,66 @@ router.post("/:code/cmd", (req, res) => {
   } else { done = false; }
   if (!done) return fail(res, 400, "bad_command", "Unknown command.");
   send(res, 200, { ok: true, rev: s.rev, trackRev: s.trackRev });
+});
+
+router.post("/:code/ready", (req, res) => {
+  const ctx = authed(req, res);
+  if (!ctx) return;
+  const r = ctx.r;
+  if (r.loading && Number(ctx.b.trackRev) === r.loading.trackRev) {
+    r.loading.ready.add(ctx.m.id);
+    checkLoading(r);
+  }
+  send(res, 200, { ok: true });
+});
+
+router.post("/:code/settings", (req, res) => {
+  const ctx = authed(req, res);
+  if (!ctx || !adminOnly(ctx, res)) return;
+  const b = ctx.b, r = ctx.r;
+  if (typeof b.waitAll === "boolean") r.settings.waitAll = b.waitAll;
+  if (typeof b.openControl === "boolean") r.settings.openControl = b.openControl;
+  pushSettings(r);
+  if (!r.settings.waitAll && r.loading) finishLoading(r, r.loading.trackRev);
+  send(res, 200, { ok: true, settings: r.settings });
+});
+
+router.post("/:code/request", (req, res) => {
+  const ctx = authed(req, res);
+  if (!ctx) return;
+  if (!allow("request", ctx.m.id, 6, 60000)) return fail(res, 429, "rate_limited", "Too many suggestions. Wait a bit.");
+  const t = parseTrack(ctx.b.track);
+  if (!t) return fail(res, 400, "bad_track", "That song cannot be suggested.");
+  const r = ctx.r;
+  if (r.requests.length >= 30) return fail(res, 400, "limit", "Too many pending suggestions.");
+  if (r.requests.some((x) => trackKey(x.track) === trackKey(t))) return send(res, 200, { ok: true, duplicate: true });
+  r.requests.push({ id: crypto.randomBytes(4).toString("hex"), by: ctx.m.name, byId: ctx.m.id, track: t });
+  pushRequests(r);
+  send(res, 200, { ok: true });
+});
+
+router.post("/:code/request-act", (req, res) => {
+  const ctx = authed(req, res);
+  if (!ctx || !adminOnly(ctx, res)) return;
+  const r = ctx.r;
+  const i = r.requests.findIndex((x) => x.id === String(ctx.b.id || ""));
+  if (i < 0) return fail(res, 404, "not_found", "That suggestion is gone.");
+  const item = r.requests.splice(i, 1)[0];
+  if (ctx.b.action === "approve") {
+    if (r.queue.length < LIMITS.queue) { r.queue.push(item.track); pushQueue(r); }
+  }
+  pushRequests(r);
+  send(res, 200, { ok: true });
+});
+
+router.post("/:code/react", (req, res) => {
+  const ctx = authed(req, res);
+  if (!ctx) return;
+  if (!allow("react", ctx.m.id, 8, 10000)) return send(res, 200, { ok: true });
+  const kind = String(ctx.b.kind || "");
+  if (REACTIONS.indexOf(kind) < 0) return fail(res, 400, "bad_reaction", "Unknown reaction.");
+  broadcast(ctx.r, "react", { kind: kind, by: ctx.m.name });
+  send(res, 200, { ok: true });
 });
 
 router.post("/:code/role", (req, res) => {

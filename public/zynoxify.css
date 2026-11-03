@@ -3287,3 +3287,40 @@ svg.zyx-pt-hero .zp-waves path:nth-child(2n) { animation-delay: .5s; }
 .zyx-room-qitem .zyx-row-n { flex: 0 0 auto; }
 
 @media (prefers-reduced-motion: reduce) { svg.zyx-pt-hero .zp-waves path, .zyx-room-status .zyx-led { animation: none !important; } }
+
+/* ZYX-YTM-PASS-15: Mehfil - settings switches, waiting card, reactions */
+.zyx-toggle {
+  display: flex; align-items: center; gap: 14px; width: 100%; padding: 10px 12px; border: 1px solid var(--zx-edge); border-radius: 16px;
+  background: rgba(0, 0, 0, .25); color: var(--zx-text); text-align: left; font: inherit; cursor: pointer;
+}
+.zyx-toggle:disabled { opacity: .65; cursor: default; }
+.zyx-toggle-copy { display: flex; flex-direction: column; gap: 3px; flex: 1; min-width: 0; }
+.zyx-toggle-copy b { font-size: 13.5px; font-weight: 750; }
+.zyx-toggle-copy small { color: var(--zx-muted); font-size: 11.5px; line-height: 1.4; }
+.zyx-toggle-knob { position: relative; flex: 0 0 52px; width: 52px; height: 30px; border-radius: 99px; background: var(--zx-well); box-shadow: inset 0 3px 6px rgba(0, 0, 0, .7), inset 0 -1px 1px rgba(255, 255, 255, .05); }
+.zyx-toggle-knob::after {
+  content: ""; position: absolute; top: 3px; left: 3px; width: 24px; height: 24px; border-radius: 50%;
+  background: linear-gradient(145deg, #4a5068, #2b3044); box-shadow: inset 0 1px 1px rgba(255, 255, 255, .25), 0 2px 4px rgba(0, 0, 0, .5);
+  transition: transform .25s cubic-bezier(.16, .84, .24, 1), background .25s;
+}
+.zyx-toggle[aria-checked="true"] .zyx-toggle-knob::after { transform: translateX(22px); background: linear-gradient(145deg, var(--zx-accent-hi), var(--zx-accent) 55%, var(--zx-accent-dim)); }
+
+.zyx-room-load { border: 1px solid rgba(255, 193, 94, .4); }
+.zyx-room-load strong { color: #ffc15e; }
+
+.zyx-react-row { display: flex; justify-content: center; gap: 10px; }
+.zyx-react-btn {
+  display: grid; place-items: center; width: 54px; height: 54px; border: 1px solid var(--zx-edge); border-radius: 18px; color: var(--zx-accent-hi); cursor: pointer;
+  background: linear-gradient(145deg, var(--zx-clay-hi), var(--zx-clay)); box-shadow: var(--zx-shadow-key);
+}
+.zyx-react-btn:active { transform: translateY(4px); box-shadow: var(--zx-shadow-key-pressed); }
+.zyx-float {
+  position: absolute; bottom: 150px; z-index: 95; display: flex; flex-direction: column; align-items: center; gap: 2px; pointer-events: none;
+  color: var(--zx-accent-hi); animation: zyx-floatup 2s ease-out forwards;
+}
+.zyx-float .zyx-ic { width: 34px; height: 34px; filter: drop-shadow(0 4px 8px rgba(0, 0, 0, .6)); }
+.zyx-float small { font-size: 10px; font-weight: 800; color: #fff; text-shadow: 0 1px 4px rgba(0, 0, 0, .8); }
+@keyframes zyx-floatup { 0% { opacity: 0; transform: translateY(20px) scale(.6); } 15% { opacity: 1; transform: none; } 100% { opacity: 0; transform: translateY(-260px) scale(1.15); } }
+@media (prefers-reduced-motion: reduce) { .zyx-float { display: none; } .zyx-toggle-knob::after { transition: none; } }
+.zyx-room-card[hidden] { display: none; }
+.zyx-toggle[aria-checked="true"] .zyx-toggle-knob { background: rgba(255, 46, 85, .22); }

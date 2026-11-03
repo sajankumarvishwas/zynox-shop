@@ -207,6 +207,9 @@ let videoMode=prefs.video;
 const upNext=[];
 let quietOpen=false;
 let roomApplying=false;
+let roomHold=false;
+let roomPrimeStage=0;
+let roomBlob={key:"",url:"",ready:false};
 function roomBlocks(kind,payload){
   if(roomApplying)return false;
   const g=window.ZynoxifyRoom;
@@ -407,6 +410,7 @@ function tryPlay(){
 }
 function playLocalIdx(idx){if(roomBlocks("play",{kind:"local",idx:idx}))return;loadLocal(idx);tryPlay();announce("Now playing "+titles[idx])}
 function playStream(item){
+  if(roomBlocks("play",{kind:"stream",item:item}))return;
   if(!isHttps(item.streamUrl)){announce("This track has no permitted stream.");return}
   stopEmbed();
   cur={kind:"stream",item:item};
@@ -425,6 +429,8 @@ function playStream(item){
 }
 function playEmbed(item){
   if(roomBlocks("play",{kind:"online",item:item}))return;
+  const holdPlayback=roomHold;
+  if(!holdPlayback)roomPrimeStage=2;
   const m=typeof item.embedUrl==="string"&&item.embedUrl.match(/^https:\/\/www\.youtube\.com\/embed\/([A-Za-z0-9_-]{11})$/);
   if(!m){announce("This item has no embedded player.");return}
   audio.pause();
@@ -445,7 +451,7 @@ function playEmbed(item){
     if(!cur||cur.item!==item)return;
     ytPlayer=new YT.Player(mount,{
       width:"100%",height:"100%",videoId:m[1],
-      playerVars:{playsinline:1,rel:0,autoplay:1,controls:0,fs:0,disablekb:1,modestbranding:1,iv_load_policy:3,cc_load_policy:0,origin:location.origin},
+      playerVars:{playsinline:1,rel:0,autoplay:(holdPlayback?0:1),controls:0,fs:0,disablekb:1,modestbranding:1,iv_load_policy:3,cc_load_policy:0,origin:location.origin},
       events:{
         onReady:()=>{applyEmbedVolume();embedPoll();sourceSuffix="";renderSource()},
         onStateChange:(ev)=>{
@@ -1200,7 +1206,7 @@ window.ZynoxifyMusic = {
     return null;
   },
   getSearchItems: function () { return typeof lastItems !== "undefined" ? lastItems.slice() : []; },
-  roomPlay: function (e) { roomApplying = true; try { playEntry(e); } finally { roomApplying = false; } },
+  roomPlay: function (e) { roomApplying = true; try { audio.playbackRate = 1; playEntry(e); } finally { roomApplying = false; } },
   roomSeek: function (p) {
     if (!cur) return;
     try { if (cur.kind === "embed") { if (ytPlayer && ytPlayer.seekTo) ytPlayer.seekTo(p, true); } else { audio.currentTime = p; } } catch (e) {}
@@ -1214,12 +1220,14 @@ window.ZynoxifyMusic = {
     try { if (cur.kind === "embed") { if (ytPlayer && ytPlayer.playVideo) ytPlayer.playVideo(); } else { tryPlay(); } } catch (e) {}
   },
   roomInfo: function () {
-    const info = { key: "", kind: null, playing: root.classList.contains("is-playing"), buffering: sourceSuffix === "Buffering", ready: false, ended: false, time: 0 };
+    const info = { key: "", kind: null, playing: root.classList.contains("is-playing"), buffering: sourceSuffix === "Buffering", ready: false, loaded: false, needsPrime: false, priming: false, ended: false, time: 0, rate: audio.playbackRate };
     if (!cur) return info;
     info.kind = cur.kind;
     if (cur.kind === "local") {
       info.key = "local:" + songs[cur.idx];
+      const blobbed = roomBlob.key === songs[cur.idx];
       info.ready = audio.readyState >= 2;
+      info.loaded = blobbed ? (roomBlob.ready && audio.readyState >= 2) : audio.readyState >= 3;
       info.ended = !!audio.ended;
       info.time = audio.currentTime || 0;
     } else if (cur.kind === "embed" && cur.item) {
@@ -1231,11 +1239,46 @@ window.ZynoxifyMusic = {
           info.ready = true;
           info.ended = st === 0;
           info.time = ytPlayer.getCurrentTime() || 0;
+          info.needsPrime = roomPrimeStage === 0;
+          info.priming = roomPrimeStage === 1;
+          info.loaded = roomPrimeStage === 2;
         }
       } catch (e) {}
     }
     return info;
-  }
+  },
+  roomLoad: function (e) {
+    roomApplying = true;
+    try {
+      audio.playbackRate = 1;
+      if (e.kind === "local" && Number.isInteger(e.idx) && songs[e.idx] !== undefined) {
+        loadLocal(e.idx);
+        const idx = e.idx, key = songs[idx], src = audio.src;
+        roomBlob.key = key; roomBlob.ready = false;
+        fetch(src).then(function (r) { if (!r.ok) throw new Error("load"); return r.blob(); }).then(function (b) {
+          if (roomBlob.key !== key || !cur || cur.kind !== "local" || cur.idx !== idx) return;
+          if (roomBlob.url) URL.revokeObjectURL(roomBlob.url);
+          roomBlob.url = URL.createObjectURL(b);
+          audio.src = roomBlob.url;
+          roomBlob.ready = true;
+        }).catch(function () { if (roomBlob.key === key) roomBlob.ready = true; });
+      } else if (e.kind === "online" && e.item) {
+        roomHold = true; quietOpen = true; roomPrimeStage = 0;
+        try { playEmbed(e.item); } finally { roomHold = false; quietOpen = false; }
+      }
+    } finally { roomApplying = false; }
+  },
+  roomPrime: function () {
+    if (!cur || cur.kind !== "embed" || !ytPlayer) return;
+    roomPrimeStage = 1;
+    try { ytPlayer.mute(); ytPlayer.playVideo(); } catch (e) {}
+  },
+  roomUnprime: function () {
+    if (!cur || cur.kind !== "embed" || !ytPlayer) return;
+    roomPrimeStage = 2;
+    try { ytPlayer.pauseVideo(); ytPlayer.seekTo(0, true); applyEmbedVolume(); } catch (e) {}
+  },
+  roomRate: function (r) { try { audio.playbackRate = r; } catch (e) {} }
 };
 
 })();
